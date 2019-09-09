@@ -492,7 +492,7 @@ GameObject:
   - component: {fileID: 431918281}
   - component: {fileID: 431918280}
   m_Layer: 5
-  m_Name: Register
+  m_Name: BacktoLogin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -550,7 +550,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Register
+  m_Text: Back to Login
 --- !u!222 &431918281
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -629,7 +629,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: Login
 --- !u!222 &475814433
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1281,7 +1281,7 @@ GameObject:
   - component: {fileID: 1386077280}
   - component: {fileID: 1386077279}
   m_Layer: 5
-  m_Name: Login
+  m_Name: LoginButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1304,7 +1304,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -96, y: -84}
+  m_AnchoredPosition: {x: -105, y: -84}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1386077279
