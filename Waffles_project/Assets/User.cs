@@ -8,8 +8,8 @@ using System.Collections;
 public class User
 {
 
-    private string email;
-    private string password;
+    [SerializeField] private string email;
+    [SerializeField] private string password;
 
     public User(string email, string password)
     {

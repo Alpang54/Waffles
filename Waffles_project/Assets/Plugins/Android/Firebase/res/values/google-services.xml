@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id" xmlns:tools="http://schemas.android.com/tools">
+  <string name="firebase_database_url" translatable="false">https://cz3003-waffles.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">528904155978</string>
+  <string name="google_storage_bucket" translatable="false">cz3003-waffles.appspot.com</string>
+  <string name="project_id" translatable="false">cz3003-waffles</string>
+  <string name="google_api_key" translatable="false">AIzaSyCT43SobFiT-u9lVF59prwBdJpK2aA9D_A</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCT43SobFiT-u9lVF59prwBdJpK2aA9D_A</string>
+  <string name="google_app_id" translatable="false">1:528904155978:android:a17f1ba6dc1201cbd647b3</string>
+  <string name="default_web_client_id" translatable="false">528904155978-8moda383t0su2ibdrseoe2hipg2oh9fp.apps.googleusercontent.com</string>
+</resources>
