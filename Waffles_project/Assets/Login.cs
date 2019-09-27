@@ -8,82 +8,128 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using UnityEngine.Networking;
 using Facebook.Unity;
+using Firebase.Auth;
+
 
 public class Login : MonoBehaviour
 {
     private static readonly string databaseURL = "https://cz3003-waffles.firebaseio.com/";
-    public InputField emailAddress;
-    public InputField password;
     private static readonly HttpClient client = new HttpClient();
-    
+    private Facebook.Unity.AccessToken accessToken;
+    private string userID;
+    private string accessTokenForFirebase;
+    private Credential credentials;
+
 
 
     void Awake()
-    {
-        if (!FB.IsInitialized)
-        {
-            FB.Init(() =>
-            {
-                if (FB.IsInitialized)
-                {
-                    FB.ActivateApp();
-                }
-                else
-                {
-                    Debug.Log("Did not initialize");
-                }
-            },
-            isGameShown =>
-            {
-                if (!isGameShown)
-                {
-                    Time.timeScale = 0;
-                }
-                else
-                {
-                    Time.timeScale = 1;
-                }
+    {   FB.Init(SetInit, OnHideUnity);
             }
-
-            );
-
+ 
+    private void SetInit()
+    {
+        if (FB.IsInitialized)
+        {
+            Debug.Log("Fb init is done");
+            // Signal an app activation App Event
+            FB.ActivateApp();
+            FacebookLogin();
 
         }
         else
         {
-            FB.ActivateApp();
+            Debug.Log("Failed to Initialize the Facebook SDK");
         }
     }
-    public void OnSubmit()
+
+    private void OnHideUnity(bool isGameShown)
     {
-        print("start");
-        print(emailAddress.text);
-        print(password.text);
-        print("working");
-        SignIn(emailAddress.text, password.text);
-
-    }
-
-    private void SignIn(string email, string password)
-    {
-        FirebaseScript fireScript = new FirebaseScript();
-        FacebookScript fbScript = new FacebookScript();
-        fbScript.FacebookLogin();
-        string FBAccesstoken =fbScript.getAccessToken();
-        //since unity does not support full testing with facebook
-        fireScript.FireBaseLogin("EAAKnDH9pBCIBAEdDHjfwJAgkjNaxCrGum8dEZBWhZCiWWp7i37W3t" +
-            "dD2hkZBxf1VXlUZBr4aYCZB4INqmcnxt2kj9PmuKjdsd72606jJPpa9DrRLDXqHniz7xkENXsMOS6mAzeoaEFcHYXjAmmT7UANOLHoCVU5WSus8y7zEZBzKiiJ55TQFgE");
-
+        if (!isGameShown)
+        {
+            // Pause the game - we will need to hide
+            Time.timeScale = 0;
+        }
+        else
+        {
+            // Resume the game - we're getting focus again
+            Time.timeScale = 1;
+        }
     }
 
 
+    public void FacebookLogin()
+    {
+        if (!FB.IsLoggedIn)
+        {
+            var perms = new List<string>() { "public_profile", "email" };
+            FB.LogInWithReadPermissions(perms, FBAuthCallback);
+        }
+        else
+        {
+            Debug.Log("Logged in already");
+        }
+    }
+  
+
+    private void FBAuthCallback(ILoginResult result)
+    {
+        if (FB.IsLoggedIn)
+        {
+            this.accessToken = AccessToken.CurrentAccessToken;
+            this.userID = accessToken.UserId;
+            Debug.Log("the user id" + this.userID);
+            this.credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
+            FirebaseLogin();
+
+        }
+        else
+        {
+            Debug.Log("User cancelled login");
+        }
+    }
+    public void FacebookLogout()
+    {
+        FB.LogOut();
+    }
+
+    private void FirebaseLogin()
+    {
+           Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        Debug.Log("Firebase 0");
+           auth.SignInWithCredentialAsync(this.credentials).ContinueWith(task => {
+            if (task.IsCanceled)
+            {
+                Debug.LogError("SignInWithCredentialAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                return;
+            }
+               Debug.Log("Firebase now");
+            Firebase.Auth.FirebaseUser newUser = task.Result;
+            Debug.LogFormat("User signed in successfully: {0} ({1})",
+                newUser.DisplayName, newUser.UserId);
+        });
+        Debug.Log("Firebase 2");
+    }
+
+
+}
+
+
+
+
+
+    /*
     async static void GetFromDatabase()
 
     {
         using (HttpClient client = new HttpClient())
         {
             using (HttpResponseMessage response = await client.GetAsync("https://cz3003-waffles.firebaseio.com/.json"))
-            {
+            
                 using (HttpContent content = response.Content)
                 {
                     string mycontent = await content.ReadAsStringAsync();
@@ -100,10 +146,11 @@ public class Login : MonoBehaviour
     async static void PostToDatabase(User user)
     {
         string json = JsonUtility.ToJson(user);
+
         var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
         using (HttpClient client = new HttpClient())
         {
-            using (HttpResponseMessage response = await client.PutAsync("https://cz3003-waffles.firebaseio.com/.json", stringContent))
+            using (HttpResponseMessage response = await client.PutAsync("https://cz3003-waffles.firebaseio.com/users.json", stringContent))
             {
                 using (HttpContent content = response.Content)
                 {
@@ -127,4 +174,4 @@ public class Login : MonoBehaviour
             return false;
         }
     }
-}
+}*/
