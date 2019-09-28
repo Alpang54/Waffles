@@ -16,9 +16,9 @@ public class Login : MonoBehaviour
     private static readonly string databaseURL = "https://cz3003-waffles.firebaseio.com/";
     private static readonly HttpClient client = new HttpClient();
     private Facebook.Unity.AccessToken accessToken;
-    private string userID;
+    [SerializeField] public static string userID;
     private string accessTokenForFirebase;
-    private Credential credentials;
+    [SerializeField] public static Credential credentials;
 
 
 
@@ -76,9 +76,7 @@ public class Login : MonoBehaviour
         if (FB.IsLoggedIn)
         {
             this.accessToken = AccessToken.CurrentAccessToken;
-            this.userID = accessToken.UserId;
-            Debug.Log("the user id" + this.userID);
-            this.credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
+            credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
             FirebaseLogin();
 
         }
@@ -96,7 +94,7 @@ public class Login : MonoBehaviour
     {
            Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         Debug.Log("Firebase 0");
-           auth.SignInWithCredentialAsync(this.credentials).ContinueWith(task => {
+           auth.SignInWithCredentialAsync(credentials).ContinueWith(task => {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithCredentialAsync was canceled.");
@@ -109,6 +107,7 @@ public class Login : MonoBehaviour
             }
                Debug.Log("Firebase now");
             Firebase.Auth.FirebaseUser newUser = task.Result;
+               userID = newUser.UserId;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
         });

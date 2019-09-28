@@ -9,19 +9,71 @@ using Newtonsoft.Json;
 using UnityEngine.Networking;
 using Facebook.Unity;
 using System;
+using System.Threading.Tasks;
 
 public class WorldMapScript : MonoBehaviour
 {
-    [SerializeField]
-    private Button[] buttons;
-    [SerializeField]
-    private string[] stageNames;
-    [SerializeField]
-    private static int totalWorldMapNodes;
-    [SerializeField]
-    private static string[] worldNames;
 
-    async static void getWorldNamesfromDatabase()
+    
+    [SerializeField]
+    private int totalWorldMapNodes;
+    [SerializeField]
+    private string[] worldNames;
+
+    public Text worldLevelText;
+    public Text confirmWorldLevelText;
+    public int worldLevel;
+
+
+    public GameObject worldConfirmPanel;
+
+  
+    public Sprite activeSprite;
+    public Sprite lockedSprite;
+    private Image buttonImage;
+    private Button worldButton;
+
+
+   async void Start()
+    {
+        
+       await getWorldNamesfromDatabase();
+   
+
+        buttonImage = GetComponent<Image>();
+        worldButton = GetComponent<Button>();
+        InitializeButtons();
+
+    }
+
+    void InitializeButtons()
+    {
+      
+        if (worldLevel<worldNames.Length)
+        {
+            buttonImage.sprite = activeSprite;
+            worldButton.enabled = true;
+            worldLevelText.text = "" + worldLevel;
+
+        }
+        else
+        {
+            buttonImage.sprite = lockedSprite;
+            worldButton.enabled = false;
+        }
+    }
+    void WorldConfirmPanel()
+
+    {
+        worldConfirmPanel.SetActive(true);
+     
+    }
+
+
+
+
+
+    private async Task getWorldNamesfromDatabase()
     {
         using (HttpClient client = new HttpClient())
         {
@@ -49,44 +101,47 @@ public class WorldMapScript : MonoBehaviour
                         {
                             Debug.Log(worldNames[j]);
                         }
-
-
                     }
-
                     }
-                    
-
-  
-
                 }
             }
         }
     
 
-    public void getWorldNames()
-    {
-        Debug.Log("working?");
 
-        getWorldNamesfromDatabase();
-
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void OnSubmitA()
+    public void OnSelectWorld()
     {
         print("start");
         print("working");
-        
+        confirmWorldLevelText.text = "" + worldLevel + "-" + worldNames[worldLevel].Substring(1,worldNames[worldLevel].Length-2);
+        worldConfirmPanel.SetActive(true);
 
     }
 }
 
+/*
+ 
+     private async void getStageNamesFromDatabase(string worldname)
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            using (HttpResponseMessage response = await client.GetAsync("https://cz3003-waffles.firebaseio.com/StageNames/.json"))
+            {
+                using (HttpContent content = response.Content)
+                {
+                    string mycontent = await content.ReadAsStringAsync();
+                    print(mycontent);
+
+
+                }
+
+            }
+        }
+    }
+
+    public void getStageNames()
+    {
+        Debug.Log("Working another");
+        getStageNamesFromDatabase("äli");
+    }
+*/
