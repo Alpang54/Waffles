@@ -10,6 +10,8 @@ using UnityEngine.Networking;
 using Facebook.Unity;
 using Firebase.Auth;
 
+using UnityEngine.SceneManagement;
+
 
 public class Login : MonoBehaviour
 {
@@ -20,11 +22,21 @@ public class Login : MonoBehaviour
     private string accessTokenForFirebase;
     [SerializeField] public static Credential credentials;
 
+    //Loading main menu
+    [SerializeField]
+    string SceneToLoad;
+    //Only for menu to check if user cancelled since it has no rights to callback in this class
+    public int loginProgress=-1; //-1 for not logged in (both cancel and logout), 1 for logged in successfully
+    [SerializeField]
+    Button loginBtn;
 
 
     void Awake()
-    {   FB.Init(SetInit, OnHideUnity);
-            }
+    {
+        //Only init if this page is login
+        if(!FB.IsInitialized)
+        FB.Init(SetInit, OnHideUnity);
+    }
  
     private void SetInit()
     {
@@ -34,7 +46,6 @@ public class Login : MonoBehaviour
             // Signal an app activation App Event
             FB.ActivateApp();
             FacebookLogin();
-
         }
         else
         {
@@ -63,9 +74,12 @@ public class Login : MonoBehaviour
         {
             var perms = new List<string>() { "public_profile", "email" };
             FB.LogInWithReadPermissions(perms, FBAuthCallback);
+           
         }
         else
         {
+            if (SceneToLoad != "")
+                SceneManager.LoadScene(SceneToLoad);
             Debug.Log("Logged in already");
         }
     }
@@ -75,19 +89,28 @@ public class Login : MonoBehaviour
     {
         if (FB.IsLoggedIn)
         {
+            loginBtn.GetComponentInChildren<Text>().text = "Loading";
             this.accessToken = AccessToken.CurrentAccessToken;
             credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
             FirebaseLogin();
-
+            loginProgress = 1;
+            //Load main menu when firebase is done logging in
+            if (SceneToLoad != "")
+                SceneManager.LoadScene(SceneToLoad);
         }
         else
         {
+            loginProgress = -1;
             Debug.Log("User cancelled login");
         }
     }
     public void FacebookLogout()
     {
-        FB.LogOut();
+        if(FB.IsLoggedIn)
+        {
+            FB.LogOut();
+            loginProgress = -1;
+        }
     }
 
     private void FirebaseLogin()
@@ -111,7 +134,9 @@ public class Login : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
         });
+        Debug.Log("Login done");
         Debug.Log("Firebase 2");
+      
     }
 
 
