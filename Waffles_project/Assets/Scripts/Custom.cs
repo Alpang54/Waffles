@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Custom
 {
-    private string correct;
-    private string stageName;
-    private string stageQuestion;
-    private string answer1;
-    private string answer2;
-    private string answer3;
-    private string answer4;
-
+    public string correct;
+    public string stageName;
+    public string stageQuestion;
+    public string answer1;
+    public string answer2;
+    public string answer3;
+    public string answer4;
+    public List<string> details = new List<string>();
 
     public Custom()
     {
@@ -29,11 +29,14 @@ public class Custom
         this.correct = correct;
     }
 
-    public string StageName { get => stageName; set => stageName = value; }
-    public string StageQuestion { get => stageQuestion; set => stageQuestion = value; }
-    public string Answer1 { get => answer1; set => answer1 = value; }
-    public string Answer2 { get => answer2; set => answer2 = value; }
-    public string Answer3 { get => answer3; set => answer3 = value; }
-    public string Answer4 { get => answer4; set => answer4 = value; }
-    public string Correct { get => correct; set => correct = value; }
+    
+    
+
+    public string StageName { get; set; }
+    public string StageQuestion { get; set; }
+    public string Answer1 { get; set; }
+    public string Answer2 { get; set; }
+    public string Answer3 { get; set; }
+    public string Answer4 { get; set; }
+    public string Correct{ get; set; }
 }
