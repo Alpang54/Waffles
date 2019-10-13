@@ -16,6 +16,7 @@ public class InitContent : MonoBehaviour
     public Transform contentPanel;
     public int noOfCustom;
     ArrayList arrayStageName = new ArrayList();
+    public bool done=false;
 
     public string strJson;
     // Start is called before the first frame update
@@ -28,18 +29,19 @@ public class InitContent : MonoBehaviour
     void Start()
     {
 
-        readDB();
-        Invoke("loadDB", 2);
-
+        StartCoroutine(ReadDB());
+        //Invoke("loadDB", 1);
+        
 
         
 
 
     }
-    void readDB()
+    IEnumerator ReadDB()
     {
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        done = false;
+            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+            DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 
 
 
@@ -47,35 +49,47 @@ public class InitContent : MonoBehaviour
 
 
 
-        FirebaseDatabase.DefaultInstance.GetReference("CustomStage").GetValueAsync().ContinueWith(task => {
-            //reference.GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted)
+            FirebaseDatabase.DefaultInstance.GetReference("CustomStage").GetValueAsync().ContinueWith(task =>
             {
-                // Handle the error...
-            }
-            else if (task.IsCompleted)
-            {
-
-
-                DataSnapshot snapshot = task.Result;
-                noOfCustom = (int)snapshot.ChildrenCount;
-
-                foreach (var stages in snapshot.Children)
+                //reference.GetValueAsync().ContinueWith(task => {
+                if (task.IsFaulted)
                 {
-                    Debug.LogFormat("Key={0}", stages.Key);
-                    arrayStageName.Add(stages.Key.ToString());
-                    foreach (var value in stages.Children)
-                    {
-                        Debug.LogFormat("Key={0}", value.Key);
-                        string test = value.Value.ToString();
-                    }
+                    // Handle the error...
                 }
+                else if (task.IsCompleted)
+                {
 
-                //strJson =snapshot.GetRawJsonValue();
 
-            }
-        });
+                    DataSnapshot snapshot = task.Result;
+                    noOfCustom = (int)snapshot.ChildrenCount;
 
+                    foreach (var stages in snapshot.Children)
+                    {
+                        Debug.LogFormat("Key={0}", stages.Key);
+                        arrayStageName.Add(stages.Key.ToString());
+                        foreach (var value in stages.Children)
+                        {
+                            Debug.LogFormat("Key={0}", value.Key);
+                            string test = value.Value.ToString();
+                        }
+                    }
+                    done = true;
+                    //strJson =snapshot.GetRawJsonValue();
+
+                }
+            });
+
+        yield return new WaitUntil(() => done == true); 
+           
+        
+       
+        if(done==true) //reading db should be done by now
+        {
+            loadDB();
+            //yield return new WaitForSeconds(1f);
+        }
+        
+       
     }
     void loadDB()
     {
