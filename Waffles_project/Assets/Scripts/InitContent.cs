@@ -42,7 +42,7 @@ public class InitContent : MonoBehaviour
         done = false;
             FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
             DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-
+            
 
 
 
@@ -105,9 +105,5 @@ public class InitContent : MonoBehaviour
 
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 }
