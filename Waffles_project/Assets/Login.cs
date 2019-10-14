@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using UnityEngine.Networking;
 using Facebook.Unity;
 using Firebase.Auth;
-
+using UnityEngine.SceneManagement;
 
 public class Login : MonoBehaviour
 {
@@ -20,6 +20,8 @@ public class Login : MonoBehaviour
     private string accessTokenForFirebase;
     [SerializeField] public static Credential credentials;
 
+    [SerializeField] private Text status;
+    [SerializeField] private GameObject aboutPanel;
 
 
     void Awake()
@@ -33,7 +35,7 @@ public class Login : MonoBehaviour
             Debug.Log("Fb init is done");
             // Signal an app activation App Event
             FB.ActivateApp();
-            FacebookLogin();
+            
 
         }
         else
@@ -56,6 +58,15 @@ public class Login : MonoBehaviour
         }
     }
 
+    public void About()
+    {
+        aboutPanel.SetActive(true);
+    }
+
+    public void AboutBack()
+    {
+        aboutPanel.SetActive(false);
+    }
 
     public void FacebookLogin()
     {
@@ -63,10 +74,14 @@ public class Login : MonoBehaviour
         {
             var perms = new List<string>() { "public_profile", "email" };
             FB.LogInWithReadPermissions(perms, FBAuthCallback);
+            status.color = Color.white;
+            status.text = " Logging in";
+
         }
         else
         {
-            Debug.Log("Logged in already");
+            SceneManager.LoadScene("Maps", LoadSceneMode.Single);
+            Debug.Log("Logged in already, relog");
         }
     }
   
@@ -75,13 +90,21 @@ public class Login : MonoBehaviour
     {
         if (FB.IsLoggedIn)
         {
+            
+
             this.accessToken = AccessToken.CurrentAccessToken;
             credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
             FirebaseLogin();
+            SceneManager.LoadScene("Maps", LoadSceneMode.Single);
+            Debug.Log("In FBAUTHCALLBACK");
+            Debug.Log(this.accessToken.UserId);
+
 
         }
         else
         {
+            status.color = Color.red;
+            status.text = "Error Logging In";
             Debug.Log("User cancelled login");
         }
     }
@@ -89,6 +112,8 @@ public class Login : MonoBehaviour
     {
         FB.LogOut();
     }
+
+
 
     private void FirebaseLogin()
     {
@@ -113,6 +138,12 @@ public class Login : MonoBehaviour
         });
         Debug.Log("Firebase 2");
     }
+
+
+    
+
+
+
 
 
 }

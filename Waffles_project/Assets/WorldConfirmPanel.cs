@@ -12,6 +12,7 @@ public class WorldConfirmPanel : MonoBehaviour
 
     string worldName;
     int worldLevel;
+    public int worldSelected;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,8 @@ public class WorldConfirmPanel : MonoBehaviour
     {   
         confirmWorldNameText.text = worldLevel + "-" + worldName;
         this.gameObject.SetActive(true);
+        SetWorldLevel(worldLevel);
+        SetWorldName(worldName);
     }
 
     //turns confirm panel off
@@ -50,10 +53,10 @@ public class WorldConfirmPanel : MonoBehaviour
 
     //when the world is chosen, actual implementation is passed to world manager 
     public void Proceed()
-    {
+    {   
         WorldMapManagerScript mapManager = worldMapManager.GetComponent<WorldMapManagerScript>();
-        this.SetInactive();
         mapManager.OnSelectWorldProceedButton(this.worldLevel);
+        this.SetInactive();
 
     }
 

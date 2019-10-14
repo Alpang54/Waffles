@@ -10,9 +10,9 @@ public class ShareScript : MonoBehaviour
 
     public void Share()
     {
-        Debug.Log("startcoroutine");
+    
         StartCoroutine(TakeSSAndShare());
-        Debug.Log("startcoroutine");
+     
     }
 
     private IEnumerator TakeSSAndShare()
@@ -29,6 +29,6 @@ public class ShareScript : MonoBehaviour
         // To avoid memory leaks
         Destroy(ss);
 
-        new NativeShare().AddFile(filePath).SetSubject("SharedImage").Share();
+        new NativeShare().AddFile(filePath).Share();
     }
 }

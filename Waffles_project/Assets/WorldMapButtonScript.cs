@@ -54,6 +54,7 @@ public class WorldMapButtonScript : MonoBehaviour
     {
 
         WorldMapManagerScript mapManager = worldMapManager.GetComponent<WorldMapManagerScript>();
+        
         mapManager.OnSelectWorldButton(this.worldName, this.worldLevel);
 
     }
