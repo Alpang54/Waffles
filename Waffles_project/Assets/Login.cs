@@ -33,7 +33,7 @@ public class Login : MonoBehaviour
         if (FB.IsInitialized)
         {
             Debug.Log("Fb init is done");
-            // Signal an app activation App Event
+            // Signal an apps activation App Event
             FB.ActivateApp();
             
 
