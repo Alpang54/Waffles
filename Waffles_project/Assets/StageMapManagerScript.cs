@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StageMapManagerScript : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class StageMapManagerScript : MonoBehaviour
     public GameObject stageConfirmPanel;
     public Sprite activeSprite2;
     public Sprite lockedSprite2;
+    public Text loadText;
+
+
+    public GameObject toggleDifficulty;
+    public Text difficultyText;
 
     private int worldLevel;
     private string[] stageNames;
@@ -47,10 +53,12 @@ public class StageMapManagerScript : MonoBehaviour
     {
 
         this.worldLevel = worldLevel;
+        loadText.text = "Loading";
         await GetStageNamesFromDatabase();
         stageSelect.SetActive(true);
-        Debug.Log("rest api should have finished by now");
+        Debug.Log("rest apis should have finished by now");
         DeclareStageMapButtons();
+        loadText.text = "";
         
     }
 
@@ -100,11 +108,46 @@ public class StageMapManagerScript : MonoBehaviour
 
     }
 
+    public void ToggleDifficulty()
+    {
+        if (difficultyText.text == "Normal")
+        {
+            for(int i = 0; i < 9; i++)
+            {
+                stageMapButtons[i].GetComponent<Image>().color = new Color32(255, 0, 0, 255);
+            }
+            difficultyText.text = "Hard";
+            this.toggleDifficulty.GetComponent<Image>().color= new Color32(255, 0, 0, 255);
+        }
+        else if(difficultyText.text == "Hard")
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                stageMapButtons[i].GetComponent<Image>().color = new Color32(104, 3, 0, 255);
+            }
+            difficultyText.text = "Extreme";
+            this.toggleDifficulty.GetComponent<Image>().color = new Color32(104, 3, 0, 255);
+
+        }
+
+        else
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                stageMapButtons[i].GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+            }
+            difficultyText.text = "Normal";
+            this.toggleDifficulty.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        }
+    }
+
+
+   
 
     //Determine which stages are available to the user.
     public void DeclareStageMapButtons()
     {
-    
+        Debug.Log(Login.userID);
         for (int i = 0; i < stageMapButtons.Length; i++)
         {
             StageMapButtonScript aStageButton = stageMapButtons[i].GetComponent<StageMapButtonScript>();
@@ -112,8 +155,7 @@ public class StageMapManagerScript : MonoBehaviour
             if (i < stageNames.Length)
             {
              
-                //aStageButton.SetStageButtonImage(activeSprite2);
-           
+                aStageButton.SetStageButtonImage(activeSprite2);
                 aStageButton.SetStageName(stageNames[i]);
                 aStageButton.SetStageButton(true);
             }

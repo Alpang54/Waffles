@@ -12,9 +12,9 @@ public class WorldMapManagerScript : MonoBehaviour
     public Sprite activeSprite;
     public Sprite lockedSprite;
 
-    string[] worldNames;
+    private string[] worldNames;
 
-
+    public Text loadText;
     public GameObject[] worldMapButtons;
     public GameObject worldConfirmPanel;
     public GameObject worldSelect;
@@ -25,10 +25,12 @@ public class WorldMapManagerScript : MonoBehaviour
     //Load world data from database and initialize the map
     async void Start()
     {
-     
+        loadText.text = "Loading..";
         await GetWorldNamesFromDatabase();
         Debug.Log("rest api should have finished by now");
         DeclareWorldMapButtons();
+        loadText.text = "";
+
     }
 
     //determine which buttons are to be active or which to be inactive
@@ -36,7 +38,9 @@ public class WorldMapManagerScript : MonoBehaviour
     {   
         for (int i = 0; i < worldMapButtons.Length; i++)
         {
+    
             WorldMapButtonScript aWorldButtonScript= worldMapButtons[i].GetComponent<WorldMapButtonScript>();
+      
 
             if (i<worldNames.Length)
             {
@@ -57,6 +61,7 @@ public class WorldMapManagerScript : MonoBehaviour
     //when a world is selected, show confirm panel
     public void OnSelectWorldButton(string worldName, int worldLevel)
     {
+        Debug.Log(worldLevel);
         WorldConfirmPanel confirmPanel = worldConfirmPanel.GetComponent<WorldConfirmPanel>();
         confirmPanel.confirmPanelAppear(worldName, worldLevel);
     }
@@ -64,6 +69,7 @@ public class WorldMapManagerScript : MonoBehaviour
     // when a world is selected and confirmed, pass to stage manager to load stage map and turn world map off
     public async void OnSelectWorldProceedButton(int worldLevel)
     {
+        Debug.Log(worldLevel);
         StageMapManagerScript stageManager = stageMapManager.GetComponent<StageMapManagerScript>();
         await stageManager.LoadStageMap(worldLevel);
         worldSelect.SetActive(false);
@@ -124,5 +130,6 @@ public class WorldMapManagerScript : MonoBehaviour
         }
 
     }
+
 
 }
