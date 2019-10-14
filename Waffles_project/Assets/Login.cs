@@ -25,8 +25,11 @@ public class Login : MonoBehaviour
 
 
     void Awake()
-    {   FB.Init(SetInit, OnHideUnity);
-            }
+    {
+        //Only init if this page is login
+        if(!FB.IsInitialized)
+        FB.Init(SetInit, OnHideUnity);
+    }
  
     private void SetInit()
     {
@@ -110,7 +113,11 @@ public class Login : MonoBehaviour
     }
     public void FacebookLogout()
     {
-        FB.LogOut();
+        if(FB.IsLoggedIn)
+        {
+            FB.LogOut();
+            loginProgress = -1;
+        }
     }
 
 
@@ -136,7 +143,9 @@ public class Login : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
         });
+        Debug.Log("Login done");
         Debug.Log("Firebase 2");
+      
     }
 
 
