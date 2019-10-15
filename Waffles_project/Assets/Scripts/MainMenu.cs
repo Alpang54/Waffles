@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
     }
 
     public void MenuLoginLogout()
-    {
+    {/*
         if (this.gameObject.GetComponent<Login>() != null)
         {
 
@@ -47,7 +47,7 @@ public class MainMenu : MonoBehaviour
 
             }
 
-        }
+        }*/
        
     }
     

@@ -44,6 +44,7 @@ public class WorldMapManagerScript : MonoBehaviour
 
             if (i<worldNames.Length)
             {
+                Debug.Log("hahaha");
                 aWorldButtonScript.SetWorldButtonImage(activeSprite);
                 aWorldButtonScript.SetWorldName(worldNames[i]);
                 aWorldButtonScript.SetWorldButton(true);
@@ -51,6 +52,7 @@ public class WorldMapManagerScript : MonoBehaviour
 
             else
             {
+                Debug.Log("papap");
                 aWorldButtonScript.SetWorldButtonImage(lockedSprite);
                 aWorldButtonScript.SetWorldButton(false);
             }

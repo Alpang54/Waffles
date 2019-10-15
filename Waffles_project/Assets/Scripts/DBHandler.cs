@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FullSerializer;
@@ -37,7 +37,7 @@ public class DBHandler
     {
         RestClient.Get<User>($"{databaseURL}users/{userId}.json").Then(user => { callback(user); });
     }
-    */
+    
     /// <summary>
     /// Gets all users from the Firebase Database
     /// </summary>
@@ -60,3 +60,4 @@ public class DBHandler
     }
 }
 
+*/

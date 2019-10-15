@@ -83,7 +83,7 @@ public class Login : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("Maps", LoadSceneMode.Single);
+            SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
             Debug.Log("Logged in already, relog");
         }
     }
@@ -116,7 +116,7 @@ public class Login : MonoBehaviour
         if(FB.IsLoggedIn)
         {
             FB.LogOut();
-            loginProgress = -1;
+         //   loginProgress = -1;
         }
     }
 
