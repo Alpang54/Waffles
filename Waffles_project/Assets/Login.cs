@@ -24,11 +24,13 @@ public class Login : MonoBehaviour
     [SerializeField] private GameObject aboutPanel;
 
 
+    public bool loggedIn = false;
+
     void Awake()
     {
         //Only init if this page is login
-        if(!FB.IsInitialized)
-        FB.Init(SetInit, OnHideUnity);
+        if (!FB.IsInitialized)
+            FB.Init(SetInit, OnHideUnity);
     }
  
     private void SetInit()
@@ -38,8 +40,8 @@ public class Login : MonoBehaviour
             Debug.Log("Fb init is done");
             // Signal an app activation App Event
             FB.ActivateApp();
-            
 
+           
         }
         else
         {
@@ -77,13 +79,16 @@ public class Login : MonoBehaviour
         {
             var perms = new List<string>() { "public_profile", "email" };
             FB.LogInWithReadPermissions(perms, FBAuthCallback);
-            status.color = Color.white;
-            status.text = " Logging in";
-
+            if (status != null)
+            {
+                status.color = Color.white;
+                status.text = " Logging in";
+            }
         }
         else
         {
-            SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+            loggedIn = true;
+            //SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
             Debug.Log("Logged in already, relog");
         }
     }
@@ -93,12 +98,11 @@ public class Login : MonoBehaviour
     {
         if (FB.IsLoggedIn)
         {
-            
-
             this.accessToken = AccessToken.CurrentAccessToken;
             credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
+            loggedIn = true;
             FirebaseLogin();
-            SceneManager.LoadScene("Maps", LoadSceneMode.Single);
+            //SceneManager.LoadScene("Maps", LoadSceneMode.Single);
             Debug.Log("In FBAUTHCALLBACK");
             Debug.Log(this.accessToken.UserId);
 
@@ -106,9 +110,19 @@ public class Login : MonoBehaviour
         }
         else
         {
-            status.color = Color.red;
-            status.text = "Error Logging In";
+            loggedIn = false;
+            if (status != null)
+            {
+                status.color = Color.red;
+                status.text = "Error Logging In";
+            }
             Debug.Log("User cancelled login");
+        }
+        //Only in main menu this will work
+        if(this.gameObject.GetComponent<MainMenu>()!=null)
+        {
+            //Reflect correct text on button to show login/logout
+            this.gameObject.GetComponent<MainMenu>().UpdateLoginOutText(loggedIn);
         }
     }
     public void FacebookLogout()
@@ -116,7 +130,7 @@ public class Login : MonoBehaviour
         if(FB.IsLoggedIn)
         {
             FB.LogOut();
-         //   loginProgress = -1;
+            loggedIn = false;
         }
     }
 
@@ -125,7 +139,7 @@ public class Login : MonoBehaviour
     private void FirebaseLogin()
     {
            Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        Debug.Log("Firebase 0");
+            Debug.Log("Firebase 0");
            auth.SignInWithCredentialAsync(credentials).ContinueWith(task => {
             if (task.IsCanceled)
             {
