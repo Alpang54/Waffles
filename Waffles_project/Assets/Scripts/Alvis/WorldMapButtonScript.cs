@@ -16,11 +16,9 @@ public class WorldMapButtonScript : MonoBehaviour
 
     public int worldLevel;
     private string worldName;
-
     public Text worldButtonText;
     private Image worldButtonImage;
     private Button worldButton;
-
     public GameObject worldMapManager;
 
 

@@ -11,39 +11,36 @@ public class MainMenu : MonoBehaviour
     Button loginOutbtn;
     [SerializeField]
     GameObject loginPopUp;
+
+    private Login LoginManagerScript;
+
+
     void Awake()
     {
-       
+        LoginManagerScript = GameObject.Find("LoginManager").GetComponent<Login>();
     }
     // Start is called before the first frame update
     void Start()
     {
-
-        if (!FB.IsLoggedIn)
-        {
-            this.gameObject.GetComponent<Login>().FacebookLogin();
-        }
     }
 
 
     public void MenuLoginLogout()
     {
-        if (this.gameObject.GetComponent<Login>() != null)
+        LoginManagerScript = GameObject.Find("LoginManager").GetComponent<Login>();
+        bool isLoggedIn = LoginManagerScript.GetLoggedIn();
+        if (isLoggedIn)
         {
-            if (!FB.IsLoggedIn)
-            {
-                this.gameObject.GetComponent<Login>().FacebookLogin();
-            }
-            else
-            {
-                this.gameObject.GetComponent<Login>().FacebookLogout();
-                UpdateLoginOutText(false);
-                Debug.Log("Logged out");
-
-            }
+            UpdateLoginOutText(!isLoggedIn);
+            LoginManagerScript.FacebookLogout();
+        }
+        else
+        {
+            UpdateLoginOutText(!isLoggedIn);
+            LoginManagerScript.FacebookLogin();
 
         }
-       
+
     }
     public void UpdateLoginOutText(bool loggedIn)
     {

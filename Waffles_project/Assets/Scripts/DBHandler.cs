@@ -1,63 +1,52 @@
-﻿/*using System.Collections;
-using System.Collections.Generic;
+﻿using System.Threading.Tasks;
+using Firebase;
+using Firebase.Database;
+using Firebase.Unity.Editor;
 using UnityEngine;
-using FullSerializer;
-using Proyecto26;
+using UnityEngine.SceneManagement;
 
-public class DBHandler
+public class DBHandler : MonoBehaviour
 {
-    private const string projectId = "nico-the-weather"; // You can find this in your Firebase project settings
-    private static readonly string databaseURL = $"https://cz3003-waffles.firebaseio.com/";
-
-    private static fsSerializer serializer = new fsSerializer();
-
-    public delegate void PostUserCallback();
-    public delegate void GetUserCallback(Custom custom);
-    public delegate void GetUsersCallback(Dictionary<string, Custom> customs);
+    private DataSnapshot snapshot;
 
 
-    /// <summary>
-    /// Adds a user to the Firebase Database
-    /// </summary>
-    /// <param name="user"> User object that will be uploaded </param>
-    /// <param name="userId"> Id of the user that will be uploaded </param>
-    /// <param name="callback"> What to do after the user is uploaded successfully </param>
-    /*
-    public static void PostUser(User user, string userId, PostUserCallback callback)
+    void Start()
     {
-        RestClient.Put<User>($"{databaseURL}users/{userId}.json", user).Then(response => { callback(); });
+        DontDestroyOnLoad(this.gameObject);
+        SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
     }
 
-    /// <summary>
-    /// Retrieves a user from the Firebase Database, given their id
-    /// </summary>
-    /// <param name="userId"> Id of the user that we are looking for </param>
-    /// <param name="callback"> What to do after the user is downloaded successfully </param>
-    public static void GetUser(string userId, GetUserCallback callback)
+    public DataSnapshot GetSnapshot()
     {
-        RestClient.Get<User>($"{databaseURL}users/{userId}.json").Then(user => { callback(user); });
+        return this.snapshot;
     }
-    
-    /// <summary>
-    /// Gets all users from the Firebase Database
-    /// </summary>
-    /// <param name="callback"> What to do after all users are downloaded successfully </param>
-    public static void GetUsers(GetUsersCallback callback)
+
+    public async Task ReadfromFirebase(string RootName)
     {
-        RestClient.Get($"{databaseURL}CustomStage.json").Then(response =>
-        {
-            var responseJson = response.Text;
+        await GetSnapshotFromDatabase(RootName);
+        Debug.Log("Snapshot should have loaded");
+       
+    }
 
-            // Using the FullSerializer library: https://github.com/jacobdufault/fullserializer
-            // to serialize more complex types (a Dictionary, in this case)
-            var data = fsJsonParser.Parse(responseJson);
-            object deserialized = null;
-            serializer.TryDeserialize(data, typeof(Dictionary<string, Custom>), ref deserialized);
+    private async Task GetSnapshotFromDatabase(string RootName)
+    {
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        await FirebaseDatabase.DefaultInstance.GetReference(RootName).GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted)
+            {
+                snapshot = null;
+                Debug.Log("Error encountered, check input parameters");
+                // Handle the error...
+          }
+            else if (task.IsCompleted)
+            {     // Do something with snapshot...
+                this.snapshot = task.Result;
+                Debug.Log("Finally fetched snapshot" + RootName);
 
-            var customs = deserialized as Dictionary<string, Custom>;
-            callback(customs);
+            }
         });
     }
 }
 
-*/
+

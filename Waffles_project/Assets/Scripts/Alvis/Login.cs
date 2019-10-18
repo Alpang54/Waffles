@@ -13,15 +13,10 @@ using UnityEngine.SceneManagement;
 
 public class Login : MonoBehaviour
 {
-    private static readonly string databaseURL = "https://cz3003-waffles.firebaseio.com/";
-    private static readonly HttpClient client = new HttpClient();
     private Facebook.Unity.AccessToken accessToken;
-    [SerializeField] public static string userID;
+    [SerializeField] public string userID;
     private string accessTokenForFirebase;
     [SerializeField] public static Credential credentials;
-
-    [SerializeField] private Text status;
-    [SerializeField] private GameObject aboutPanel;
 
 
     public bool loggedIn = false;
@@ -31,6 +26,7 @@ public class Login : MonoBehaviour
         //Only init if this page is login
         if (!FB.IsInitialized)
             FB.Init(SetInit, OnHideUnity);
+        DontDestroyOnLoad(this.gameObject);
     }
  
     private void SetInit()
@@ -49,6 +45,12 @@ public class Login : MonoBehaviour
         }
     }
 
+
+    public bool GetLoggedIn()
+    {
+        return this.loggedIn;
+    }
+
     private void OnHideUnity(bool isGameShown)
     {
         if (!isGameShown)
@@ -63,33 +65,23 @@ public class Login : MonoBehaviour
         }
     }
 
-    public void About()
-    {
-        aboutPanel.SetActive(true);
-    }
 
-    public void AboutBack()
-    {
-        aboutPanel.SetActive(false);
-    }
 
+    public string GetUserID()
+    {
+        return this.userID;
+
+    }
     public void FacebookLogin()
     {
         if (!FB.IsLoggedIn)
         {
             var perms = new List<string>() { "public_profile", "email" };
             FB.LogInWithReadPermissions(perms, FBAuthCallback);
-            if (status != null)
-            {
-                status.color = Color.white;
-                status.text = " Logging in";
-            }
         }
         else
         {
             loggedIn = true;
-            //SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
-            Debug.Log("Logged in already, relog");
         }
     }
   
@@ -102,20 +94,14 @@ public class Login : MonoBehaviour
             credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
             loggedIn = true;
             FirebaseLogin();
-            //SceneManager.LoadScene("Maps", LoadSceneMode.Single);
             Debug.Log("In FBAUTHCALLBACK");
-            Debug.Log(this.accessToken.UserId);
+            Debug.Log("userid is:"+this.accessToken.UserId);
 
 
         }
         else
         {
             loggedIn = false;
-            if (status != null)
-            {
-                status.color = Color.red;
-                status.text = "Error Logging In";
-            }
             Debug.Log("User cancelled login");
         }
         //Only in main menu this will work
@@ -139,7 +125,6 @@ public class Login : MonoBehaviour
     private void FirebaseLogin()
     {
            Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-            Debug.Log("Firebase 0");
            auth.SignInWithCredentialAsync(credentials).ContinueWith(task => {
             if (task.IsCanceled)
             {
@@ -151,22 +136,15 @@ public class Login : MonoBehaviour
                 Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
                 return;
             }
-               Debug.Log("Firebase now");
+           
             Firebase.Auth.FirebaseUser newUser = task.Result;
                userID = newUser.UserId;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
-                newUser.DisplayName, newUser.UserId);
+            newUser.DisplayName, newUser.UserId);
         });
         Debug.Log("Login done");
-        Debug.Log("Firebase 2");
       
     }
-
-
-    
-
-
-
 
 
 }
