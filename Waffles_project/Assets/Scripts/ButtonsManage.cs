@@ -126,13 +126,14 @@ public class ButtonsManage : MonoBehaviour
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://cz3003-waffles.firebaseio.com/");
         databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
-        databaseRef.Child("CustomStage").Child(stageName.text).Child("StageName").SetValueAsync(stageName.text);
-        databaseRef.Child("CustomStage").Child(stageName.text).Child("Question").SetValueAsync(stageQuestion.text);
-        databaseRef.Child("CustomStage").Child(stageName.text).Child("1").SetValueAsync(stageAnswer1.text);
-        databaseRef.Child("CustomStage").Child(stageName.text).Child("2").SetValueAsync(stageAnswer2.text);
-        databaseRef.Child("CustomStage").Child(stageName.text).Child("3").SetValueAsync(stageAnswer3.text);
-        databaseRef.Child("CustomStage").Child(stageName.text).Child("4").SetValueAsync(stageAnswer4.text);
-        databaseRef.Child("CustomStage").Child(stageName.text).Child("Correct").SetValueAsync(CorrectAnswer);
+        int noOfCustomQuestion = 1;
+        databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child(noOfCustomQuestion.ToString()).Child("StageName").SetValueAsync(stageName.text);
+        databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child(noOfCustomQuestion.ToString()).Child("Question").SetValueAsync(stageQuestion.text);
+        databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child(noOfCustomQuestion.ToString()).Child("1").SetValueAsync(stageAnswer1.text);
+        databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child(noOfCustomQuestion.ToString()).Child("2").SetValueAsync(stageAnswer2.text);
+        databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child(noOfCustomQuestion.ToString()).Child("3").SetValueAsync(stageAnswer3.text);
+        databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child(noOfCustomQuestion.ToString()).Child("4").SetValueAsync(stageAnswer4.text);
+        databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child(noOfCustomQuestion.ToString()).Child("Correct").SetValueAsync(CorrectAnswer);
 
         
        

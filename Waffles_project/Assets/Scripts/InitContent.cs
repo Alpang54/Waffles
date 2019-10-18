@@ -44,11 +44,6 @@ public class InitContent : MonoBehaviour
             DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
             
 
-
-
-
-
-
             FirebaseDatabase.DefaultInstance.GetReference("CustomStage").GetValueAsync().ContinueWith(task =>
             {
                 //reference.GetValueAsync().ContinueWith(task => {
@@ -65,17 +60,25 @@ public class InitContent : MonoBehaviour
 
                     foreach (var stages in snapshot.Children)
                     {
-                        Debug.LogFormat("Key={0}", stages.Key);
+                        Debug.LogFormat("Key={0}", stages.Key); //Node Custom Stage Name
                         arrayStageName.Add(stages.Key.ToString());
-                        foreach (var value in stages.Children)
+                        
+                        foreach (var questionNumber in stages.Children)
                         {
-                            Debug.LogFormat("Key={0}", value.Key);
-                            string test = value.Value.ToString();
+                            Debug.LogFormat("Key={0}", questionNumber.Children);//Node at Question Number
+                            string noOfQuestionNumberInStage = questionNumber.ChildrenCount.ToString();
+                            foreach(var indiQuestion in questionNumber.Children) //Node at indiQuestion
+                            {
+                                foreach(var value in indiQuestion.Children) //values in indiQuestion
+                                {
+                                    string test = value.Value.ToString();
+                                }
+                            }
                         }
                     }
                     done = true;
                     //strJson =snapshot.GetRawJsonValue();
-
+                 
                 }
             });
 
