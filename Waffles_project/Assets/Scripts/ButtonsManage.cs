@@ -15,6 +15,7 @@ public class ButtonsManage : MonoBehaviour
     public GameObject doneButton;
     public GameObject inputStage;
     public GameObject scrollView;
+    public GameObject prefRef;
     public GameObject addMoreQuestion;
     public GameObject inputQns;
     public Transform contentPanel2;
@@ -194,5 +195,10 @@ public class ButtonsManage : MonoBehaviour
         go.SetActive(true);
         go.transform.SetParent(contentPanel2);
 
+    }
+
+    public void pressDelete()
+    {
+        Destroy(prefRef);
     }
 }
