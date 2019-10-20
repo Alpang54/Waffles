@@ -23,7 +23,7 @@ public class CharacterSel : MonoBehaviour
 
     private void Start()
     {
-        DontDestroyOnLoad(this);
+        
         GameObject.Find("Level").active = false;
         UpdateCharacterSelectionUI();
     }
