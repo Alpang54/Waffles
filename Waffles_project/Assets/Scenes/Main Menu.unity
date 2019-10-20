@@ -241,6 +241,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 11317863}
   m_CullTransparentMesh: 0
+--- !u!1 &37338180 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6143574939422851756, guid: f1754dc04061c9b47978cc7c721adf66,
+    type: 3}
+  m_PrefabInstance: {fileID: 1830931288}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &139855062
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,12 +365,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139855062}
   m_CullTransparentMesh: 0
---- !u!1 &149170180 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6143574939422851756, guid: f1754dc04061c9b47978cc7c721adf66,
-    type: 3}
-  m_PrefabInstance: {fileID: 1830931288}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &159310709
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,6 +762,7 @@ GameObject:
   m_Component:
   - component: {fileID: 875133907}
   - component: {fileID: 875133908}
+  - component: {fileID: 875133906}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -769,6 +770,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &875133906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875133905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3910716887c8749a86132e1d63c480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userID: 
+  loginOutbtn: {fileID: 1601461560}
 --- !u!4 &875133907
 Transform:
   m_ObjectHideFlags: 0
@@ -795,8 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 577eb8d2462c25043a7a6577ed44e5d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginOutbtn: {fileID: 1601461560}
-  loginPopUp: {fileID: 149170180}
+  loginPopUp: {fileID: 37338180}
 --- !u!1001 &1060228890
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -918,11 +932,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 875133908}
+      objectReference: {fileID: 875133906}
     - target: {fileID: 4327992189524064343, guid: 643164e82260072448b16e8a0f980425,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: MenuLoginLogout
+      value: FacebookLogin
       objectReference: {fileID: 0}
     - target: {fileID: 4327992189524064343, guid: 643164e82260072448b16e8a0f980425,
         type: 3}

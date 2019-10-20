@@ -14,20 +14,32 @@ using UnityEngine.SceneManagement;
 public class Login : MonoBehaviour
 {
     private Facebook.Unity.AccessToken accessToken;
-    [SerializeField] public string userID;
+    [SerializeField] private string userID;
     private string accessTokenForFirebase;
-    [SerializeField] public static Credential credentials;
+    [SerializeField] private static Credential credentials;
 
 
-    public bool loggedIn = false;
+    [SerializeField]
+    Button loginOutbtn;
 
+    private bool loggedIn = false;
+    private DataHandler datahandler;
+
+
+// Start of Default Code
     void Awake()
-    {
+    { 
         //Only init if this page is login
         if (!FB.IsInitialized)
             FB.Init(SetInit, OnHideUnity);
-        DontDestroyOnLoad(this.gameObject);
+        datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
+        this.loggedIn = datahandler.GetIsLoggedIn();
+        if (this.loggedIn)
+        {
+            loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
+        }
     }
+ 
  
     private void SetInit()
     {
@@ -36,8 +48,6 @@ public class Login : MonoBehaviour
             Debug.Log("Fb init is done");
             // Signal an app activation App Event
             FB.ActivateApp();
-
-           
         }
         else
         {
@@ -45,11 +55,6 @@ public class Login : MonoBehaviour
         }
     }
 
-
-    public bool GetLoggedIn()
-    {
-        return this.loggedIn;
-    }
 
     private void OnHideUnity(bool isGameShown)
     {
@@ -65,13 +70,20 @@ public class Login : MonoBehaviour
         }
     }
 
+    //End Of Default Code
 
-
-    public string GetUserID()
+    public void OnLoginLogoutButtonClick()
     {
-        return this.userID;
-
+        if (!loggedIn)
+        {
+            FacebookLogin();
+        }
+        else
+        {
+            FacebookLogout();
+        }
     }
+
     public void FacebookLogin()
     {
         if (!FB.IsLoggedIn)
@@ -81,7 +93,9 @@ public class Login : MonoBehaviour
         }
         else
         {
-            loggedIn = true;
+            this.loggedIn = true;
+            loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
+            Debug.Log("Fb is logged in already");
         }
     }
   
@@ -90,34 +104,29 @@ public class Login : MonoBehaviour
     {
         if (FB.IsLoggedIn)
         {
+            this.loggedIn = true;
             this.accessToken = AccessToken.CurrentAccessToken;
             credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
-            loggedIn = true;
+            datahandler.SetIsLoggedIn(true);
+            loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
             FirebaseLogin();
             Debug.Log("In FBAUTHCALLBACK");
-            Debug.Log("userid is:"+this.accessToken.UserId);
-
+            Debug.Log("this.accesstoken.userid is:" + this.accessToken.UserId);
 
         }
         else
         {
-            loggedIn = false;
+            this.loggedIn = false;
+            loginOutbtn.GetComponentInChildren<Text>().text = "Login";
             Debug.Log("User cancelled login");
         }
-        //Only in main menu this will work
-        if(this.gameObject.GetComponent<MainMenu>()!=null)
-        {
-            //Reflect correct text on button to show login/logout
-            this.gameObject.GetComponent<MainMenu>().UpdateLoginOutText(loggedIn);
-        }
     }
+
     public void FacebookLogout()
     {
-        if(FB.IsLoggedIn)
-        {
-            FB.LogOut();
-            loggedIn = false;
-        }
+         FB.LogOut();
+         this.loggedIn = false;
+
     }
 
 
@@ -141,9 +150,23 @@ public class Login : MonoBehaviour
                userID = newUser.UserId;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
             newUser.DisplayName, newUser.UserId);
+               datahandler.SetFireBaseUserId(newUser.UserId);
         });
         Debug.Log("Login done");
       
+    }
+
+
+
+    public bool GetLoggedIn()
+    {
+        return this.loggedIn;
+    }
+
+    public string GetUserID()
+    {
+        return this.userID;
+
     }
 
 

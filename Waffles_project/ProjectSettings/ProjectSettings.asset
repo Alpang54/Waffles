@@ -712,10 +712,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: 7e19c2b8-6a16-43ca-9883-195b7f1ec598
+  cloudProjectId: 
   framebufferDepthMemorylessMode: 0
-  projectName: Waffles_project (1)
-  organizationId: alpang54
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

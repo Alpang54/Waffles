@@ -30,14 +30,14 @@ public class WorldMapManagerScript : MonoBehaviour
 
 
 
-    private Login LoginManagerScript;
+    private DataHandler datahandler;
 
 
     //Load world data from database and initialize the map
     async void Start()
     {
 
-        LoginManagerScript = GameObject.Find("LoginManager").GetComponent<Login>();
+        datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
         loadText.text = "Loading..";
         worldNames = new List<string>();
 
@@ -152,7 +152,7 @@ public class WorldMapManagerScript : MonoBehaviour
 
         int worldProgress = 1;
 
-        string userID = LoginManagerScript.GetUserID();
+        string userID = datahandler.GetFirebaseUserId();
         foreach (var userid in snapShotOfUserProgress.Children)
         {
             if (userid.Key.ToString() == userID)
