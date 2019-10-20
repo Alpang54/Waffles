@@ -4,6 +4,7 @@ using Firebase.Unity.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StageNameManage : MonoBehaviour
@@ -12,6 +13,7 @@ public class StageNameManage : MonoBehaviour
     public Button clickedEdit;
     public GameObject prefabRef;
     public Text stageName;
+    static public string customName;
 
     public void onDeleteClick()
     {
@@ -29,6 +31,10 @@ public class StageNameManage : MonoBehaviour
     }
     public void onEditClick()
     {
-
+        customName = stageName.text.ToString();
+        SceneManager.LoadScene("Edit_Custom");
     }
+
+   
+
 }
