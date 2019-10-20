@@ -170,7 +170,9 @@ public class Custom_Save : MonoBehaviour
         }
 
 
-
+        optionChoice.Clear();
+        correctAnswers.Clear();
+        questionName.Clear();
     }
 
     public void pressPlus()
