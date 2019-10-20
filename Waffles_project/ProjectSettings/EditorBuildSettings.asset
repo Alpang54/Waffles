@@ -14,14 +14,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Create_Custom.unity
     guid: dfeb1c389c07053429a38e664b8dc388
-  - enabled: 1
-    path: Assets/Scenes/CreateCustomQuestions.unity
-    guid: 85a71802707621942b64bef592facf72
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Custom_Manage.unity
     guid: 667bbe85b3b4db14c8e604378f84be9c
+  - enabled: 1
+    path: Assets/Scenes/Edit_Custom.unity
+    guid: 8a85bcee66dcc3b4ab3fa817fa35b015
   - enabled: 0
-    path: Assets/Scenes/Login.unity
+    path: 
     guid: 60e5f38ba4fa71a4492c6add7453e18f
   - enabled: 0
     path: Assets/Scenes/share.unity
