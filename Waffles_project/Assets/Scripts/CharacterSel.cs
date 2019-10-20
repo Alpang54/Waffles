@@ -18,10 +18,13 @@ public class CharacterSel : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private Image characterimage;
+    [SerializeField] private Text level;
     
 
     private void Start()
     {
+        DontDestroyOnLoad(this);
+        GameObject.Find("Level").active = false;
         UpdateCharacterSelectionUI();
     }
 
@@ -50,7 +53,7 @@ public class CharacterSel : MonoBehaviour
     public void ConfirmCharSel()
     {
         //This is to set what the player has choosen for the diffculties of the game
-        PlayerPrefs.SetInt("CharacterSelected" , selectedCharacterIndes);
+        PlayerPrefs.SetInt("CharacterSelected" , int.Parse(level.text));
        //Test to get the value on what the level is in the console
        Debug.Log(PlayerPrefs.GetInt("CharacterSelected")); 
     }
@@ -63,15 +66,20 @@ public class CharacterSel : MonoBehaviour
         characterimage.sprite =characterList[selectedCharacterIndes].splash;       
         //change description
         description.text = characterList[selectedCharacterIndes].description;
+        //change level 
+        level.text = characterList[selectedCharacterIndes].level;
     }
 
     [System.Serializable]
     public class CharacterSelectObject
     {
         //what does the character list contain
-        //change the character
+        //Character image
         public Sprite splash;
         //description is the starting level
         public string description;
+        //character level
+        public string level;
+
     }
 }

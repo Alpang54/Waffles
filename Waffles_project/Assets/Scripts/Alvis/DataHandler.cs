@@ -10,7 +10,7 @@ public class DataHandler : MonoBehaviour
     private bool isLoggedIn;
     private string firebaseUserId;
     private Tuple<int, int> worldAndStageLevel;
-
+    private int characterlevel;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +41,11 @@ public class DataHandler : MonoBehaviour
         return this.worldAndStageLevel;
     }
 
+    public int GetCharacterLevel()
+    {
+        return this.characterlevel;
+    }
+
 
     public void SetIsLoggedIn(bool isLoggedIn)
     {
@@ -57,5 +62,11 @@ public class DataHandler : MonoBehaviour
     public void SetWorldAndStageLevel(Tuple<int,int> worldAndStageLevel)
     {
         this.worldAndStageLevel = worldAndStageLevel;
+    }
+
+    public void SetCharacterLevel()
+    {
+        //set the character level
+        this.characterlevel = PlayerPrefs.GetInt("CharacterSelected");
     }
 }
