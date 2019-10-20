@@ -31,12 +31,12 @@ public class MainMenu : MonoBehaviour
         bool isLoggedIn = LoginManagerScript.GetLoggedIn();
         if (isLoggedIn)
         {
-            UpdateLoginOutText(!isLoggedIn);
+            UpdateLoginOutText(isLoggedIn);
             LoginManagerScript.FacebookLogout();
         }
         else
         {
-            UpdateLoginOutText(!isLoggedIn);
+            UpdateLoginOutText(isLoggedIn);
             LoginManagerScript.FacebookLogin();
 
         }
