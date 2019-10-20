@@ -27,17 +27,18 @@ public class StageMapManagerScript : MonoBehaviour
     List<Tuple<int, string, string>> worldStageNames;
     List<Tuple<int, string, string>> worldStageProgress;
 
-    private Login LoginManagerScript;
+    private DataHandler datahandler;
+
 
 
     public void LoadStageMap(int worldLevel, List<Tuple<int, string, string>> worldStageNames, List<Tuple<int, string, string>> worldStageProgress)
     {
-        
+        datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
         this.stageNames = new List<string>();
         this.worldStageNames = worldStageNames;
         this.worldStageProgress = worldStageProgress;
         this.worldLevel = worldLevel;
-        LoginManagerScript = GameObject.Find("LoginManager").GetComponent<Login>();
+       
         DeclareStageMapButtons();
         stageSelect.SetActive(true);
         DontDestroyOnLoad(this.gameObject);
@@ -70,18 +71,15 @@ public class StageMapManagerScript : MonoBehaviour
     public void OnSelectStagePlayButton(int stageLevel)
     {
         //change depengind on ameplay,ideally load scene
+        
+        Tuple<int, int> worldAndStageLevel = new Tuple<int, int>(this.worldLevel, stageLevel);
+        datahandler.SetWorldAndStageLevel(worldAndStageLevel);
+        //SceneManager.LoadScene(nextScene);
     }
-
-
-    //Loads stage map
-  
-
-
-    //Handle data from database
-  
 
     public void ToggleDifficulty()
     {
+        
         if (difficultyText.text == "Normal")
         {
             for(int i = 0; i < 9; i++)
