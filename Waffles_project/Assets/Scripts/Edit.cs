@@ -19,6 +19,8 @@ public class Edit : MonoBehaviour
     public ArrayList questionName = new ArrayList();
     public ArrayList correctAnswers = new ArrayList();
     public ArrayList optionChoice = new ArrayList();
+    public GameObject plus;
+    public GameObject save;
 
 
     // Start is called before the first frame update
@@ -168,6 +170,9 @@ public class Edit : MonoBehaviour
             }
             counting++;
         }
+
+        plus.SetActive(true);
+        save.SetActive(true);
     }
 
 

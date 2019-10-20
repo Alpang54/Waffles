@@ -568,7 +568,7 @@ PrefabInstance:
     - target: {fileID: 2160357141566602866, guid: be13a30b3192b8245be42a5edbdc1e2b,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2160357141566602829, guid: be13a30b3192b8245be42a5edbdc1e2b,
         type: 3}
@@ -1361,6 +1361,8 @@ MonoBehaviour:
     type: 3}
   stageName: {fileID: 0}
   correctChecked: {fileID: 21300104, guid: b4c1e02935e1f6246b47d53edff0855a, type: 3}
+  plus: {fileID: 2070251429}
+  save: {fileID: 1564753722}
 --- !u!1001 &1791547165
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1376,7 +1378,7 @@ PrefabInstance:
     - target: {fileID: 2160357141566602866, guid: be13a30b3192b8245be42a5edbdc1e2b,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2160357141566602829, guid: be13a30b3192b8245be42a5edbdc1e2b,
         type: 3}
