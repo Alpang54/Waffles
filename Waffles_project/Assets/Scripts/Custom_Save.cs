@@ -152,6 +152,9 @@ public class Custom_Save : MonoBehaviour
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
         databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
         Debug.Log(custStageName);
+
+        databaseRef.Child("CustomStage").Child(custStageName).RemoveValueAsync();
+
         for (int i = 0; i < noOfQuestion; i++)
         {
             databaseRef.Child("CustomStage").Child(custStageName).Child("QuestionNumber").Child((i + 1).ToString()).Child("StageName").SetValueAsync(custStageName);
@@ -182,8 +185,5 @@ public class Custom_Save : MonoBehaviour
 
     }
 
-    public void pressDelete()
-    {
-        Destroy(prefRef);
-    }
+    
 }
