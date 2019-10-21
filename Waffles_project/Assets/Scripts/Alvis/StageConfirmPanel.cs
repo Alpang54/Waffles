@@ -53,7 +53,7 @@ public class StageConfirmPanel : MonoBehaviour
     public void Play()
     { ///needs to change depending on gameplay
         StageMapManagerScript mapManager = stageMapManager.GetComponent<StageMapManagerScript>();
-        this.SetInactive();
+        
         mapManager.OnSelectStagePlayButton(this.stageLevel);
 
     }

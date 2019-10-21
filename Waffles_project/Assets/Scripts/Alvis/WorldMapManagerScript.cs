@@ -14,6 +14,10 @@ public class WorldMapManagerScript : MonoBehaviour
     public Sprite activeSprite;
     public Sprite lockedSprite;
 
+
+    private int worldCount;
+    private int worldProgress;
+
     private List<string> worldNames;
 
     private List<Tuple<int,string,string>> worldStageNames;
@@ -59,11 +63,11 @@ public class WorldMapManagerScript : MonoBehaviour
 
         await DBHandlerScript.ReadfromFirebase("World");
         DataSnapshot SnapshotOfWorld = DBHandlerScript.GetSnapshot();
-        int worldCount = ExtractWorldInformation(SnapshotOfWorld);
+        ExtractWorldInformation(SnapshotOfWorld);
 
         await DBHandlerScript.ReadfromFirebase("Progress");
         DataSnapshot snapshotOfUserProgress = DBHandlerScript.GetSnapshot();
-        int worldProgress = ExtractUserWorldProgress(snapshotOfUserProgress);
+        ExtractUserWorldProgress(snapshotOfUserProgress);
 
 
         DeclareWorldMapButtons(worldProgress, worldCount);
@@ -71,24 +75,23 @@ public class WorldMapManagerScript : MonoBehaviour
 
     }
 
-    private int ExtractWorldInformation(DataSnapshot snapShotOfWorld)
+    private void ExtractWorldInformation(DataSnapshot snapShotOfWorld)
     {
         this.worldStageNames = worldMapImplementor.ExtractWorldInformationLogic(snapShotOfWorld);
-        int worldCount = worldMapImplementor.GetNoOfWorlds();
-        Debug.Log("No of Worlds" + worldCount);
-        return worldCount;
+        this.worldCount = worldMapImplementor.GetWorldCount();
+
     }
 
 
     //method to handle data from database
-    private int ExtractUserWorldProgress(DataSnapshot snapShotOfUserProgress)
+    private void ExtractUserWorldProgress(DataSnapshot snapShotOfUserProgress)
     {
         string userID = datahandler.GetFirebaseUserId();
         this.worldStageProgress = worldMapImplementor.ExtractUserProgressLogic(snapShotOfUserProgress, userID);
         this.worldNames = worldMapImplementor.GetWorldNames();
+        this.worldProgress= worldMapImplementor.GetWorldProgress();
 
-        Debug.Log("world progress is" + worldMapImplementor.GetWorldProgress());
-        return worldMapImplementor.GetWorldProgress();
+      
     }
 
 
@@ -102,13 +105,13 @@ public class WorldMapManagerScript : MonoBehaviour
 
             WorldMapButtonScript aWorldButtonScript = worldMapButtons[i].GetComponent<WorldMapButtonScript>();
 
-            Debug.Log(" i is " + i + "worldProgress is + " + worldProgress + "worldCount is + " + worldCount);
+           
 
             if (worldMapImplementor.DeclareWorldButtonsLogic(worldProgress,worldCount,i))
             {
                 aWorldButtonScript.SetWorldButtonImage(activeSprite);
                 worldMapButtons[i].GetComponent<Button>().interactable = true;
-                aWorldButtonScript.SetWorldName(worldNames[i]);
+
                 aWorldButtonScript.SetWorldButton(true);
          
             }
@@ -124,17 +127,17 @@ public class WorldMapManagerScript : MonoBehaviour
 
 
     //when a world is selected, show confirm panel
-    public void OnSelectWorldButton(string worldName, int worldLevel)
+    public void OnSelectWorldButton(int worldLevel)
     {
-        Debug.Log(worldLevel);
+
         WorldConfirmPanel confirmPanel = worldConfirmPanel.GetComponent<WorldConfirmPanel>();
-        confirmPanel.confirmPanelAppear(worldName, worldLevel);
+        confirmPanel.confirmPanelAppear(this.worldNames[worldLevel-1], worldLevel);
     }
 
     // when a world is selected and confirmed, pass to stage manager to load stage map and turn world map off
     public void OnSelectWorldProceedButton(int worldLevel)
     {
-        Debug.Log(worldLevel);
+       
         StageMapManagerScript stageManager = stageMapManager.GetComponent<StageMapManagerScript>();
         stageManager.LoadStageMap(worldLevel,this.worldStageNames,this.worldStageProgress);
         worldSelect.SetActive(false);
@@ -174,7 +177,7 @@ public class WorldMapManagerScript : MonoBehaviour
 
 public class WorldMapImplementation
 {
-    private int noOfWorld;
+    private int worldCount;
     private List<string> worldNames;
     private int worldProgress;
 
@@ -195,7 +198,7 @@ public class WorldMapImplementation
 
         if (snapShotOfWorld == null)
         {
-            this.noOfWorld = worldNumber;
+            this.worldCount = worldNumber;
             return null;
         }
         List<Tuple<int, string, string>> worldStageNames = new List<Tuple<int, string, string>>();
@@ -208,8 +211,8 @@ public class WorldMapImplementation
                 worldStageNames.Add(aRecordOfworldStageNames);
             }
         }
-        this.noOfWorld = worldNumber;
-        Debug.Log("noOfWorld" + worldNumber);
+        this.worldCount = worldNumber;
+ 
         return worldStageNames;
       
     }
@@ -254,9 +257,9 @@ public class WorldMapImplementation
     }
 
 
-    public int GetNoOfWorlds()
+    public int GetWorldCount()
     {
-        return this.noOfWorld;
+        return this.worldCount;
     }
     public int GetWorldProgress()
     {

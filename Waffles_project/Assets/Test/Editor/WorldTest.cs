@@ -70,7 +70,7 @@ namespace Tests
         {
             WorldMapImplementation worldMapImplementor = new WorldMapImplementation();
             worldMapImplementor.ExtractWorldInformationLogic(null);
-            Assert.AreEqual(0, worldMapImplementor.GetNoOfWorlds());
+            Assert.AreEqual(0, worldMapImplementor.GetWorldCount());
         }
 
         [Test]

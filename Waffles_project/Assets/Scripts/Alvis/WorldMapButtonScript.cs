@@ -15,7 +15,7 @@ public class WorldMapButtonScript : MonoBehaviour
 {
 
     public int worldLevel;
-    private string worldName;
+   
     public Text worldButtonText;
     private Image worldButtonImage;
     private Button worldButton;
@@ -31,12 +31,7 @@ public class WorldMapButtonScript : MonoBehaviour
 
     }
 
-    public void SetWorldName(string worldName)
-    {
-        this.worldName = worldName;
-        
-
-    }
+  
     public void SetWorldButtonImage(Sprite activeOrInactiveSprite)
     {
         worldButtonImage.sprite = activeOrInactiveSprite;
@@ -53,7 +48,7 @@ public class WorldMapButtonScript : MonoBehaviour
 
         WorldMapManagerScript mapManager = worldMapManager.GetComponent<WorldMapManagerScript>();
         
-        mapManager.OnSelectWorldButton(this.worldName, this.worldLevel);
+        mapManager.OnSelectWorldButton(this.worldLevel);
 
     }
 }
