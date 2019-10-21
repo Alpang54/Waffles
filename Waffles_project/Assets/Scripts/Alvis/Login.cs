@@ -119,6 +119,7 @@ public class Login : MonoBehaviour
             this.loggedIn = false;
             loginOutbtn.GetComponentInChildren<Text>().text = "Login";
             Debug.Log("User cancelled login");
+            datahandler.SetIsLoggedIn(false);
         }
     }
 
@@ -126,7 +127,8 @@ public class Login : MonoBehaviour
     {
          FB.LogOut();
          this.loggedIn = false;
-
+        loginOutbtn.GetComponentInChildren<Text>().text = "Login";
+        datahandler.SetIsLoggedIn(false);
     }
 
 

@@ -32,6 +32,17 @@ public class MainMenu : MonoBehaviour
             loginPopUp.SetActive(true);
         }
     }
+    public void CheckLogin(GameObject toActivate)
+    {
+        if (datahandler.GetIsLoggedIn())
+        {
+            toActivate.SetActive(true);
+        }
+        else
+        {
+            loginPopUp.SetActive(true);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
