@@ -207,6 +207,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 847145618}
     m_Modifications:
+    - target: {fileID: 6062993894644705678, guid: 643164e82260072448b16e8a0f980425,
+        type: 3}
+      propertyPath: m_Name
+      value: Btn_Manage
+      objectReference: {fileID: 0}
     - target: {fileID: 1963631352991100141, guid: 643164e82260072448b16e8a0f980425,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -312,10 +317,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 6062993894644705678, guid: 643164e82260072448b16e8a0f980425,
+    - target: {fileID: 630221096290406857, guid: 643164e82260072448b16e8a0f980425,
         type: 3}
-      propertyPath: m_Name
-      value: Btn_Manage
+      propertyPath: m_Text
+      value: Manage
       objectReference: {fileID: 0}
     - target: {fileID: 4327992189524064343, guid: 643164e82260072448b16e8a0f980425,
         type: 3}
@@ -331,11 +336,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Custom_Manage
-      objectReference: {fileID: 0}
-    - target: {fileID: 630221096290406857, guid: 643164e82260072448b16e8a0f980425,
-        type: 3}
-      propertyPath: m_Text
-      value: Manage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 643164e82260072448b16e8a0f980425, type: 3}
@@ -521,6 +521,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: 0797a431dfea3f344adbe192fb7648f4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -728,6 +730,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 847145618}
     m_Modifications:
+    - target: {fileID: 6062993894644705678, guid: 643164e82260072448b16e8a0f980425,
+        type: 3}
+      propertyPath: m_Name
+      value: Btn_Play
+      objectReference: {fileID: 0}
     - target: {fileID: 1963631352991100141, guid: 643164e82260072448b16e8a0f980425,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -833,10 +840,20 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 6062993894644705678, guid: 643164e82260072448b16e8a0f980425,
+    - target: {fileID: 4327992189524064343, guid: 643164e82260072448b16e8a0f980425,
         type: 3}
-      propertyPath: m_Name
-      value: Btn_Play
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1604424182}
+    - target: {fileID: 4327992189524064343, guid: 643164e82260072448b16e8a0f980425,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 4327992189524064343, guid: 643164e82260072448b16e8a0f980425,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Custom Lobby
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 643164e82260072448b16e8a0f980425, type: 3}

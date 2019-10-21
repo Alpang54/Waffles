@@ -8,6 +8,7 @@ TextureImporter:
     21300006: Banner
     21300008: Potrait1
     21300010: PotraitBordered
+    21300012: Window_0
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -227,6 +228,26 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: f9ca359df0bdf2a4a85a87545c4606df
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Window_0
+      rect:
+        serializedVersion: 2
+        x: 3542
+        y: 2018
+        width: 427
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3fdcffc02637ba4786b73b57dc9d6af
       vertices: []
       indices: 
       edges: []
