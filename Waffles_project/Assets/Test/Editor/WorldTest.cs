@@ -23,20 +23,6 @@ namespace Tests
 
 
         [Test]
-        public void TestProgressInitializationOfStageWhenProgressIsMoreThanContent()
-        {
-            List<Tuple<int, string, string>> worldStageNames = new List<Tuple<int, string, string>>();
-            List<Tuple<int, string, string>> worldStageProgress = new List<Tuple<int, string, string>>();
-            worldStageNames.Add(new Tuple<int, string, string>(1, "1", "World1Stage1"));
-            worldStageNames.Add(new Tuple<int, string, string>(1, "2", "World1Stage2"));
-            worldStageProgress.Add(new Tuple<int, string, string>(1, "1", "100"));
-            worldStageProgress.Add(new Tuple<int, string, string>(1, "2", "100"));
-            worldStageProgress.Add(new Tuple<int, string, string>(1, "3", "100"));
-            StageMapManagerImplementation stageMapImplementor = new StageMapManagerImplementation();
-            stageMapImplementor.InitializeNoOfStagesAndUserProgress(worldStageNames, worldStageProgress, 1);
-            Assert.AreEqual(2, stageMapImplementor.GetStageProgress());
-        }
-        [Test]
         public void TestStageCountInitializationOfStageWhenProgressIsLesserThanContent()
         {
             List<Tuple<int, string, string>> worldStageNames = new List<Tuple<int, string, string>>();

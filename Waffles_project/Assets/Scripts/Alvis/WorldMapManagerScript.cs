@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Firebase.Database;
@@ -100,11 +101,10 @@ public class WorldMapManagerScript : MonoBehaviour
         {
 
             WorldMapButtonScript aWorldButtonScript = worldMapButtons[i].GetComponent<WorldMapButtonScript>();
-            WorldMapImplementation worldMapeImplentor = new WorldMapImplementation();
 
             Debug.Log(" i is " + i + "worldProgress is + " + worldProgress + "worldCount is + " + worldCount);
 
-            if (worldMapeImplentor.DeclareWorldButtonsLogic(worldProgress,worldCount,i))
+            if (worldMapImplementor.DeclareWorldButtonsLogic(worldProgress,worldCount,i))
             {
                 aWorldButtonScript.SetWorldButtonImage(activeSprite);
                 worldMapButtons[i].GetComponent<Button>().interactable = true;
@@ -180,7 +180,7 @@ public class WorldMapImplementation
 
     public bool DeclareWorldButtonsLogic(int worldProgress, int worldCount, int i)
     {
-        if (i < worldProgress)
+        if (i < worldProgress && i<worldCount)
         {
             return true;
         }
@@ -190,7 +190,7 @@ public class WorldMapImplementation
 
     public List<Tuple<int, string, string>>  ExtractWorldInformationLogic(DataSnapshot snapShotOfWorld)
     {
-
+       
         int worldNumber = 0;
 
         if (snapShotOfWorld == null)

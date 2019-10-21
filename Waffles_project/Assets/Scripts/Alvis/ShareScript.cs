@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class ShareScript : MonoBehaviour
 {
-    
 
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     public void Share()
     {
