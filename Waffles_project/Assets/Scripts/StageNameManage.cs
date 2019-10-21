@@ -34,7 +34,11 @@ public class StageNameManage : MonoBehaviour
         customName = stageName.text.ToString();
         SceneManager.LoadScene("Edit_Custom");
     }
+    public void onPlayClick()
+    {
+        customName = stageName.text.ToString();
+        SceneManager.LoadScene("Custom Stage");
+    }
 
-   
 
 }
