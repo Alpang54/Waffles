@@ -19,8 +19,6 @@ public class WorldMapManagerScript : MonoBehaviour
     private List<Tuple<int, string, string>> worldStageProgress;
 
 
-
-
     public Text loadText;
     public GameObject[] worldMapButtons;
     public GameObject worldConfirmPanel;
@@ -29,7 +27,7 @@ public class WorldMapManagerScript : MonoBehaviour
 
 
 
-
+    WorldMapImplementation worldMapImplementor;
     private DataHandler datahandler;
 
 
@@ -40,16 +38,60 @@ public class WorldMapManagerScript : MonoBehaviour
         datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
         loadText.text = "Loading..";
         worldNames = new List<string>();
-
         worldStageProgress = new List<Tuple<int, string, string>>();
         worldStageNames = new List<Tuple<int,string,string>>();
+        worldMapImplementor = new WorldMapImplementation();
 
-       await GetWorldProgressFromDatabase();
+        await GetWorldAndUserProgressFromDatabase();
         loadText.text = "";
 
 
 
     }
+
+
+    //method to handle data from database
+    private async Task GetWorldAndUserProgressFromDatabase()
+    {
+        GameObject DBHandler = GameObject.Find("DBHandler");
+        DBHandler DBHandlerScript = DBHandler.GetComponent<DBHandler>();
+
+        await DBHandlerScript.ReadfromFirebase("World");
+        DataSnapshot SnapshotOfWorld = DBHandlerScript.GetSnapshot();
+        int worldCount = ExtractWorldInformation(SnapshotOfWorld);
+
+        await DBHandlerScript.ReadfromFirebase("Progress");
+        DataSnapshot snapshotOfUserProgress = DBHandlerScript.GetSnapshot();
+        int worldProgress = ExtractUserWorldProgress(snapshotOfUserProgress);
+
+
+        DeclareWorldMapButtons(worldProgress, worldCount);
+
+
+    }
+
+    private int ExtractWorldInformation(DataSnapshot snapShotOfWorld)
+    {
+        this.worldStageNames = worldMapImplementor.ExtractWorldInformationLogic(snapShotOfWorld);
+        int worldCount = worldMapImplementor.GetNoOfWorlds();
+        Debug.Log("No of Worlds" + worldCount);
+        return worldCount;
+    }
+
+
+    //method to handle data from database
+    private int ExtractUserWorldProgress(DataSnapshot snapShotOfUserProgress)
+    {
+        string userID = datahandler.GetFirebaseUserId();
+        this.worldStageProgress = worldMapImplementor.ExtractUserProgressLogic(snapShotOfUserProgress, userID);
+        this.worldNames = worldMapImplementor.GetWorldNames();
+
+        Debug.Log("world progress is" + worldMapImplementor.GetWorldProgress());
+        return worldMapImplementor.GetWorldProgress();
+    }
+
+
+
 
     //determine which buttons are to be active or which to be inactive
     public void DeclareWorldMapButtons(int worldProgress, int worldCount)
@@ -58,17 +100,19 @@ public class WorldMapManagerScript : MonoBehaviour
         {
 
             WorldMapButtonScript aWorldButtonScript = worldMapButtons[i].GetComponent<WorldMapButtonScript>();
+            WorldMapImplementation worldMapeImplentor = new WorldMapImplementation();
 
+            Debug.Log(" i is " + i + "worldProgress is + " + worldProgress + "worldCount is + " + worldCount);
 
-            if (i < worldProgress)
+            if (worldMapeImplentor.DeclareWorldButtonsLogic(worldProgress,worldCount,i))
             {
-
                 aWorldButtonScript.SetWorldButtonImage(activeSprite);
                 worldMapButtons[i].GetComponent<Button>().interactable = true;
                 aWorldButtonScript.SetWorldName(worldNames[i]);
                 aWorldButtonScript.SetWorldButton(true);
+         
             }
-            else if (i >= worldProgress && i < worldCount)
+            else
             {
                 aWorldButtonScript.SetWorldButtonImage(lockedSprite);
                 aWorldButtonScript.SetWorldButton(false);
@@ -109,74 +153,118 @@ public class WorldMapManagerScript : MonoBehaviour
         worldSelect.SetActive(true);
     }
 
-
-    //method to handle data from database
-    private async Task GetWorldProgressFromDatabase()
+    public List<Tuple<int, string, string>> GetWorldStageNames()
     {
-        GameObject DBHandler = GameObject.Find("DBHandler");
-        DBHandler DBHandlerScript = DBHandler.GetComponent<DBHandler>();
-
-        await DBHandlerScript.ReadfromFirebase("World");
-        DataSnapshot SnapshotOfWorld = DBHandlerScript.GetSnapshot();
-        int worldCount = ExtractWorldInformation(SnapshotOfWorld);
-
-        await DBHandlerScript.ReadfromFirebase("Progress");
-        DataSnapshot snapshotOfUserProgress = DBHandlerScript.GetSnapshot();
-        int worldProgress = ExtractUserWorldProgress(snapshotOfUserProgress);
-        DeclareWorldMapButtons(worldProgress, worldCount);
-
-
+        return this.worldStageNames;
     }
 
-    private int ExtractWorldInformation(DataSnapshot snapShotOfWorld)
+    public void SetWorldStageNames(List<Tuple<int, string, string>> newWorldStageNames)
     {
-        int worldCount = 0;
-        foreach (var world in snapShotOfWorld.Children)
+        this.worldStageNames=newWorldStageNames;
+    }
+
+
+
+
+
+
+   
+}
+
+
+public class WorldMapImplementation
+{
+    private int noOfWorld;
+    private List<string> worldNames;
+    private int worldProgress;
+
+    public bool DeclareWorldButtonsLogic(int worldProgress, int worldCount, int i)
+    {
+        if (i < worldProgress)
         {
-            worldCount++;
-            foreach(var stage in world.Children)
-            { Tuple<int, string, string> aRecordOfworldStageNames = new Tuple<int, string, string>(worldCount, stage.Key.ToString(), stage.Value.ToString());
-                this.worldStageNames.Add(aRecordOfworldStageNames);
+            return true;
+        }
+    
+        return false;
+    }
+
+    public List<Tuple<int, string, string>>  ExtractWorldInformationLogic(DataSnapshot snapShotOfWorld)
+    {
+
+        int worldNumber = 0;
+
+        if (snapShotOfWorld == null)
+        {
+            this.noOfWorld = worldNumber;
+            return null;
+        }
+        List<Tuple<int, string, string>> worldStageNames = new List<Tuple<int, string, string>>();
+        foreach (var world in snapShotOfWorld.Children)
+        {   
+            worldNumber++;
+            foreach (var stage in world.Children)
+            {
+                Tuple<int, string, string> aRecordOfworldStageNames = new Tuple<int, string, string>(worldNumber, stage.Key.ToString(), stage.Value.ToString());
+                worldStageNames.Add(aRecordOfworldStageNames);
             }
         }
-        Debug.Log("worldcount" + "  " + worldCount);
-        return worldCount;
+        this.noOfWorld = worldNumber;
+        Debug.Log("noOfWorld" + worldNumber);
+        return worldStageNames;
+      
     }
 
-
-
-
-    //method to handle data from database
-    private int ExtractUserWorldProgress(DataSnapshot snapShotOfUserProgress)
+    public List<Tuple<int, string, string>> ExtractUserProgressLogic(DataSnapshot snapShotOfUserProgress, string userID)
     {
+      
 
+        this.worldNames = new List<string>();
         int worldProgress = 1;
+        List<Tuple<int, string, string>> worldStageProgress = new List<Tuple<int, string, string>>();
 
-        string userID = datahandler.GetFirebaseUserId();
-        foreach (var userid in snapShotOfUserProgress.Children)
+        if (snapShotOfUserProgress == null || userID == null)
+        {
+           
+            this.worldProgress = worldProgress ;
+            return null;
+        }
+
+
+            foreach (var userid in snapShotOfUserProgress.Children)
         {
             if (userid.Key.ToString() == userID)
             {
-                foreach (var world in userid.Children) //values in indiQuestion
+                foreach (var world in userid.Children)
                 {
-                   this.worldNames.Add(world.Key.ToString());
+                    this.worldNames.Add(world.Key.ToString());
                     worldProgress = Int32.Parse(world.Key.ToString().Substring(5));
 
-                    foreach(var stage in world.Children)
-                    { Tuple<int, string, string> aRecordOfWorldStageProgress = new Tuple<int, string, string>( worldProgress, stage.Key.ToString(), stage.Value.ToString());
-                        this.worldStageProgress.Add(aRecordOfWorldStageProgress);
+                    foreach (var stage in world.Children)
+                    {
+                        Tuple<int, string, string> aRecordOfWorldStageProgress = new Tuple<int, string, string>(worldProgress, stage.Key.ToString(), stage.Value.ToString());
+                        worldStageProgress.Add(aRecordOfWorldStageProgress);
                     }
+                    
                 }
                 break;
             }
-            else
-            {
-                
-            }
         }
-
-        return worldProgress;
+        this.worldProgress = worldProgress;
+        return worldStageProgress;
     }
 
-   
+
+    public int GetNoOfWorlds()
+    {
+        return this.noOfWorld;
+    }
+    public int GetWorldProgress()
+    {
+        return this.worldProgress;
+    }
+
+    public List<string> GetWorldNames()
+    {
+        return this.worldNames;
+    }
 }

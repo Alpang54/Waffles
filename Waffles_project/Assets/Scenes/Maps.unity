@@ -5728,6 +5728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageMapManager: {fileID: 1896673994}
   confirmStageNameText: {fileID: 1457495132}
+  stageCompletion: {fileID: 883440619}
 --- !u!1 &1339647005
 GameObject:
   m_ObjectHideFlags: 0

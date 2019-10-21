@@ -23,25 +23,32 @@ public class StageMapManagerScript : MonoBehaviour
     private int worldLevel;
 
     private int stageCount;
+    private int stageProgress;
+    private List<string> stageCompletionPercentage;
     private List<string> stageNames;
     List<Tuple<int, string, string>> worldStageNames;
     List<Tuple<int, string, string>> worldStageProgress;
 
     private DataHandler datahandler;
+    private StageMapManagerImplementation stageMapImplementor;
 
 
 
     public void LoadStageMap(int worldLevel, List<Tuple<int, string, string>> worldStageNames, List<Tuple<int, string, string>> worldStageProgress)
     {
         datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
-        this.stageNames = new List<string>();
+      
         this.worldStageNames = worldStageNames;
         this.worldStageProgress = worldStageProgress;
         this.worldLevel = worldLevel;
-       
+        stageMapImplementor = new StageMapManagerImplementation();
+        stageMapImplementor.InitializeNoOfStagesAndUserProgress(this.worldStageNames,this.worldStageProgress,this.worldLevel);
+        this.stageNames = stageMapImplementor.GetStageNames();
+        this.stageCount = stageMapImplementor.GetStageCount();
+        this.stageProgress = stageMapImplementor.GetStageProgress();
+        this.stageCompletionPercentage = stageMapImplementor.GetStageCompletionPercentage();
         DeclareStageMapButtons();
         stageSelect.SetActive(true);
-        DontDestroyOnLoad(this.gameObject);
     }
 
  
@@ -63,7 +70,7 @@ public class StageMapManagerScript : MonoBehaviour
     public void OnSelectStageButton(int stageLevel, string stageName)
     {
         StageConfirmPanel confirmPanel = stageConfirmPanel.GetComponent<StageConfirmPanel>();
-        confirmPanel.confirmPanelAppear(stageName, worldLevel, stageLevel);
+        confirmPanel.confirmPanelAppear(stageName, worldLevel, stageLevel,stageCompletionPercentage[stageLevel-1]);
 
     }
 
@@ -112,43 +119,16 @@ public class StageMapManagerScript : MonoBehaviour
     }
 
 
-   
-
     //Determine which stages are available to the user.
     public void DeclareStageMapButtons()
-    {
-        this.stageCount = 0;
-        int stageProgress = 0;
-        
-       foreach(var entry in worldStageProgress)
-        {
-            if (entry.Item1 == this.worldLevel)
-            {   
-                stageProgress++;
-               
-
-            }
-        }
-
-       foreach(var entry in worldStageNames)
-        {
-            if (entry.Item1 == this.worldLevel)
-            {
-                this.stageCount++;
-                stageNames.Add(entry.Item2);
-
-            }
-
-        }
-
-
-
+    { 
 
         for (int i = 0; i < stageMapButtons.Length; i++)
         {
             StageMapButtonScript aStageButton = stageMapButtons[i].GetComponent<StageMapButtonScript>();
-
-            if (i < stageProgress)
+            Debug.Log("stage progress is" + stageProgress);
+            Debug.Log("stage Count is" + stageCount);
+            if (stageMapImplementor.DeclareStageMapButton(this.stageProgress,this.stageCount,i)==1)
             {
              
                 aStageButton.SetStageButtonImage(activeSprite2);
@@ -157,12 +137,93 @@ public class StageMapManagerScript : MonoBehaviour
                 aStageButton.SetStageButton(true);
             }
 
-            else if (i >= stageProgress && i<stageCount) 
+            else if (stageMapImplementor.DeclareStageMapButton(this.stageProgress, this.stageCount, i) == 2) 
             {
                 aStageButton.SetStageButtonImage(lockedSprite2);
                 aStageButton.SetStageButton(false);
             }
         }
+    }
+}
+
+
+public class StageMapManagerImplementation
+{
+    List<string> stageCompletionPercentage = new List<string>();
+    List<string> stageNames = new List<string>();
+    int stageCount = 0;
+    int stageProgress = 0;
+
+    public int GetStageCount()
+    {
+        return this.stageCount;
+    }
+
+    public int GetStageProgress()
+    {
+        return this.stageProgress;
+    }
+
+    public List<string> GetStageNames()
+    {
+        return this.stageNames;
+    }
+
+    public List<string> GetStageCompletionPercentage()
+    {
+        return this.stageCompletionPercentage;
+    }
+
+    public void InitializeNoOfStagesAndUserProgress(List<Tuple<int, string, string>> worldStageNames,
+    List<Tuple<int, string, string>> worldStageProgress,int worldLevel)
+
+    {
+
+        foreach (var entry in worldStageProgress)
+        {
+            if (entry.Item1 == worldLevel)
+            {
+                Debug.Log("entry.Item 1"+entry.Item1);
+                Debug.Log("worldLevel is" + worldLevel);
+                this.stageProgress++;
+                Debug.Log("this.stageProgress is" + this.stageProgress);
+                stageCompletionPercentage.Add(entry.Item3);
+            }
+        }
+
+        foreach (var entry in worldStageNames)
+        {
+            if (entry.Item1 == worldLevel)
+            {
+                this.stageCount++;
+                this.stageNames.Add(entry.Item2);
+
+            }
+
+        }
+
+        if (this.stageProgress > this.stageCount)
+        {
+            this.stageProgress = this.stageCount;
+        }
+    }
+
+
+    public int DeclareStageMapButton(int stageProgress, int stageCount, int i)
+    {
+        if (i < stageProgress)
+        {
+            return 1;
+        }
+        else if ((i >= stageProgress && i < stageCount))
+        {
+            return 2;
+        }
+        else
+        {
+            return 0;
+        }
+      
     }
 }
 

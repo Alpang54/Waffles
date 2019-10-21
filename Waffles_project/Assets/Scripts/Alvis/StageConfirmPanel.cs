@@ -8,7 +8,7 @@ public class StageConfirmPanel : MonoBehaviour
 
     public GameObject stageMapManager;
     public Text confirmStageNameText;
-
+    public Text stageCompletion;
     string stageName;
     int stageLevel;
 
@@ -25,9 +25,10 @@ public class StageConfirmPanel : MonoBehaviour
     }
 
     //turn on stage confirm panel with appropriate text
-    public void confirmPanelAppear(string stageName, int worldLevel, int stageLevel)
+    public void confirmPanelAppear(string stageName, int worldLevel, int stageLevel,string stageCompletionPercentage)
     {
         confirmStageNameText.text = worldLevel + "-" +stageLevel+"-"+ stageName;
+        stageCompletion.text=stageCompletionPercentage+"%";
         this.gameObject.SetActive(true);
     }
 
