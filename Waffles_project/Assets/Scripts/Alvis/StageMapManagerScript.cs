@@ -82,7 +82,8 @@ public class StageMapManagerScript : MonoBehaviour
         
         Tuple<int, int> worldAndStageLevel = new Tuple<int, int>(this.worldLevel, stageLevel);
         datahandler.SetWorldAndStageLevel(worldAndStageLevel);
-        SceneManager.LoadScene("Custom Lobby");
+        //SceneManager.LoadScene("Custom Lobby");
+        SceneManager.LoadScene("Game Map");
     }
 
     public void ToggleDifficulty()
