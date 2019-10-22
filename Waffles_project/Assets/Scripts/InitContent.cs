@@ -12,6 +12,7 @@ using UnityEngine.UI;
 public class InitContent : MonoBehaviour
 {
     public GameObject extraContent;
+    public GameObject addButton;
     public Text stageName;
     public Transform contentPanel;
     public int noOfCustom;
@@ -108,6 +109,7 @@ public class InitContent : MonoBehaviour
 
 
         }
+        addButton.SetActive(true);
     }
    
 }
