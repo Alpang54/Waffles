@@ -19,6 +19,8 @@ public class Login : MonoBehaviour
     [SerializeField] private static Credential credentials;
 
 
+    private Firebase.Auth.FirebaseAuth auth;
+
     [SerializeField]
     Button loginOutbtn;
 
@@ -28,19 +30,20 @@ public class Login : MonoBehaviour
 
 // Start of Default Code
     void Awake()
-    { 
+    {
+        datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
         //Only init if this page is login
         if (!FB.IsInitialized)
             FB.Init(SetInit, OnHideUnity);
-        datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
-        this.loggedIn = datahandler.GetIsLoggedIn();
-        if (this.loggedIn)
-        {
-            loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
-        }
+        Debug.Log("Awake");
+        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+
     }
- 
- 
+
+
+
+
+
     private void SetInit()
     {
         if (FB.IsInitialized)
@@ -73,19 +76,22 @@ public class Login : MonoBehaviour
     //End Of Default Code
 
     public void OnLoginLogoutButtonClick()
-    {
+    {   
         if (!loggedIn)
         {
+            Debug.Log("FacebookLogin");
             FacebookLogin();
         }
         else
         {
+            Debug.Log("FacebookLogout");
             FacebookLogout();
         }
     }
 
     public void FacebookLogin()
     {
+        Debug.Log("FacebookLogin");
         if (!FB.IsLoggedIn)
         {
             var perms = new List<string>() { "public_profile", "email" };
@@ -102,12 +108,16 @@ public class Login : MonoBehaviour
 
     private void FBAuthCallback(ILoginResult result)
     {
+        Debug.Log("FBAuthCallback");
         if (FB.IsLoggedIn)
         {
             this.loggedIn = true;
             this.accessToken = AccessToken.CurrentAccessToken;
             credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
+            print(credentials);
             datahandler.SetIsLoggedIn(true);
+            Debug.Log("In FBAUTHCALLBACK"); Debug.Log("In FBAUTHCALLBACK");
+            Debug.Log("In FBAUTHCALLBACK");
             loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
             FirebaseLogin();
             Debug.Log("In FBAUTHCALLBACK");
@@ -135,7 +145,8 @@ public class Login : MonoBehaviour
 
     private void FirebaseLogin()
     {
-           Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+
+      
            auth.SignInWithCredentialAsync(credentials).ContinueWith(task => {
             if (task.IsCanceled)
             {

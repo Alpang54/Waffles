@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Firebase.Database;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StageMapManagerScript : MonoBehaviour
@@ -81,7 +82,7 @@ public class StageMapManagerScript : MonoBehaviour
         
         Tuple<int, int> worldAndStageLevel = new Tuple<int, int>(this.worldLevel, stageLevel);
         datahandler.SetWorldAndStageLevel(worldAndStageLevel);
-        //SceneManager.LoadScene(nextScene);
+        SceneManager.LoadScene("Custom Lobby");
     }
 
     public void ToggleDifficulty()
@@ -118,7 +119,11 @@ public class StageMapManagerScript : MonoBehaviour
         }
     }
 
-
+    public void Share()
+    {
+        ShareScript sharescript = GameObject.Find("ShareHandler").GetComponent<ShareScript>();
+        sharescript.Share();
+    }
     //Determine which stages are available to the user.
     public void DeclareStageMapButtons()
     { 
@@ -126,8 +131,6 @@ public class StageMapManagerScript : MonoBehaviour
         for (int i = 0; i < stageMapButtons.Length; i++)
         {
             StageMapButtonScript aStageButton = stageMapButtons[i].GetComponent<StageMapButtonScript>();
-            Debug.Log("stage progress is" + stageProgress);
-            Debug.Log("stage Count is" + stageCount);
             if (stageMapImplementor.DeclareStageMapButton(this.stageProgress,this.stageCount,i)==1)
             {
              
@@ -183,29 +186,23 @@ public class StageMapManagerImplementation
         {
             if (entry.Item1 == worldLevel)
             {
-                Debug.Log("entry.Item 1"+entry.Item1);
-                Debug.Log("worldLevel is" + worldLevel);
+
                 this.stageProgress++;
-                Debug.Log("this.stageProgress is" + this.stageProgress);
                 stageCompletionPercentage.Add(entry.Item3);
             }
         }
 
         foreach (var entry in worldStageNames)
-        {
+        {  
             if (entry.Item1 == worldLevel)
             {
                 this.stageCount++;
-                this.stageNames.Add(entry.Item2);
+                this.stageNames.Add(entry.Item3);
 
             }
 
         }
 
-        if (this.stageProgress > this.stageCount)
-        {
-            this.stageProgress = this.stageCount;
-        }
     }
 
 

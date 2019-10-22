@@ -42,9 +42,6 @@ public class WorldMapManagerScript : MonoBehaviour
 
         datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
         loadText.text = "Loading..";
-        worldNames = new List<string>();
-        worldStageProgress = new List<Tuple<int, string, string>>();
-        worldStageNames = new List<Tuple<int,string,string>>();
         worldMapImplementor = new WorldMapImplementation();
 
         await GetWorldAndUserProgressFromDatabase();
@@ -64,10 +61,13 @@ public class WorldMapManagerScript : MonoBehaviour
         await DBHandlerScript.ReadfromFirebase("World");
         DataSnapshot SnapshotOfWorld = DBHandlerScript.GetSnapshot();
         ExtractWorldInformation(SnapshotOfWorld);
+        ProcessWorldInformation(this.worldStageNames);
+        
 
         await DBHandlerScript.ReadfromFirebase("Progress");
         DataSnapshot snapshotOfUserProgress = DBHandlerScript.GetSnapshot();
         ExtractUserWorldProgress(snapshotOfUserProgress);
+        ProcessUserProgessLogic(this.worldStageProgress);
 
 
         DeclareWorldMapButtons(worldProgress, worldCount);
@@ -78,20 +78,35 @@ public class WorldMapManagerScript : MonoBehaviour
     private void ExtractWorldInformation(DataSnapshot snapShotOfWorld)
     {
         this.worldStageNames = worldMapImplementor.ExtractWorldInformationLogic(snapShotOfWorld);
-        this.worldCount = worldMapImplementor.GetWorldCount();
+        Debug.Log("this.worldstagenames is" + this.worldStageNames);
 
     }
 
+    private void ProcessWorldInformation(List<Tuple<int, string, string>> worldStageNames)
+    {
+        worldMapImplementor.ProcessWorldInformation(worldStageNames);
+        this.worldCount = worldMapImplementor.GetWorldCount();
+        Debug.Log("this.worldcount is" + this.worldCount);
+    }
 
     //method to handle data from database
     private void ExtractUserWorldProgress(DataSnapshot snapShotOfUserProgress)
     {
         string userID = datahandler.GetFirebaseUserId();
         this.worldStageProgress = worldMapImplementor.ExtractUserProgressLogic(snapShotOfUserProgress, userID);
+        Debug.Log("this.worldstageprogress is" + this.worldStageProgress);
         this.worldNames = worldMapImplementor.GetWorldNames();
-        this.worldProgress= worldMapImplementor.GetWorldProgress();
+        Debug.Log("this.worldnames is" + this.worldNames);
+        
 
       
+    }
+    
+    private void ProcessUserProgessLogic(List<Tuple<int, string, string>> worldStageProgress)
+    {
+        worldMapImplementor.ProcessUserProgressLogic(worldStageProgress);
+        this.worldProgress = worldMapImplementor.GetWorldProgress();
+        Debug.Log("this.worldprogress is" + this.worldProgress);
     }
 
 
@@ -193,12 +208,11 @@ public class WorldMapImplementation
 
     public List<Tuple<int, string, string>>  ExtractWorldInformationLogic(DataSnapshot snapShotOfWorld)
     {
-       
-        int worldNumber = 0;
 
+
+        int worldNumber=0;
         if (snapShotOfWorld == null)
         {
-            this.worldCount = worldNumber;
             return null;
         }
         List<Tuple<int, string, string>> worldStageNames = new List<Tuple<int, string, string>>();
@@ -211,24 +225,31 @@ public class WorldMapImplementation
                 worldStageNames.Add(aRecordOfworldStageNames);
             }
         }
-        this.worldCount = worldNumber;
+        
  
         return worldStageNames;
       
     }
 
+    public void ProcessWorldInformation(List<Tuple<int, string, string>> worldStageNames)
+    {
+        int worldCount = 0;
+        foreach(var aRecordOfWorldStageNames in worldStageNames)
+        {
+            worldCount=aRecordOfWorldStageNames.Item1;
+        }
+        this.worldCount = worldCount;
+    }
+
     public List<Tuple<int, string, string>> ExtractUserProgressLogic(DataSnapshot snapShotOfUserProgress, string userID)
     {
-      
 
+        int worldProgress;
         this.worldNames = new List<string>();
-        int worldProgress = 1;
         List<Tuple<int, string, string>> worldStageProgress = new List<Tuple<int, string, string>>();
 
         if (snapShotOfUserProgress == null || userID == null)
         {
-           
-            this.worldProgress = worldProgress ;
             return null;
         }
 
@@ -252,8 +273,18 @@ public class WorldMapImplementation
                 break;
             }
         }
-        this.worldProgress = worldProgress;
+       
         return worldStageProgress;
+    }
+
+    public void ProcessUserProgressLogic(List<Tuple<int, string, string>> worldStageProgress)
+    {
+        int worldProgress = 0;
+        foreach (var aRecordOfWorldStageProgress in worldStageProgress)
+        {
+            worldProgress = aRecordOfWorldStageProgress.Item1;
+        }
+        this.worldProgress = worldProgress;
     }
 
 
