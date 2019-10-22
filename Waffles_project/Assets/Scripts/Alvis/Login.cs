@@ -40,9 +40,17 @@ public class Login : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        //Update the text whenever reload scene (Ex. switching scenes since init wont be called multiple times)
+        if (FB.IsLoggedIn)
+        {
+            loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
+        }
+        else
+            loginOutbtn.GetComponentInChildren<Text>().text = "Login";
 
-
-
+    }
 
     private void SetInit()
     {
@@ -51,6 +59,19 @@ public class Login : MonoBehaviour
             Debug.Log("Fb init is done");
             // Signal an app activation App Event
             FB.ActivateApp();
+            //Check if they already logged in or not before, to update button text
+            if (FB.IsLoggedIn)
+            {
+                this.loggedIn = true;
+                loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
+                datahandler.SetIsLoggedIn(true);
+            }
+            else
+            {
+                this.loggedIn = false;
+                loginOutbtn.GetComponentInChildren<Text>().text = "Login";
+                datahandler.SetIsLoggedIn(false);
+            }
         }
         else
         {
@@ -76,7 +97,7 @@ public class Login : MonoBehaviour
     //End Of Default Code
 
     public void OnLoginLogoutButtonClick()
-    {   
+    {
         if (!loggedIn)
         {
             Debug.Log("FacebookLogin");
@@ -100,6 +121,7 @@ public class Login : MonoBehaviour
         else
         {
             this.loggedIn = true;
+            datahandler.SetIsLoggedIn(true);
             loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
             Debug.Log("Fb is logged in already");
         }
@@ -135,18 +157,17 @@ public class Login : MonoBehaviour
 
     public void FacebookLogout()
     {
-         FB.LogOut();
-         this.loggedIn = false;
+        this.loggedIn = false;
         loginOutbtn.GetComponentInChildren<Text>().text = "Login";
         datahandler.SetIsLoggedIn(false);
+        FB.LogOut();
+       
     }
 
 
 
     private void FirebaseLogin()
     {
-
-      
            auth.SignInWithCredentialAsync(credentials).ContinueWith(task => {
             if (task.IsCanceled)
             {

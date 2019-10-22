@@ -103,6 +103,7 @@ public class InitContent : MonoBehaviour
             //go.GetComponent<>
             go.SetActive(true);
             go.transform.SetParent(contentPanel);
+            go.gameObject.transform.localScale = new Vector3(1, 1, 1);
 
 
 
