@@ -18,10 +18,10 @@ public class InitContent : MonoBehaviour
     public int noOfCustom;
     ArrayList arrayStageName = new ArrayList();
     public bool done=false;
-
+    
     public string strJson;
     // Start is called before the first frame update
-
+    private DataHandler dataHandler;
     private void Awake()
     {
         
@@ -29,12 +29,15 @@ public class InitContent : MonoBehaviour
 
     void Start()
     {
+        
+        dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
 
         StartCoroutine(ReadDB());
         //Invoke("loadDB", 1);
-        
+        string test = dataHandler.GetFirebaseUserId();
+        Debug.Log(test);
 
-        
+
 
 
     }
@@ -45,7 +48,7 @@ public class InitContent : MonoBehaviour
             DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
             
 
-            FirebaseDatabase.DefaultInstance.GetReference("CustomStage").GetValueAsync().ContinueWith(task =>
+            FirebaseDatabase.DefaultInstance.GetReference("UserCustom/"+dataHandler.GetFirebaseUserId()).GetValueAsync().ContinueWith(task =>
             {
                 //reference.GetValueAsync().ContinueWith(task => {
                 if (task.IsFaulted)
@@ -62,20 +65,9 @@ public class InitContent : MonoBehaviour
                     foreach (var stages in snapshot.Children)
                     {
                         Debug.LogFormat("Key={0}", stages.Key); //Node Custom Stage Name
-                        arrayStageName.Add(stages.Key.ToString());
+                        arrayStageName.Add(stages.Value.ToString());
                         
-                        foreach (var questionNumber in stages.Children)
-                        {
-                            Debug.LogFormat("Key={0}", questionNumber.Children);//Node at Question Number
-                            string noOfQuestionNumberInStage = questionNumber.ChildrenCount.ToString();
-                            foreach(var indiQuestion in questionNumber.Children) //Node at indiQuestion
-                            {
-                                foreach(var value in indiQuestion.Children) //values in indiQuestion
-                                {
-                                    string test = value.Value.ToString();
-                                }
-                            }
-                        }
+                        
                     }
                     done = true;
                     //strJson =snapshot.GetRawJsonValue();

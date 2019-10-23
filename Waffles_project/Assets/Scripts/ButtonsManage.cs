@@ -40,7 +40,7 @@ public class ButtonsManage : MonoBehaviour
     public ArrayList questionName = new ArrayList();
     public ArrayList correctAnswers = new ArrayList();
     public ArrayList optionChoice = new ArrayList();
-   
+    private DataHandler dataHandler;
     public void pressNext()
     {
         backButton.SetActive(!backButton.active);
@@ -115,6 +115,8 @@ public class ButtonsManage : MonoBehaviour
 
     public void pressDone()
     {
+        dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
+        string uID = dataHandler.GetFirebaseUserId();
         int buttonImageCount = 0;
         int correctAnswer = 0;
         noOfQuestion = contentPanel2.childCount;
@@ -169,7 +171,11 @@ public class ButtonsManage : MonoBehaviour
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://cz3003-waffles.firebaseio.com/");
         databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
-        for(int i=0;i<noOfQuestion;i++)
+
+       
+        databaseRef.Child("Data").Child("Custom").Child(stageName.text).SetValueAsync(stageName.text);
+        databaseRef.Child("UserCustom").Child(dataHandler.GetFirebaseUserId()).Push().SetValueAsync(stageName.text);
+        for (int i=0;i<noOfQuestion;i++)
         {
             databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("StageName").SetValueAsync(stageName.text);
             databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("Question").SetValueAsync(questionName[i]);
@@ -194,7 +200,7 @@ public class ButtonsManage : MonoBehaviour
         goQuestion.Add(go);
         go.SetActive(true);
         go.transform.SetParent(contentPanel2);
-
+        go.gameObject.transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void pressDelete()
