@@ -601,17 +601,17 @@ MonoBehaviour:
   prefRef: {fileID: 0}
   addMoreQuestion: {fileID: 124226236}
   inputQns: {fileID: 0}
-  popUpError: {fileID: 0}
+  popUpError: {fileID: 3635682949940773848}
   popUpComplete: {fileID: 0}
   popupConfirm: {fileID: 0}
-  error: {fileID: 0}
+  error: {fileID: 4533758727216552036}
   contentPanel2: {fileID: 858631549}
   option1: {fileID: 0}
   option2: {fileID: 0}
   option3: {fileID: 0}
   option4: {fileID: 0}
-  correctChecked: {fileID: 0}
-  normalChecked: {fileID: 0}
+  correctChecked: {fileID: 21300104, guid: b4c1e02935e1f6246b47d53edff0855a, type: 3}
+  normalChecked: {fileID: 21300102, guid: b4c1e02935e1f6246b47d53edff0855a, type: 3}
   stageName: {fileID: 0}
   stageQuestion: {fileID: 0}
   stageAnswer1: {fileID: 0}

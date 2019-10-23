@@ -47,52 +47,6 @@ public class StageNameManage : MonoBehaviour
 
 
 
-    IEnumerator ReadDB()
-    {
-        done = false;
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-
-
-        FirebaseDatabase.DefaultInstance.GetReference("UserCustom/" + dataHandler.GetFirebaseUserId()).GetValueAsync().ContinueWith(task =>
-        {
-            //reference.GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted)
-            {
-                // Handle the error...
-            }
-            else if (task.IsCompleted)
-            {
-
-
-                DataSnapshot snapshot = task.Result;
-                noOfCustom = (int)snapshot.ChildrenCount;
-
-                foreach (var stages in snapshot.Children)
-                {
-                    Debug.LogFormat("Key={0}", stages.Key); //Node Custom Stage Name
-                    arrayStageName.Add(stages.Value.ToString());
-
-
-                }
-                done = true;
-                //strJson =snapshot.GetRawJsonValue();
-
-            }
-        });
-
-        yield return new WaitUntil(() => done == true);
-
-
-
-        if (done == true) //reading db should be done by now
-        {
-            loadDB();
-            //yield return new WaitForSeconds(1f);
-        }
-
-
-    }
     public void onEditClick()
     {
         customName = stageName.text.ToString();

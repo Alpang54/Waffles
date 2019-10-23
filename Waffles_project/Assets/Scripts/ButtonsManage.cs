@@ -132,13 +132,20 @@ public class ButtonsManage : MonoBehaviour
         string uID = dataHandler.GetFirebaseUserId();
         int buttonImageCount = 0;
         int correctAnswer = 0;
+        bool filled = true;
+        int neverTick = 0;
+
         noOfQuestion = contentPanel2.childCount;
         foreach (Transform stageQuestion in contentPanel2.transform) //noOfQUestion
         {
             string test = stageQuestion.gameObject.name;
             correctAnswer = 0;
             int count = 0;
-            
+            if (string.IsNullOrEmpty(test) == true)
+            {
+                filled = false;
+            }
+
             foreach (Transform inputs in stageQuestion.transform) //elements inside questions
             {
                 buttonImageCount = 0;
@@ -148,7 +155,11 @@ public class ButtonsManage : MonoBehaviour
                     {
                         test = inputs.gameObject.GetComponent<InputField>().text;
                         questionName.Add(inputs.gameObject.GetComponent<InputField>().text);// input question
-                        
+                         if (string.IsNullOrEmpty(test) == true)
+                         {
+                            filled = false;
+                         }
+
                     }
                     else
                     {
@@ -160,7 +171,11 @@ public class ButtonsManage : MonoBehaviour
                                  test = options.gameObject.GetComponent<InputField>().text;  //text for option
                                 optionChoice.Add(options.gameObject.GetComponent<InputField>().text);
                                  buttonImageCount++;
-                                }
+                                 if (string.IsNullOrEmpty(test) == true)
+                                 {
+                                    filled = false;
+                                 }
+                        }
                             else
                               {
                                  if(options.gameObject.GetComponent<Button>().image.sprite==correctChecked)
@@ -179,14 +194,7 @@ public class ButtonsManage : MonoBehaviour
                
             }
         }
-        if (noOfQuestion == 0)
-        {
-            error.text = ("Please Add at least one Question");
-            popUpError.SetActive(true);
-            
-        }
-        else
-        {
+        
             DatabaseReference databaseRef;
             FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
             databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
@@ -209,24 +217,118 @@ public class ButtonsManage : MonoBehaviour
 
 
             popUpComplete.SetActive(true);
-        }
+        
         
     }
 
     public void pressPlus()
     {
+        int buttonImageCount = 0;
+        int correctAnswer = 0;
+        bool filled = true;
+        int neverTick = 0;
+        int correctTick = 0;
+        noOfQuestion = contentPanel2.childCount;
+        if(noOfQuestion==0)
+        {
+            GameObject go = Instantiate(extraQuestion);
+            go.name = noOfQuestion.ToString();
+            goQuestion.Add(go);
+            go.SetActive(true);
+            go.transform.SetParent(contentPanel2);
+            go.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            foreach (Transform stageQuestion in contentPanel2.transform) //noOfQUestion
+            {
+                string test = stageQuestion.gameObject.name;
+                correctAnswer = 0;
+                int count = 0;
+
+                foreach (Transform inputs in stageQuestion.transform) //elements inside questions
+                {
+                    buttonImageCount = 0;
+                    test = inputs.gameObject.name;
+
+                    if (count == 0)
+                    {
+
+                        test = inputs.gameObject.GetComponent<InputField>().text;// get input question
+                        if (string.IsNullOrEmpty(test) == true)
+                        {
+                            filled = false;
+                        }
+
+                    }
+                    else
+                    {
+
+                        foreach (Transform options in inputs.gameObject.transform)
+                        {
+                            if (buttonImageCount == 0)
+                            {
+                                test = options.gameObject.GetComponent<InputField>().text;  //text for option
+                                if (string.IsNullOrEmpty(test) == true)
+                                {
+                                    filled = false;
+                                }
+                                buttonImageCount++;
+                            }
+                            else
+                            {
+                                if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
+                                {
+
+                                    correctTick++;
+                                }
+                                else
+                                {
+                                    neverTick++;
+                                }
+
+                            }
+
+                        }
+
+
+                    }
+                    count++;
+                    correctAnswer++;
+
+                }
+
+                
+
+
+            }
+
+            
+            
+    
+
+            if(filled==true)
+            {
+                GameObject go = Instantiate(extraQuestion);
+                go.name = noOfQuestion.ToString();
+                goQuestion.Add(go);
+                go.SetActive(true);
+                go.transform.SetParent(contentPanel2);
+                go.gameObject.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (filled==false)
+            {
+                error.text = ("You have not filled in all textbox");
+                popUpError.SetActive(true);
+            }
+        }
         
-        noOfQuestion++;
-        GameObject go = Instantiate(extraQuestion) ;
-        go.name = noOfQuestion.ToString();
-        goQuestion.Add(go);
-        go.SetActive(true);
-        go.transform.SetParent(contentPanel2);
-        go.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        
     }
 
     public void pressDelete()
     {
+        noOfQuestion--;
         Destroy(prefRef);
     }
     public void prompAndCheck()
