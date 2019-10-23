@@ -82,6 +82,7 @@ public class CustomGame : MonoBehaviour
     List<String> rightList = new List<string>();
     List<String> wrongList = new List<string>();
     string qnsRight = ""; string qnsWrong = "";
+    private double startTime,timeTaken;
 
     // Start is called before the first frame update
     void Start()
@@ -208,6 +209,7 @@ public class CustomGame : MonoBehaviour
             initializedButtons[currentQnsNumber].GetComponent<Button>().GetComponent<Image>().sprite = normalQns;
             initializedButtons[currentQnsNumber].GetComponent<Button>().interactable = true;
             qnsCounter.GetComponent<Text>().text = ("Question Cleared: " + (qnsCounterT) + "/" + qnList.Count).ToString();
+            startTime = Time.time;
         }
     }
     public void CheckAns(int i)
@@ -245,6 +247,8 @@ public class CustomGame : MonoBehaviour
     {
         if (qnsCounterT == qnList.Count)
         {
+            timeTaken = Time.time - startTime;
+            Debug.Log(timeTaken);
             Debug.Log("Cleared");
             clearedPopUp.SetActive(true);
             clearedText.text += "Total Questions Correct: " + correctQns + "/" + qnList.Count;
@@ -305,6 +309,10 @@ public class CustomGame : MonoBehaviour
     }
     void StoreLatestStat()
     {
+        double timeTakenPer = Math.Round((timeTaken / qnList.Count),2);
+        timeTaken = Math.Round(timeTaken, 2);
+        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("timeTakenPer").SetValueAsync(timeTakenPer+" secs");
+        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("totalTimeTaken").SetValueAsync(timeTaken+" secs");
         reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("fbUserName").SetValueAsync(fBUsername);
         reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("noRight").SetValueAsync(correctQns);
         reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("noWrong").SetValueAsync(wrongQns);
@@ -316,7 +324,7 @@ public class CustomGame : MonoBehaviour
             reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsWrong").SetValueAsync(qnsWrong);
         else
             reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsWrong").SetValueAsync("None");
-
+        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsCount").SetValueAsync(qnList.Count);
     }
     public void loadQns()
     {

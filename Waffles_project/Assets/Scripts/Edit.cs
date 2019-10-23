@@ -115,6 +115,7 @@ public class Edit : MonoBehaviour
 
             go.SetActive(true);
             go.transform.SetParent(contentPanel);
+            go.transform.localScale = new Vector3(1, 1, 1);
 
         }
 

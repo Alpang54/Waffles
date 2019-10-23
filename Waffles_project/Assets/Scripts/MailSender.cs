@@ -66,17 +66,19 @@ public class MailSender : MonoBehaviour
                         Debug.LogFormat("Firebase token={0}", firebaseToken.Key); //values inside question 1,2
                         foreach (var stats in firebaseToken.Children)
                         {
-                            if (countDB == 0)
+                            if (stats.Key == "fbUserName")
                                 data += "Facebook Username: " + stats.Value.ToString() + "\n";
-
                             //Debug.LogFormat("FB={0}", stats.Value.ToString()); //values inside question 1,2
-                            if (countDB == 1)
+                            if (stats.Key == "noRight")
                                 data += "Number of correct qns: " + stats.Value.ToString() + "\n";
-
+                            if (stats.Key == "qnsRight")
+                                data += "Correct qns: " + stats.Value.ToString() + "\n";
                             //Debug.LogFormat("Right={0}", stats.Value.ToString()); //values inside question 1,2
-                            if (countDB == 2)
+                            if (stats.Key == "noWrong")
                                 data += "Number of wrong qns: " + stats.Value.ToString() + "\n";
                             //Debug.LogFormat("Wrong={0}", stats.Value.ToString()); //values inside question 1,2
+                            if (stats.Key == "qnsWrong")
+                                data += "Wrong qns: " + stats.Value.ToString() + "\n";
                             countDB++;
                         }
 
