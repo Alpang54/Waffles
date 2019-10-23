@@ -18,6 +18,10 @@ public class ButtonsManage : MonoBehaviour
     public GameObject prefRef;
     public GameObject addMoreQuestion;
     public GameObject inputQns;
+    public GameObject popUpError;
+    public GameObject popUpComplete;
+    public GameObject popupConfirm;
+    public Text error;
     public Transform contentPanel2;
     public Button option1;
     public Button option2;
@@ -31,6 +35,7 @@ public class ButtonsManage : MonoBehaviour
     public InputField stageAnswer2;
     public InputField stageAnswer3;
     public InputField stageAnswer4;
+    
     public int correct;
     public int newCorrect;
     public String CorrectAnswer;
@@ -43,12 +48,20 @@ public class ButtonsManage : MonoBehaviour
     private DataHandler dataHandler;
     public void pressNext()
     {
-        backButton.SetActive(!backButton.active);
-        nextButton.SetActive(!nextButton.active);
-        doneButton.SetActive(!doneButton.active);
-        inputStage.SetActive(!inputStage.active);
-        scrollView.SetActive(!scrollView.active);
-        addMoreQuestion.SetActive(!addMoreQuestion.active);
+        if(string.IsNullOrEmpty(inputStage.GetComponent<InputField>().text.ToString()))
+        {
+            popUpError.SetActive(true);
+        }
+        else
+        {
+            backButton.SetActive(!backButton.active);
+            nextButton.SetActive(!nextButton.active);
+            doneButton.SetActive(!doneButton.active);
+            inputStage.SetActive(!inputStage.active);
+            scrollView.SetActive(!scrollView.active);
+            addMoreQuestion.SetActive(!addMoreQuestion.active);
+        }
+        
     }
     public void pressBack()
     {
@@ -166,29 +179,38 @@ public class ButtonsManage : MonoBehaviour
                
             }
         }
-        
-        DatabaseReference databaseRef;
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl ("https://cz3003-waffles.firebaseio.com/");
-        databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
-
-
-       
-        databaseRef.Child("Data").Child("Custom").Child(stageName.text).SetValueAsync(stageName.text);
-        databaseRef.Child("UserCustom").Child(dataHandler.GetFirebaseUserId()).Push().SetValueAsync(stageName.text);
-        for (int i=0;i<noOfQuestion;i++)
+        if (noOfQuestion == 0)
         {
-            databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("StageName").SetValueAsync(stageName.text);
-            databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("Question").SetValueAsync(questionName[i]);
-            databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("Correct").SetValueAsync(correctAnswers[i]);
-            databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("1").SetValueAsync(optionChoice[i*4]);
-            databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("2").SetValueAsync(optionChoice[i*4+1]);
-            databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("3").SetValueAsync(optionChoice[i*4+2]);
-            databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i+1).ToString()).Child("4").SetValueAsync(optionChoice[i*4+3]);
+            error.text = ("Please Add at least one Question");
+            popUpError.SetActive(true);
             
         }
-        
+        else
+        {
+            DatabaseReference databaseRef;
+            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+            databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
- 
+
+
+            databaseRef.Child("Data").Child("Custom").Child(stageName.text).SetValueAsync(stageName.text);
+            databaseRef.Child("UserCustom").Child(dataHandler.GetFirebaseUserId()).Child(stageName.text).SetValueAsync(stageName.text);
+            for (int i = 0; i < noOfQuestion; i++)
+            {
+                databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i + 1).ToString()).Child("StageName").SetValueAsync(stageName.text);
+                databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i + 1).ToString()).Child("Question").SetValueAsync(questionName[i]);
+                databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i + 1).ToString()).Child("Correct").SetValueAsync(correctAnswers[i]);
+                databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i + 1).ToString()).Child("1").SetValueAsync(optionChoice[i * 4]);
+                databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i + 1).ToString()).Child("2").SetValueAsync(optionChoice[i * 4 + 1]);
+                databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i + 1).ToString()).Child("3").SetValueAsync(optionChoice[i * 4 + 2]);
+                databaseRef.Child("CustomStage").Child(stageName.text).Child("QuestionNumber").Child((i + 1).ToString()).Child("4").SetValueAsync(optionChoice[i * 4 + 3]);
+
+            }
+
+
+            popUpComplete.SetActive(true);
+        }
+        
     }
 
     public void pressPlus()
@@ -206,5 +228,19 @@ public class ButtonsManage : MonoBehaviour
     public void pressDelete()
     {
         Destroy(prefRef);
+    }
+    public void prompAndCheck()
+    {
+        noOfQuestion = contentPanel2.childCount;
+        if (noOfQuestion == 0)
+        {
+            error.text = ("Please Add at least one Question");
+            popUpError.SetActive(true);
+
+        }
+        else
+        {
+            popupConfirm.SetActive(true);
+        }
     }
 }

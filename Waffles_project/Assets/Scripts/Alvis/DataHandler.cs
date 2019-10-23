@@ -20,10 +20,7 @@ public class DataHandler : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 
 
     public bool GetIsLoggedIn()
