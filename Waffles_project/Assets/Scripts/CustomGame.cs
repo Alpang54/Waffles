@@ -69,32 +69,49 @@ public class CustomGame : MonoBehaviour
     [SerializeField]
     GameObject loading;
 
+    [SerializeField]
+    String testStageName = "";
+
     List<GameObject> initializedButtons = new List<GameObject>();
     int currentQnsNumber = 0;
 
+    private DataHandler dataHandler;
+    private string firebaseUserID;
+    private string fBUsername;
+    DatabaseReference reference;
+    List<String> rightList = new List<string>();
+    List<String> wrongList = new List<string>();
+    string qnsRight = ""; string qnsWrong = "";
 
     // Start is called before the first frame update
     void Start()
     {
-        CuststageName = StageNameManage.customName;
-        //Debug.Log(stageName);
+        dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
+        firebaseUserID = dataHandler.GetFirebaseUserId();
+        Debug.Log(firebaseUserID);
+        fBUsername = dataHandler.GetFBUserName();
+        Debug.Log(fBUsername);
+        //In case want to test a certain stage
+        if (testStageName == "")
+            CuststageName = StageNameManage.customName;
+        else
+            CuststageName = testStageName;
+
         stageName.text = CuststageName;
+
         StartCoroutine(ReadDB());
         questionPopUp.SetActive(false);
         answerPopUp.SetActive(false);
     }
-
-    // Update is called once per frame
-
-
 
     IEnumerator ReadDB()
     {
         done = false;
         if (loading != null)
             loading.SetActive(true);
+
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        reference = FirebaseDatabase.DefaultInstance.RootReference;
 
 
         FirebaseDatabase.DefaultInstance.GetReference("CustomStage/" + CuststageName + "/").GetValueAsync().ContinueWith(task =>
@@ -144,7 +161,6 @@ public class CustomGame : MonoBehaviour
                             countDB++;
                         }
                         qnList.Add(qn);
-
                     }
                 }
 
@@ -171,6 +187,8 @@ public class CustomGame : MonoBehaviour
                 }
 
             }
+
+            //Create new buttons for all the questions fetched from custom stage database
             for (int i = 0; i < qnList.Count; i++)
             {
                 GameObject newButton = Instantiate(questionBtn) as GameObject;
@@ -190,21 +208,12 @@ public class CustomGame : MonoBehaviour
             initializedButtons[currentQnsNumber].GetComponent<Button>().GetComponent<Image>().sprite = normalQns;
             initializedButtons[currentQnsNumber].GetComponent<Button>().interactable = true;
             qnsCounter.GetComponent<Text>().text = ("Question Cleared: " + (qnsCounterT) + "/" + qnList.Count).ToString();
-
-            for (int i = 0; i < qnList.Count; i++)
-            {
-                Debug.Log("ASKJAKSJKAS " + qnList[i].getQns());
-                Debug.Log("ASKJAKSJKAS " + qnList[i].getQnsNumber());
-
-            }
-            //loadDB();
-            //yield return new WaitForSeconds(1f);
         }
     }
     public void CheckAns(int i)
     {
-        Debug.Log(i + " " + qnList[currentQnsNumber].getAnswer());
-        Debug.Log("BA " + qnList[currentQnsNumber].getQnsNumber());
+        //Debug.Log(i + " " + qnList[currentQnsNumber].getAnswer());
+        //Debug.Log("BA " + qnList[currentQnsNumber].getQnsNumber());
         answerPopUp.SetActive(true);
         //currentQnsNumber starts from 1 on, array start from 0
         if (i == qnList[currentQnsNumber].getAnswer())
@@ -240,124 +249,88 @@ public class CustomGame : MonoBehaviour
             clearedPopUp.SetActive(true);
             clearedText.text += "Total Questions Correct: " + correctQns + "/" + qnList.Count;
             clearedText.text += "\n";
-            if (correctQns > 0)
+            for (int i = 0; i < qnList.Count; i++)
             {
-                clearedText.text += "\nQuestions answered correctly: ";
-                for (int i = 0; i < qnList.Count; i++)
+                if (qnList[i].getAnsweredCorrecrWrong())
                 {
-                    if (qnList[i].getAnsweredCorrecrWrong())
-                    {
-                        clearedText.text += ((qnList[i].getQnsNumber() + 1).ToString() + ",");
-                    }
+                    rightList.Add((qnList[i].getQnsNumber() + 1).ToString());
+                }
+                if (!qnList[i].getAnsweredCorrecrWrong())
+                {
+                    wrongList.Add((qnList[i].getQnsNumber() + 1).ToString());
                 }
             }
-            if (wrongQns > 0)
+            if (rightList.Count > 0)
             {
                 clearedText.text += "\n";
-                clearedText.text += "Questions answered wrongly: ";
-                for (int i = 0; i < qnList.Count; i++)
+
+                clearedText.text += "Questions correct: ";
+                for (int i = 0; i < rightList.Count; i++)
                 {
-                    if (!qnList[i].getAnsweredCorrecrWrong())
+                    qnsRight += rightList[i];
+                    if (i == rightList.Count - 1)
                     {
-                        clearedText.text += ((qnList[i].getQnsNumber() + 1).ToString() + ",");
+
+                    }
+                    else
+                    {
+                        qnsRight += ",";
                     }
                 }
-                clearedText.text += "\n";
+                clearedText.text += qnsRight;
             }
+            if (wrongList.Count > 0)
+            {
+                clearedText.text += "\n";
+
+                clearedText.text += "Questions wrong: ";
+
+                for (int i = 0; i < wrongList.Count; i++)
+                {
+                    qnsWrong += wrongList[i];
+                    if (i == wrongList.Count - 1)
+                    {
+
+                    }
+                    else
+                    {
+                        qnsWrong += ",";
+                    }
+                }
+                clearedText.text += qnsWrong;
+
+            }
+            StoreLatestStat();
         }
+    }
+    void StoreLatestStat()
+    {
+        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("fbUserName").SetValueAsync(fBUsername);
+        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("noRight").SetValueAsync(correctQns);
+        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("noWrong").SetValueAsync(wrongQns);
+        if (qnsRight != "")
+            reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsRight").SetValueAsync(qnsRight);
+        else
+            reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsRight").SetValueAsync("None");
+        if (qnsWrong != "")
+            reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsWrong").SetValueAsync(qnsWrong);
+        else
+            reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsWrong").SetValueAsync("None");
+
     }
     public void loadQns()
     {
+        //Question pop up
         GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
         QuestionChoice qn = currentSelected.GetComponent<QuestionChoice>();
         questionPopUp.SetActive(true);
         currentQnsNumber = qn.getQnsNumber();
         bannerText.GetComponent<Text>().text = "Qns " + (qn.getQnsNumber() + 1).ToString();
-        //qnsCounter.GetComponent<Text>().text = ("Current Question " + (currentQnsNumber + 1) + "/" + qnList.Count).ToString();
         qnsText.GetComponent<Text>().text = qn.getQns();
         for (int i = 0; i < qn.getChoices().Count; i++)
         {
             choices[i].gameObject.SetActive(true);
             choices[i].GetComponentInChildren<Text>().text = qn.getChoices()[i].ToString();
         }
-        // Debug.Log(qn.getAnswer());
-
     }
-    void loadDB()
-    {
-        /*
-        int buttonImageCount = 0;
-        int correctAnswer = 0;
-        int counting = 0;
-        for (int i = 0; i < noOfCustom; i++)
-        {
-            //stageName.text = arrayStageName[i].ToString();
-            GameObject go = Instantiate(extraContent) as GameObject;
-            //go.GetComponent<>
-            go.name = (i + 1).ToString();
-
-            go.SetActive(true);
-            go.transform.SetParent(contentPanel);
-
-        }
-
-        foreach (Transform stageQuestion in contentPanel.transform) //noOfQUestion
-        {
-            string test = stageQuestion.gameObject.name;
-            correctAnswer = 0;
-            int count = 0;
-            int count2 = 0;
-
-            foreach (Transform inputs in stageQuestion.transform) //elements inside questions
-            {
-                buttonImageCount = 0;
-                test = inputs.gameObject.name;
-
-                if (count == 0)
-                {
-                    //test = inputs.gameObject.GetComponent<InputField>().text;
-                    inputs.gameObject.GetComponent<InputField>().text = questionName[counting].ToString();// input question
-
-                }
-                else
-                {
-                    
-                    foreach (Transform options in inputs.gameObject.transform)
-                    {
-                        if (buttonImageCount == 0)
-                        {
-                            options.gameObject.GetComponent<InputField>().text = optionChoice[counting*4+count2].ToString();  //text for option
-                            
-                            buttonImageCount++;
-                            count2++;
-                        }
-                        else
-                        {
-                            if(count2==Int32.Parse(correctAnswers[counting].ToString()))
-                            {
-                                options.gameObject.GetComponent<Button>().image.sprite = correctChecked;
-                            }
-                            
-                            
-
-                        }
-
-                    }
-                    
-
-                }
-                
-                count++;
-                correctAnswer++;
-
-            }
-            counting++;
-        }
-
-        plus.SetActive(true);
-        save.SetActive(true);*/
-    }
-
-
-
 }

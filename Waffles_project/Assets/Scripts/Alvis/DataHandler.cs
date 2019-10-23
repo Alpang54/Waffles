@@ -11,18 +11,24 @@ public class DataHandler : MonoBehaviour
     private string firebaseUserId;
     private Tuple<int, int> worldAndStageLevel;
     private int characterlevel;
+    private string facebookUsername;
     // Start is called before the first frame update
     void Start()
     {
         this.isLoggedIn = false;
         DontDestroyOnLoad(this.gameObject);
-        
+
     }
 
-    // Update is called once per frame
+    public void SetFBUserName(string user)
+    {
+        facebookUsername = user;
+    }
 
-
-
+    public string GetFBUserName()
+    {
+        return facebookUsername;
+    }
     public bool GetIsLoggedIn()
     {
         return this.isLoggedIn;
@@ -33,7 +39,7 @@ public class DataHandler : MonoBehaviour
         return this.firebaseUserId;
     }
 
-    public Tuple<int,int> GetWorldAndStageLevel()
+    public Tuple<int, int> GetWorldAndStageLevel()
     {
         return this.worldAndStageLevel;
     }
@@ -46,7 +52,7 @@ public class DataHandler : MonoBehaviour
 
     public void SetIsLoggedIn(bool isLoggedIn)
     {
-        this.isLoggedIn=isLoggedIn;
+        this.isLoggedIn = isLoggedIn;
 
     }
 
@@ -56,7 +62,7 @@ public class DataHandler : MonoBehaviour
 
     }
 
-    public void SetWorldAndStageLevel(Tuple<int,int> worldAndStageLevel)
+    public void SetWorldAndStageLevel(Tuple<int, int> worldAndStageLevel)
     {
         this.worldAndStageLevel = worldAndStageLevel;
     }

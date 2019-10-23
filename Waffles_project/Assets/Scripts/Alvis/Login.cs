@@ -28,7 +28,7 @@ public class Login : MonoBehaviour
     private DataHandler datahandler;
 
 
-// Start of Default Code
+    // Start of Default Code
     void Awake()
     {
         datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
@@ -65,6 +65,7 @@ public class Login : MonoBehaviour
                 this.loggedIn = true;
                 loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
                 datahandler.SetIsLoggedIn(true);
+                FB.API("me?fields=name", Facebook.Unity.HttpMethod.GET, GetFacebookData);
             }
             else
             {
@@ -78,7 +79,12 @@ public class Login : MonoBehaviour
             Debug.Log("Failed to Initialize the Facebook SDK");
         }
     }
+    void GetFacebookData(Facebook.Unity.IGraphResult result)
+    {
+        string fbName = result.ResultDictionary["name"].ToString();
 
+        datahandler.SetFBUserName(fbName);
+    }
 
     private void OnHideUnity(bool isGameShown)
     {
@@ -126,7 +132,7 @@ public class Login : MonoBehaviour
             Debug.Log("Fb is logged in already");
         }
     }
-  
+
 
     private void FBAuthCallback(ILoginResult result)
     {
@@ -144,7 +150,7 @@ public class Login : MonoBehaviour
             FirebaseLogin();
             Debug.Log("In FBAUTHCALLBACK");
             Debug.Log("this.accesstoken.userid is:" + this.accessToken.UserId);
-
+            FB.API("me?fields=name", Facebook.Unity.HttpMethod.GET, GetFacebookData);
         }
         else
         {
@@ -161,14 +167,14 @@ public class Login : MonoBehaviour
         loginOutbtn.GetComponentInChildren<Text>().text = "Login";
         datahandler.SetIsLoggedIn(false);
         FB.LogOut();
-       
+
     }
 
 
 
     private void FirebaseLogin()
     {
-           auth.SignInWithCredentialAsync(credentials).ContinueWith(task => {
+        auth.SignInWithCredentialAsync(credentials).ContinueWith(task => {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithCredentialAsync was canceled.");
@@ -179,15 +185,15 @@ public class Login : MonoBehaviour
                 Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
                 return;
             }
-           
+
             Firebase.Auth.FirebaseUser newUser = task.Result;
-               userID = newUser.UserId;
+            userID = newUser.UserId;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
             newUser.DisplayName, newUser.UserId);
-               datahandler.SetFireBaseUserId(newUser.UserId);
+            datahandler.SetFireBaseUserId(newUser.UserId);
         });
         Debug.Log("Login done");
-      
+
     }
 
 
@@ -210,56 +216,56 @@ public class Login : MonoBehaviour
 
 
 
-    /*
-    async static void GetFromDatabase()
+/*
+async static void GetFromDatabase()
 
+{
+    using (HttpClient client = new HttpClient())
     {
-        using (HttpClient client = new HttpClient())
-        {
-            using (HttpResponseMessage response = await client.GetAsync("https://cz3003-waffles.firebaseio.com/.json"))
-            
-                using (HttpContent content = response.Content)
-                {
-                    string mycontent = await content.ReadAsStringAsync();
-                    print(mycontent);
-                }
-            }
-        }
+        using (HttpResponseMessage response = await client.GetAsync("https://cz3003-waffles.firebaseio.com/.json"))
 
-    }
-
-
-
-
-    async static void PostToDatabase(User user)
-    {
-        string json = JsonUtility.ToJson(user);
-
-        var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
-        using (HttpClient client = new HttpClient())
-        {
-            using (HttpResponseMessage response = await client.PutAsync("https://cz3003-waffles.firebaseio.com/users.json", stringContent))
+            using (HttpContent content = response.Content)
             {
-                using (HttpContent content = response.Content)
-                {
-                    string mycontent = await content.ReadAsStringAsync();
-                }
+                string mycontent = await content.ReadAsStringAsync();
+                print(mycontent);
             }
         }
-
     }
 
+}
 
-    bool IsValidEmail(string email)
+
+
+
+async static void PostToDatabase(User user)
+{
+    string json = JsonUtility.ToJson(user);
+
+    var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+    using (HttpClient client = new HttpClient())
     {
-        try
+        using (HttpResponseMessage response = await client.PutAsync("https://cz3003-waffles.firebaseio.com/users.json", stringContent))
         {
-            var addr = new System.Net.Mail.MailAddress(email);
-            return addr.Address == email;
-        }
-        catch
-        {
-            return false;
+            using (HttpContent content = response.Content)
+            {
+                string mycontent = await content.ReadAsStringAsync();
+            }
         }
     }
+
+}
+
+
+bool IsValidEmail(string email)
+{
+    try
+    {
+        var addr = new System.Net.Mail.MailAddress(email);
+        return addr.Address == email;
+    }
+    catch
+    {
+        return false;
+    }
+}
 }*/
