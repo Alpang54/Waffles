@@ -23,7 +23,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 770439983177155183}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -154,10 +154,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4327992189524064343, guid: 643164e82260072448b16e8a0f980425,
+    - target: {fileID: 630221096290406857, guid: 643164e82260072448b16e8a0f980425,
         type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
+      propertyPath: m_Text
+      value: Home
       objectReference: {fileID: 0}
     - target: {fileID: 4327992189524064343, guid: 643164e82260072448b16e8a0f980425,
         type: 3}
@@ -168,11 +168,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Main Menu
-      objectReference: {fileID: 0}
-    - target: {fileID: 630221096290406857, guid: 643164e82260072448b16e8a0f980425,
-        type: 3}
-      propertyPath: m_Text
-      value: Home
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 643164e82260072448b16e8a0f980425, type: 3}
@@ -308,6 +303,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Txt_Custom
+      objectReference: {fileID: 0}
+    - target: {fileID: 1655037035779949429, guid: fd68a647139e5454f8b73ce24f8931e8,
+        type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: ca9684d1dfb2ff547bec3e1f1dec9555,
+        type: 3}
+    - target: {fileID: 1655037035779949429, guid: fd68a647139e5454f8b73ce24f8931e8,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 1655037035779949429, guid: fd68a647139e5454f8b73ce24f8931e8,
         type: 3}

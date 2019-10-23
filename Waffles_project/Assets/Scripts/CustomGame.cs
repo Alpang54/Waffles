@@ -30,7 +30,7 @@ public class CustomGame : MonoBehaviour
     GameObject panel;
     [SerializeField]
     GameObject questionBtn;
-    
+
     [SerializeField]
     GameObject qnsText;
     [SerializeField]
@@ -66,8 +66,11 @@ public class CustomGame : MonoBehaviour
     int correctQns;
     int wrongQns;
 
+    [SerializeField]
+    GameObject loading;
+
     List<GameObject> initializedButtons = new List<GameObject>();
-    int currentQnsNumber=0;
+    int currentQnsNumber = 0;
 
 
     // Start is called before the first frame update
@@ -82,17 +85,19 @@ public class CustomGame : MonoBehaviour
     }
 
     // Update is called once per frame
-    
+
 
 
     IEnumerator ReadDB()
     {
         done = false;
+        if (loading != null)
+            loading.SetActive(true);
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 
 
-        FirebaseDatabase.DefaultInstance.GetReference("CustomStage/"+CuststageName+"/").GetValueAsync().ContinueWith(task =>
+        FirebaseDatabase.DefaultInstance.GetReference("CustomStage/" + CuststageName + "/").GetValueAsync().ContinueWith(task =>
         {
             //reference.GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted)
@@ -101,10 +106,10 @@ public class CustomGame : MonoBehaviour
             }
             else if (task.IsCompleted)
             {
-                int  countDB = 0;
+                int countDB = 0;
 
                 DataSnapshot snapshot = task.Result;
-                
+
                 foreach (var questionNumber in snapshot.Children)
                 {
                     Debug.LogFormat("Key={0}", questionNumber.Key); //Node at question number
@@ -116,7 +121,7 @@ public class CustomGame : MonoBehaviour
                         QuestionChoice qn = new QuestionChoice();
 
                         Debug.LogFormat("Key={0}", actualQuestionNumber.Key); //question 1,2.....
-                        foreach(var value in actualQuestionNumber.Children)
+                        foreach (var value in actualQuestionNumber.Children)
                         {
 
                             Debug.LogFormat("Value={0}", value.Value.ToString()); //values inside question 1,2
@@ -150,24 +155,26 @@ public class CustomGame : MonoBehaviour
         });
 
         yield return new WaitUntil(() => done == true);
-       
+
         if (done == true) //reading db should be done by now
         {
+            if (loading != null)
+                loading.SetActive(false);
             Debug.Log(qnList.Count);
             for (int i = 0; i < qnList.Count; i++)
             {
                 Debug.Log("QNS " + i.ToString() + " " + qnList[i].getQns());
 
-                for (int j = 0; j < qnList[i].getChoices().Count;j++)
+                for (int j = 0; j < qnList[i].getChoices().Count; j++)
                 {
                     Debug.Log("Choices " + j.ToString() + " " + qnList[i].getChoices()[j].ToString());
                 }
 
             }
-            for (int i = 0; i < qnList.Count;i++)
+            for (int i = 0; i < qnList.Count; i++)
             {
                 GameObject newButton = Instantiate(questionBtn) as GameObject;
-                newButton.GetComponent<Button>().GetComponentInChildren<Text>().text = "Qns " + (i+1).ToString();
+                newButton.GetComponent<Button>().GetComponentInChildren<Text>().text = "Qns " + (i + 1).ToString();
                 newButton.gameObject.name = i.ToString();
                 newButton.GetComponent<Button>().GetComponent<Image>().sprite = lockedQns;
                 newButton.GetComponent<Button>().interactable = false;
@@ -176,8 +183,9 @@ public class CustomGame : MonoBehaviour
                 newButton.GetComponent<QuestionChoice>().setQnsNumber(i); //qns start from 0
                 newButton.GetComponent<QuestionChoice>().setAnswer(qnList[i].getAnswer());
                 newButton.GetComponent<QuestionChoice>().setQns(qnList[i].getQns());
-                initializedButtons.Add(newButton);
                 newButton.gameObject.transform.SetParent(panel.gameObject.transform);
+                newButton.gameObject.transform.localScale = new Vector3(1, 1, 1);
+                initializedButtons.Add(newButton);
             }
             initializedButtons[currentQnsNumber].GetComponent<Button>().GetComponent<Image>().sprite = normalQns;
             initializedButtons[currentQnsNumber].GetComponent<Button>().interactable = true;
@@ -216,42 +224,46 @@ public class CustomGame : MonoBehaviour
             initializedButtons[currentQnsNumber].GetComponent<Button>().GetComponent<Image>().sprite = answerWrongQns;
         }
         initializedButtons[currentQnsNumber].GetComponent<Button>().interactable = false;
-        if (currentQnsNumber<initializedButtons.Count-1) //There is a next button
+        if (currentQnsNumber < initializedButtons.Count - 1) //There is a next button
         {
-            initializedButtons[currentQnsNumber+1].GetComponent<Button>().interactable = true;
-            initializedButtons[currentQnsNumber+1].GetComponent<Button>().GetComponent<Image>().sprite = normalQns;
+            initializedButtons[currentQnsNumber + 1].GetComponent<Button>().interactable = true;
+            initializedButtons[currentQnsNumber + 1].GetComponent<Button>().GetComponent<Image>().sprite = normalQns;
         }
         qnsCounterT++;
         qnsCounter.GetComponent<Text>().text = ("Question Cleared: " + (qnsCounterT) + "/" + qnList.Count).ToString();
     }
     public void CheckEnd()
     {
-        if(qnsCounterT == qnList.Count)
+        if (qnsCounterT == qnList.Count)
         {
             Debug.Log("Cleared");
             clearedPopUp.SetActive(true);
             clearedText.text += "Total Questions Correct: " + correctQns + "/" + qnList.Count;
             clearedText.text += "\n";
-
-            clearedText.text += "Questions answered correctly: ";
-            for (int i = 0; i < qnList.Count; i++)
+            if (correctQns > 0)
             {
-                if (qnList[i].getAnsweredCorrecrWrong())
+                clearedText.text += "\nQuestions answered correctly: ";
+                for (int i = 0; i < qnList.Count; i++)
                 {
-                    clearedText.text += ( (qnList[i].getQnsNumber() + 1).ToString()+ ",");
+                    if (qnList[i].getAnsweredCorrecrWrong())
+                    {
+                        clearedText.text += ((qnList[i].getQnsNumber() + 1).ToString() + ",");
+                    }
                 }
             }
-            clearedText.text += "\n";
-            clearedText.text += "Questions answered wrongly: ";
-            for (int i = 0; i < qnList.Count; i++)
+            if (wrongQns > 0)
             {
-                if (!qnList[i].getAnsweredCorrecrWrong())
+                clearedText.text += "\n";
+                clearedText.text += "Questions answered wrongly: ";
+                for (int i = 0; i < qnList.Count; i++)
                 {
-                    clearedText.text += ((qnList[i].getQnsNumber() + 1).ToString() + ",");
+                    if (!qnList[i].getAnsweredCorrecrWrong())
+                    {
+                        clearedText.text += ((qnList[i].getQnsNumber() + 1).ToString() + ",");
+                    }
                 }
+                clearedText.text += "\n";
             }
-            clearedText.text += "\n";
-
         }
     }
     public void loadQns()
@@ -263,12 +275,12 @@ public class CustomGame : MonoBehaviour
         bannerText.GetComponent<Text>().text = "Qns " + (qn.getQnsNumber() + 1).ToString();
         //qnsCounter.GetComponent<Text>().text = ("Current Question " + (currentQnsNumber + 1) + "/" + qnList.Count).ToString();
         qnsText.GetComponent<Text>().text = qn.getQns();
-        for(int i = 0; i < qn.getChoices().Count;i++)
+        for (int i = 0; i < qn.getChoices().Count; i++)
         {
             choices[i].gameObject.SetActive(true);
             choices[i].GetComponentInChildren<Text>().text = qn.getChoices()[i].ToString();
         }
-       // Debug.Log(qn.getAnswer());
+        // Debug.Log(qn.getAnswer());
 
     }
     void loadDB()
@@ -347,5 +359,5 @@ public class CustomGame : MonoBehaviour
     }
 
 
-   
+
 }

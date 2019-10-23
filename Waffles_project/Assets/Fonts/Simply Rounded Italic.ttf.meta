@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 87a0a97c6cd13c84bbaa5add7346979e
+guid: ca9684d1dfb2ff547bec3e1f1dec9555
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,11 +8,12 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Salmon White - Personal Use
+  fontName: Simply Rounded
   fontNames:
-  - Salmon White - Personal Use
+  - Simply Rounded
   fallbackFontReferences:
-  - {fileID: 12800000, guid: 3f69127e99d42924587e7d76ee0a1f7c, type: 3}
+  - {fileID: 12800000, guid: 39352c07006927a428686cb9f64d1a85, type: 3}
+  - {fileID: 12800000, guid: 9a8876b89a0224647a7a579728549b2e, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

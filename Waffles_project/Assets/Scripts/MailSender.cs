@@ -51,7 +51,7 @@ public class MailSender : MonoBehaviour
                 smtpClient.Credentials = new System.Net.NetworkCredential("cz3003wa@gmail.com", "@qwerty123");
                 smtpClient.EnableSsl = true;
                 ServicePointManager.ServerCertificateValidationCallback = (x, y, z, w) => true;
-                smtpClient.Send(mail);
+                smtpClient.SendMailAsync(mail);
                 reportPopUp.SetActive(false);
                 sentPopUp.SetActive(true);
                 popUpText.text = "Report has been sent to " + toEmail;
