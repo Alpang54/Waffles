@@ -212,13 +212,9 @@ public class CustomGame : MonoBehaviour
             startTime = Time.time;
         }
     }
-    public void CheckAns(int i)
+    public void UpdateButtonCondition(int i)
     {
-        //Debug.Log(i + " " + qnList[currentQnsNumber].getAnswer());
-        //Debug.Log("BA " + qnList[currentQnsNumber].getQnsNumber());
-        answerPopUp.SetActive(true);
-        //currentQnsNumber starts from 1 on, array start from 0
-        if (i == qnList[currentQnsNumber].getAnswer())
+        if(CheckAns(i))
         {
             Debug.Log("Correct");
             correctQns++;
@@ -234,14 +230,32 @@ public class CustomGame : MonoBehaviour
             correctWrong.GetComponent<Text>().text = "Sorry, you got the wrong answer";
             initializedButtons[currentQnsNumber].GetComponent<Button>().GetComponent<Image>().sprite = answerWrongQns;
         }
-        initializedButtons[currentQnsNumber].GetComponent<Button>().interactable = false;
-        if (currentQnsNumber < initializedButtons.Count - 1) //There is a next button
+        if (initializedButtons.Count > 0)
         {
-            initializedButtons[currentQnsNumber + 1].GetComponent<Button>().interactable = true;
-            initializedButtons[currentQnsNumber + 1].GetComponent<Button>().GetComponent<Image>().sprite = normalQns;
+            initializedButtons[currentQnsNumber].GetComponent<Button>().interactable = false;
+            if (currentQnsNumber < initializedButtons.Count - 1) //There is a next button
+            {
+                initializedButtons[currentQnsNumber + 1].GetComponent<Button>().interactable = true;
+                initializedButtons[currentQnsNumber + 1].GetComponent<Button>().GetComponent<Image>().sprite = normalQns;
+            }
         }
+        if (answerPopUp != null)
+            answerPopUp.SetActive(true);
         qnsCounterT++;
-        qnsCounter.GetComponent<Text>().text = ("Question Cleared: " + (qnsCounterT) + "/" + qnList.Count).ToString();
+        if (qnsCounter != null)
+            qnsCounter.GetComponent<Text>().text = ("Question Cleared: " + (qnsCounterT) + "/" + qnList.Count).ToString();
+    }
+    public bool CheckAns(int i)
+    {
+        if (i == qnList[currentQnsNumber].getAnswer())
+        {  
+            return true;
+        }
+        else
+        { 
+            return false;
+        }
+       
     }
     public void CheckEnd()
     {

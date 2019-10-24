@@ -104,7 +104,7 @@ public class Login : MonoBehaviour
 
     public void OnLoginLogoutButtonClick()
     {
-        if (!loggedIn)
+        if (!FB.IsLoggedIn)
         {
             Debug.Log("FacebookLogin");
             FacebookLogin();

@@ -401,7 +401,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1918015155}
-        m_MethodName: CheckAns
+        m_MethodName: UpdateButtonCondition
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -753,7 +753,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000053656953}
+  m_AnchoredPosition: {x: 0, y: -0.000037115973}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &331450768
@@ -2569,7 +2569,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1918015155}
-        m_MethodName: CheckAns
+        m_MethodName: UpdateButtonCondition
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3132,6 +3132,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Custom_Manage
       objectReference: {fileID: 0}
+    - target: {fileID: 330960534536723598, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5063177802237740250, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 11.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5063177802237740250, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1208.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5063177802101297677, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 516
+      objectReference: {fileID: 0}
     - target: {fileID: 6344767821860054217, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
         type: 3}
       propertyPath: m_Text
@@ -3157,26 +3177,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_FontData.m_FontSize
       value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 5063177802237740250, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5063177802237740250, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 1208.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5063177802101297677, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 516
-      objectReference: {fileID: 0}
-    - target: {fileID: 330960534536723598, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d74c4ab086865f4e9057af2ddd70cd3, type: 3}
@@ -3724,7 +3724,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1918015155}
-        m_MethodName: CheckAns
+        m_MethodName: UpdateButtonCondition
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4530,6 +4530,7 @@ MonoBehaviour:
   clearedText: {fileID: 283894432}
   qnsCounter: {fileID: 1346340048}
   loading: {fileID: 1667781223}
+  testStageName: 
 --- !u!4 &1918015156
 Transform:
   m_ObjectHideFlags: 0
@@ -4622,8 +4623,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1954034894}
   m_HandleRect: {fileID: 1954034893}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5422,7 +5423,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1918015155}
-        m_MethodName: CheckAns
+        m_MethodName: UpdateButtonCondition
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

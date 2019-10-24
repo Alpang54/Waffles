@@ -30,8 +30,7 @@ public class InitContent : MonoBehaviour
     string currentScene;
     [SerializeField]
     GameObject loading;
-    [SerializeField]
-    GameObject popUp;
+    
     private void Awake()
     {
         
@@ -125,7 +124,7 @@ public class InitContent : MonoBehaviour
         foreach (Transform child in contentPanel)
         {
 
-            if ((child.gameObject.name.ToString().ToLower().Contains(ifs.text.ToString().ToLower())))
+            if (Search(child.gameObject.name, ifs.text.ToString()))
             {
                 child.gameObject.SetActive(true);
                 count++;
@@ -140,11 +139,17 @@ public class InitContent : MonoBehaviour
             loading.GetComponent<Text>().text = "No matching stage found";
         }
     }
+    public bool Search(string a, string b)
+    {
+        if (a.ToLower().Contains(b.ToLower()))
+            return true;
+        else
+            return false;
+    }
     public void GetGameObjectName(GameObject textUpdate)
     {
         GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
         Debug.Log(currentSelected.transform.parent.name);
-        popUp.SetActive(true);
         StartCoroutine(FetchPastProgress(currentSelected.transform.parent.name,textUpdate));
 
     }
