@@ -316,12 +316,12 @@ public class ButtonsManage : MonoBehaviour
             {
                 if(correctTick!=noOfQuestion)
                 {
-                    error.text = ("Please Check at least one correct option");
+                    error.text = ("Please Tick One Of The Options");
                     popUpError.SetActive(true);
                 }
                 else
                 {
-                    error.text = ("One or more InputField(s) is empty");
+                    error.text = ("One Or More Of The InputField(s) Is Empty");
                     popUpError.SetActive(true);
                 }
                 
@@ -343,7 +343,7 @@ public class ButtonsManage : MonoBehaviour
         noOfQuestion = contentPanel2.childCount;
         if (noOfQuestion == 0)
         {
-            error.text = ("Please Add at least one Question");
+            error.text = ("Please Add At Least One Question");
             popUpError.SetActive(true);
 
         }

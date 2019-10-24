@@ -462,7 +462,12 @@ PrefabInstance:
     - target: {fileID: 6475599228884310288, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
       propertyPath: m_Text
-      value: Delete Stage?
+      value: Confirm to Delete Stage?
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475599228884310288, guid: f1754dc04061c9b47978cc7c721adf66,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 4163639687396753690, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
@@ -2607,7 +2612,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Deleted Stage!
+  m_Text: Stage Deleted!
 --- !u!222 &1735712702
 CanvasRenderer:
   m_ObjectHideFlags: 0

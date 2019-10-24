@@ -1257,7 +1257,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Saved Stage!
+  m_Text: Stage Saved!
 --- !u!222 &747601635
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2258,7 +2258,12 @@ PrefabInstance:
     - target: {fileID: 6475599228884310288, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
       propertyPath: m_Text
-      value: Confirm to Save Stage?
+      value: Save Stage?
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475599228884310288, guid: f1754dc04061c9b47978cc7c721adf66,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 4163639687396753690, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
@@ -3801,7 +3806,12 @@ PrefabInstance:
     - target: {fileID: 6475599228884310288, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
       propertyPath: m_Text
-      value: Quit Creating Custom Stage?
+      value: Stop Creating Custom Stage?
+      objectReference: {fileID: 0}
+    - target: {fileID: 6475599228884310288, guid: f1754dc04061c9b47978cc7c721adf66,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 4163639687396753690, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
@@ -4317,7 +4327,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Please Enter a valid Stage Name
+  m_Text: Please Enter A Valid Stage Name
 --- !u!224 &4545603991774562226
 RectTransform:
   m_ObjectHideFlags: 0
