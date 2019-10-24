@@ -262,12 +262,14 @@ public class InitContent : MonoBehaviour
         {
              stageName.text = arrayStageName[i].ToString();
             GameObject go = Instantiate(extraContent) as GameObject;
+            go.name=(arrayStageName[i].ToString());
             //go.GetComponent<>
-            go.SetActive(true);
             go.transform.SetParent(contentPanel);
             go.gameObject.transform.localScale = new Vector3(1, 1, 1);
+            go.SetActive(true);
 
-
+           
+            
 
         }
         addButton.SetActive(true);

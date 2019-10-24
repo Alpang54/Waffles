@@ -23,7 +23,7 @@ public class StageNameManage : MonoBehaviour
     public ArrayList arrayStageName = new ArrayList();
     public ArrayList pushKey = new ArrayList();
     public bool done = false;
-
+    public GameObject popUpComplete;
 
 
     public  void onDeleteClick()
@@ -43,7 +43,7 @@ public class StageNameManage : MonoBehaviour
 
 
             Destroy(prefabRef);
-        
+            popUpComplete.SetActive(true);
         
 
        

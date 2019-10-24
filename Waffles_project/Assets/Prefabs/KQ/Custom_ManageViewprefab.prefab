@@ -375,17 +375,6 @@ MonoBehaviour:
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 4526603537128498006}
-        m_MethodName: onDeleteClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -427,7 +416,12 @@ MonoBehaviour:
   clickedDelete: {fileID: 7853666864414774279}
   clickedEdit: {fileID: 7853666864414774278}
   prefabRef: {fileID: 2797179506383060226}
+  popUpDelete: {fileID: 0}
+  contentPanel2: {fileID: 0}
   stageName: {fileID: 7853666864414774277}
+  delete: 0
+  done: 0
+  popUpComplete: {fileID: 0}
 --- !u!1 &2797179506383060226
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,8 +458,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 342.92004, y: 984.68005}
-  m_SizeDelta: {x: 491.44003, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2797179506383060224
 MonoBehaviour:
@@ -652,4 +646,9 @@ MonoBehaviour:
   clickedDelete: {fileID: 7853666864414774279}
   clickedEdit: {fileID: 7853666864414774278}
   prefabRef: {fileID: 2797179506383060226}
+  popUpDelete: {fileID: 0}
+  contentPanel2: {fileID: 0}
   stageName: {fileID: 7853666864414774277}
+  delete: 0
+  done: 0
+  popUpComplete: {fileID: 0}
