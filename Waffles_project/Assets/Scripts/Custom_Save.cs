@@ -18,6 +18,10 @@ public class Custom_Save : MonoBehaviour
     public GameObject prefRef;
     public GameObject addMoreQuestion;
     public GameObject inputQns;
+    public GameObject popUpError;
+    public GameObject popUpComplete;
+    public GameObject popupConfirm;
+    public Text error;
     public Transform contentPanel2;
     public Button option1;
     public Button option2;
@@ -98,9 +102,11 @@ public class Custom_Save : MonoBehaviour
     public void pressDone()
     {
         custStageName = StageNameManage.customName;
+        int dbQuestion = Edit.noOfCustom;
         int buttonImageCount = 0;
         int correctAnswer = 0;
         noOfQuestion = contentPanel2.childCount;
+
         foreach (Transform stageQuestion in contentPanel2.transform) //noOfQUestion
         {
             string test = stageQuestion.gameObject.name;
@@ -153,7 +159,7 @@ public class Custom_Save : MonoBehaviour
         databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
         Debug.Log(custStageName);
 
-        databaseRef.Child("CustomStage").Child(custStageName).RemoveValueAsync();
+        
 
         for (int i = 0; i < noOfQuestion; i++)
         {
@@ -169,6 +175,16 @@ public class Custom_Save : MonoBehaviour
             
         }
 
+        if(noOfQuestion<dbQuestion)
+        {
+            for(int i=dbQuestion;i>(dbQuestion-noOfQuestion);i--)
+            {
+                databaseRef.Child("CustomStage").Child(custStageName).Child("QuestionNumber").Child(i.ToString()).RemoveValueAsync();
+            }
+                    
+        }
+
+        popUpComplete.SetActive(true);
 
         optionChoice.Clear();
         correctAnswers.Clear();
@@ -178,14 +194,223 @@ public class Custom_Save : MonoBehaviour
     public void pressPlus()
     {
 
-        noOfQuestion++;
-        GameObject go = Instantiate(extraQuestion);
-        go.name = noOfQuestion.ToString();
-        goQuestion.Add(go);
-        go.SetActive(true);
-        go.transform.SetParent(contentPanel2);
+        int buttonImageCount = 0;
+        int correctAnswer = 0;
+        bool filled = true;
+        int neverTick = 0;
+        int correctTick = 0;
+        noOfQuestion = contentPanel2.childCount;
+        if (noOfQuestion == 0)
+        {
+            GameObject go = Instantiate(extraQuestion);
+            go.name = noOfQuestion.ToString();
+            goQuestion.Add(go);
+            go.SetActive(true);
+            go.transform.SetParent(contentPanel2);
+            go.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            foreach (Transform stageQuestion in contentPanel2.transform) //noOfQUestion
+            {
+                string test = stageQuestion.gameObject.name;
+                correctAnswer = 0;
+                int count = 0;
+
+                foreach (Transform inputs in stageQuestion.transform) //elements inside questions
+                {
+                    buttonImageCount = 0;
+                    test = inputs.gameObject.name;
+
+                    if (count == 0)
+                    {
+
+                        test = inputs.gameObject.GetComponent<InputField>().text;// get input question
+                        if (string.IsNullOrEmpty(test) == true)
+                        {
+                            filled = false;
+                        }
+
+                    }
+                    else
+                    {
+
+                        foreach (Transform options in inputs.gameObject.transform)
+                        {
+                            if (buttonImageCount == 0)
+                            {
+                                test = options.gameObject.GetComponent<InputField>().text;  //text for option
+                                if (string.IsNullOrEmpty(test) == true)
+                                {
+                                    filled = false;
+                                }
+                                buttonImageCount++;
+                            }
+                            else
+                            {
+                                if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
+                                {
+
+                                    correctTick++;
+                                }
+
+
+                            }
+
+                        }
+
+
+                    }
+                    count++;
+                    correctAnswer++;
+
+                }
+
+
+
+
+            }
+
+            if (correctTick != noOfQuestion)
+                filled = false;
+
+
+
+            if (filled == true)
+            {
+                GameObject go = Instantiate(extraQuestion);
+                go.name = noOfQuestion.ToString();
+                goQuestion.Add(go);
+                go.SetActive(true);
+                go.transform.SetParent(contentPanel2);
+                go.gameObject.transform.localScale = new Vector3(1, 1, 1);
+            }
+            else
+            {
+                if (correctTick != noOfQuestion)
+                {
+                    error.text = ("Please Check at least one correct option");
+                    popUpError.SetActive(true);
+                }
+                else
+                {
+                    error.text = ("One or more InputField(s) is empty");
+                    popUpError.SetActive(true);
+                }
+
+            }
+        }
 
     }
 
-    
+
+    public void prompAndCheck()
+    {
+        noOfQuestion = contentPanel2.childCount;
+        if (noOfQuestion == 0)
+        {
+            error.text = ("Please Add at least one Question");
+            popUpError.SetActive(true);
+
+        }
+        else
+        {
+
+            int buttonImageCount = 0;
+            int correctAnswer = 0;
+            bool filled = true;
+            int neverTick = 0;
+            int correctTick = 0;
+
+
+
+            foreach (Transform stageQuestion in contentPanel2.transform) //noOfQUestion
+            {
+                string test = stageQuestion.gameObject.name;
+                correctAnswer = 0;
+                int count = 0;
+
+                foreach (Transform inputs in stageQuestion.transform) //elements inside questions
+                {
+                    buttonImageCount = 0;
+                    test = inputs.gameObject.name;
+
+                    if (count == 0)
+                    {
+
+                        test = inputs.gameObject.GetComponent<InputField>().text;// get input question
+                        if (string.IsNullOrEmpty(test) == true)
+                        {
+                            filled = false;
+                        }
+
+                    }
+                    else
+                    {
+
+                        foreach (Transform options in inputs.gameObject.transform)
+                        {
+                            if (buttonImageCount == 0)
+                            {
+                                test = options.gameObject.GetComponent<InputField>().text;  //text for option
+                                if (string.IsNullOrEmpty(test) == true)
+                                {
+                                    filled = false;
+                                }
+                                buttonImageCount++;
+                            }
+                            else
+                            {
+                                if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
+                                {
+
+                                    correctTick++;
+                                }
+
+
+                            }
+
+                        }
+
+
+                    }
+                    count++;
+                    correctAnswer++;
+
+                }
+
+
+
+
+            }
+
+            if (correctTick != noOfQuestion)
+                filled = false;
+
+
+
+            if (filled == true)
+            {
+                popupConfirm.SetActive(true);
+            }
+            else
+            {
+                if (correctTick != noOfQuestion)
+                {
+                    error.text = ("Please Check at least one correct option");
+                    popUpError.SetActive(true);
+                }
+                else
+                {
+                    error.text = ("One or more InputField(s) is empty");
+                    popUpError.SetActive(true);
+                }
+
+            }
+
+
+        }
+    }
+
+
 }

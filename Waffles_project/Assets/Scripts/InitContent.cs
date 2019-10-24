@@ -16,6 +16,7 @@ public class InitContent : MonoBehaviour
     public Text stageName;
     public Transform contentPanel;
     public int noOfCustom;
+    
     ArrayList arrayStageName = new ArrayList();
     public bool done=false;
     
@@ -202,5 +203,7 @@ public class InitContent : MonoBehaviour
         }
         addButton.SetActive(true);
     }
-   
+
+    
+
 }

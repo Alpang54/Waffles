@@ -13,33 +13,39 @@ public class StageNameManage : MonoBehaviour
     public Button clickedDelete;
     public Button clickedEdit;
     public GameObject prefabRef;
+    public GameObject popUpDelete;
+    public Transform contentPanel2;
     public Text stageName;
     private int noOfCustom=0;
+    public int delete = 0;
     static public string customName;
     private DataHandler dataHandler;
     public ArrayList arrayStageName = new ArrayList();
     public ArrayList pushKey = new ArrayList();
     public bool done = false;
-  
 
 
-    public void onDeleteClick()
+
+    public  void onDeleteClick()
     {
-        dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-        string test = stageName.text.ToString();
-        // dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
-       
+    
+            dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
+            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+            DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+            string test = stageName.text.ToString();
+            // dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
 
 
-        reference.Child("CustomStage").Child(stageName.text.ToString()).RemoveValueAsync();
-        reference.Child("UserCustom").Child(dataHandler.GetFirebaseUserId()).Child(stageName.text.ToString()).RemoveValueAsync();
-        reference.Child("Data").Child("Custom").Child(stageName.text.ToString()).RemoveValueAsync();
+
+            reference.Child("CustomStage").Child(stageName.text.ToString()).RemoveValueAsync();
+            reference.Child("UserCustom").Child(dataHandler.GetFirebaseUserId()).Child(stageName.text.ToString()).RemoveValueAsync();
+            reference.Child("Data").Child("Custom").Child(stageName.text.ToString()).RemoveValueAsync();
 
 
-        Destroy(prefabRef);
+            Destroy(prefabRef);
         
+        
+
        
 
 

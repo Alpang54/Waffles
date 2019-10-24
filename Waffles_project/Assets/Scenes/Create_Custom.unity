@@ -2143,7 +2143,7 @@ PrefabInstance:
     - target: {fileID: 6143574939422851756, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
       propertyPath: m_Name
-      value: PopUpBox (1)
+      value: PopUp_Save
       objectReference: {fileID: 0}
     - target: {fileID: 6143574939422851756, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
@@ -3686,7 +3686,7 @@ PrefabInstance:
     - target: {fileID: 6143574939422851756, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
       propertyPath: m_Name
-      value: PopUpBox
+      value: PopUp_Quit
       objectReference: {fileID: 0}
     - target: {fileID: 6143574939422851756, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
