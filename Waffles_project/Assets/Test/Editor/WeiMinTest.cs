@@ -62,7 +62,7 @@ namespace Tests
         public void TestConvertTimeStampToGMT8()
         {
             MailSender ms = new MailSender();
-            DateTime dt = ms.ConvertUnixTimeStamp("1571920529448");
+            DateTime dt = ms.ConvertUnixTimeStamp(1571920529448);
             Assert.AreEqual("10/24/2019 8:35:29 PM", dt.ToString());
 
         }

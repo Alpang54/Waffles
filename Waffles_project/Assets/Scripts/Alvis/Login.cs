@@ -66,6 +66,10 @@ public class Login : MonoBehaviour
                 loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
                 datahandler.SetIsLoggedIn(true);
                 FB.API("me?fields=name", Facebook.Unity.HttpMethod.GET, GetFacebookData);
+                this.accessToken = AccessToken.CurrentAccessToken;
+                credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
+                FirebaseLogin();
+
             }
             else
             {
@@ -192,6 +196,7 @@ public class Login : MonoBehaviour
             newUser.DisplayName, newUser.UserId);
             datahandler.SetFireBaseUserId(newUser.UserId);
         });
+        Debug.Log(datahandler.GetFirebaseUserId());
         Debug.Log("Login done");
 
     }

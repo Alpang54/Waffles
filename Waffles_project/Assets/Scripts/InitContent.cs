@@ -153,12 +153,13 @@ public class InitContent : MonoBehaviour
         StartCoroutine(FetchPastProgress(currentSelected.transform.parent.name,textUpdate));
 
     }
-    public static DateTime? ConvertUnixTimeStamp(string unixTimeStamp)
+    public static DateTime? ConvertUnixTimeStamp(long unixTimeStamp)
     {
         DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        epoch = epoch.AddMilliseconds(Convert.ToDouble(unixTimeStamp));// your case results to 4/5/2013 8:48:34 AM
-        TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
-        DateTime dt = System.TimeZoneInfo.ConvertTimeFromUtc(epoch, tzi);
+        epoch = epoch.AddMilliseconds(unixTimeStamp);// your case results to 4/5/2013 8:48:34 AM
+        TimeZoneInfo tzi = TimeZoneInfo.Local;
+        
+        DateTime dt = System.TimeZoneInfo.ConvertTimeBySystemTimeZoneId(epoch, tzi.Id);
         return dt;
     }
     IEnumerator FetchPastProgress(string stageName,GameObject update)
@@ -168,6 +169,7 @@ public class InitContent : MonoBehaviour
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
         string data = "";
+        Debug.Log(dataHandler.GetFirebaseUserId());
         update.GetComponent<Text>().text = "";
         FirebaseDatabase.DefaultInstance.GetReference("Data/Custom/" + stageName + "/" + dataHandler.GetFirebaseUserId()).GetValueAsync().ContinueWith(task =>
         {
@@ -177,25 +179,35 @@ public class InitContent : MonoBehaviour
             }
             else if (task.IsCompleted)
             {
-                done = true;
                 int countDB = 0;
                 int noOfCustom;
                 DataSnapshot snapshot = task.Result;
+                Debug.LogFormat("Count={0}", snapshot.ChildrenCount); //Node at question number
+
                 foreach (var stats in snapshot.Children)
                 {
-                    if (stats.Key == "attemptedTimestamp")
-                        data += "Timestamp attempted: " + ConvertUnixTimeStamp(stats.Value.ToString()) + "\n";
-                    if (stats.Key == "qnsCount")
-                        data += "Number of attempted qns: " + stats.Value.ToString() + "\n";
-                    if (stats.Key == "noRight")
-                        data += "Number of correct qns: " + stats.Value.ToString() + "\n";
-                    if (stats.Key == "noWrong")
-                        data += "Number of wrong qns: " + stats.Value.ToString() + "\n";
-                    if (stats.Key == "timeTakenPer")
-                        data += "Average time taken for each qns: " + stats.Value.ToString() + "\n";
-                    Debug.Log(stats.Value.ToString());
+                    Debug.LogFormat("Value={0}", stats.Value.ToString()); //values inside question 1,2
 
+                    if (countDB==0)
+                    {
+                        long milliseconds;
+                        long.TryParse(stats.Value.ToString(), out milliseconds);
+                        Debug.Log(ConvertUnixTimeStamp(milliseconds));
+                        data += "Timestamp attempted: " + ConvertUnixTimeStamp(milliseconds) + "\n";
+                    }
+                       
+                    if (countDB ==4)
+                        data += "Number of attempted qns: " + stats.Value.ToString() + "\n";
+                    if (countDB ==2)
+                        data += "Number of correct qns: " + stats.Value.ToString() + "\n";
+                    if (countDB ==3)
+                        data += "Number of wrong qns: " + stats.Value.ToString() + "\n";
+                    if (countDB ==7)
+                        data += "Average time taken for each qns: " + stats.Value.ToString() + "\n";
+                    countDB++;
                 }
+                done = true;
+
             }
         });
         yield return new WaitUntil(() => done == true);

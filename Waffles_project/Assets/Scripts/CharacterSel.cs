@@ -16,7 +16,7 @@ public class CharacterSel : MonoBehaviour
     // Start is called before the first frame update
     //this is to reference in the unity 
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI description;
+    [SerializeField] private Text description;
     [SerializeField] private Image characterimage;
     [SerializeField] private Text level;
     

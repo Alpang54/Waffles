@@ -25,6 +25,12 @@ public class MailSender : MonoBehaviour
     bool validateEmail = false;
     string data = "";
     bool done = false;
+    [SerializeField]
+    GameObject confirmButton;
+    [SerializeField]
+    GameObject fetching;
+    string toEmail;
+    bool sent = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,13 +46,13 @@ public class MailSender : MonoBehaviour
         StartCoroutine(FetchStats());
 
     }
-    public DateTime ConvertUnixTimeStamp(string unixTimeStamp)
+    public DateTime ConvertUnixTimeStamp(long unixTimeStamp)
     {
         DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        epoch = epoch.AddMilliseconds(Convert.ToDouble(unixTimeStamp));// your case results to 4/5/2013 8:48:34 AM
-        TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
-        DateTime dt = System.TimeZoneInfo.ConvertTimeFromUtc(epoch,tzi);
-        Debug.Log(dt.ToString());
+        epoch = epoch.AddMilliseconds(unixTimeStamp);// your case results to 4/5/2013 8:48:34 AM
+        TimeZoneInfo tzi = TimeZoneInfo.Local;
+
+        DateTime dt = System.TimeZoneInfo.ConvertTimeBySystemTimeZoneId(epoch, tzi.Id);
         return dt;
     }
     IEnumerator FetchStats()
@@ -74,24 +80,31 @@ public class MailSender : MonoBehaviour
 
                     noOfCustom = (int)stageNumber.ChildrenCount;  //noOfQuestions
                     data += "Number of players: " + noOfCustom + "\n";
+                    Debug.LogFormat("Count={0}", stageNumber.ChildrenCount); //Node at question number
 
                     foreach (var firebaseToken in stageNumber.Children)
                     {
                         countDB = 0;
-                        data += "-------------------------------------------------\n";
+                        data += "----------------------------------------\n";
 
                         Debug.LogFormat("Firebase token={0}", firebaseToken.Key); //values inside question 1,2
                         foreach (var stats in firebaseToken.Children)
                         {
                             if (stats.Key == "fbUsername")
                                 data += "Facebook Username: " + stats.Value.ToString() + "\n";
-                            if(stats.Key=="qnsCount")
+                            Debug.LogFormat("FB={0}", stats.Value.ToString()); //values inside question 1,2
+
+                            if (stats.Key=="qnsCount")
                                 data += "Number of attempted qns: " + stats.Value.ToString() + "\n";
-                            //Debug.LogFormat("FB={0}", stats.Value.ToString()); //values inside question 1,2
                             if (stats.Key == "noRight")
                                 data += "Number of correct qns: " + stats.Value.ToString() + "\n";
                             if(stats.Key=="attemptedTimestamp")
-                                data += "Timestamp attempted: " + ConvertUnixTimeStamp(stats.Value.ToString())+"\n";                      
+                                {
+                                    long milliseconds;
+                                    long.TryParse(stats.Value.ToString(), out milliseconds);
+                                    Debug.Log(ConvertUnixTimeStamp(milliseconds));
+                                    data += "Timestamp attempted: " + ConvertUnixTimeStamp(milliseconds) + "\n";
+                                }
                             if (stats.Key == "qnsRight")
                                 data += "Correct qns: " + stats.Value.ToString() + "\n";
                             //Debug.LogFormat("Right={0}", stats.Value.ToString()); //values inside question 1,2
@@ -108,7 +121,7 @@ public class MailSender : MonoBehaviour
                         }
 
                     }
-                    data += "===============================================\n";
+                    data += "=======================================\n";
 
                 }
                 done = true;
@@ -123,6 +136,7 @@ public class MailSender : MonoBehaviour
             StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/customStats.txt");
             sw.WriteLine(data);
             sw.Close();
+         
         }
 
     }
@@ -136,10 +150,11 @@ public class MailSender : MonoBehaviour
     }
     public void SendMail()
     {
-        string toEmail = ifs.text;
+        toEmail = ifs.text;
 
-        if (ValidateEmail(ifs.text) && done)
+        if (ValidateEmail(toEmail))
         {
+            if(done)
             try
             {
                 string attachmentPath = Application.persistentDataPath + "/customStats.txt";
@@ -159,10 +174,16 @@ public class MailSender : MonoBehaviour
                 reportPopUp.SetActive(false);
                 sentPopUp.SetActive(true);
                 popUpText.text = "Report has been sent to " + toEmail;
+                sent = true;
             }
             catch (Exception e)
             {
                 Debug.Log(e.Message);
+            }
+            else
+            {
+                ifs.text = "";
+                ifs.placeholder.GetComponent<Text>().text = "Fetching report, please try later";
             }
         }
         else
