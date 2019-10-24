@@ -49,8 +49,7 @@ public class InitContent : MonoBehaviour
 
             StartCoroutine(ReadDBEdit());
             //Invoke("loadDB", 1);
-            string test = dataHandler.GetFirebaseUserId();
-            Debug.Log(test);
+           
         }
 
 
