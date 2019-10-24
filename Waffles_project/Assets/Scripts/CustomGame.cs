@@ -313,7 +313,9 @@ public class CustomGame : MonoBehaviour
         timeTaken = Math.Round(timeTaken, 2);
         reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("timeTakenPer").SetValueAsync(timeTakenPer+" secs");
         reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("totalTimeTaken").SetValueAsync(timeTaken+" secs");
-        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("fbUserName").SetValueAsync(fBUsername);
+        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("attemptedTimestamp").SetValueAsync(Firebase.Database.ServerValue.Timestamp);
+        reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("fbUsername").SetValueAsync(fBUsername);
+
         reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("noRight").SetValueAsync(correctQns);
         reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("noWrong").SetValueAsync(wrongQns);
         if (qnsRight != "")

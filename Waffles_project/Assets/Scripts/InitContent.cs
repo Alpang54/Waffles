@@ -4,9 +4,11 @@ using Firebase.Unity.Editor;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Proyecto26;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class InitContent : MonoBehaviour
@@ -28,6 +30,8 @@ public class InitContent : MonoBehaviour
     string currentScene;
     [SerializeField]
     GameObject loading;
+    [SerializeField]
+    GameObject popUp;
     private void Awake()
     {
         
@@ -35,13 +39,13 @@ public class InitContent : MonoBehaviour
 
     void Start()
     {
-        
+
+        dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
 
         if (currentScene == "Lobby")
             StartCoroutine(ReadDBLobby());
         else
         {
-            dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
 
             StartCoroutine(ReadDBEdit());
             //Invoke("loadDB", 1);
@@ -137,6 +141,72 @@ public class InitContent : MonoBehaviour
             loading.GetComponent<Text>().text = "No matching stage found";
         }
     }
+    public void GetGameObjectName(GameObject textUpdate)
+    {
+        GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
+        Debug.Log(currentSelected.transform.parent.name);
+        popUp.SetActive(true);
+        StartCoroutine(FetchPastProgress(currentSelected.transform.parent.name,textUpdate));
+
+    }
+    public static DateTime? ConvertUnixTimeStamp(string unixTimeStamp)
+    {
+        DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        epoch = epoch.AddMilliseconds(Convert.ToDouble(unixTimeStamp));// your case results to 4/5/2013 8:48:34 AM
+        TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
+        DateTime dt = System.TimeZoneInfo.ConvertTimeFromUtc(epoch, tzi);
+        return dt;
+    }
+    IEnumerator FetchPastProgress(string stageName,GameObject update)
+    {
+        done = false;
+        loading.SetActive(true);
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        string data = "";
+        update.GetComponent<Text>().text = "";
+        FirebaseDatabase.DefaultInstance.GetReference("Data/Custom/" + stageName + "/" + dataHandler.GetFirebaseUserId()).GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                done = true;
+                int countDB = 0;
+                int noOfCustom;
+                DataSnapshot snapshot = task.Result;
+                foreach (var stats in snapshot.Children)
+                {
+                    if (stats.Key == "attemptedTimestamp")
+                        data += "Timestamp attempted: " + ConvertUnixTimeStamp(stats.Value.ToString()) + "\n";
+                    if (stats.Key == "qnsCount")
+                        data += "Number of attempted qns: " + stats.Value.ToString() + "\n";
+                    if (stats.Key == "noRight")
+                        data += "Number of correct qns: " + stats.Value.ToString() + "\n";
+                    if (stats.Key == "noWrong")
+                        data += "Number of wrong qns: " + stats.Value.ToString() + "\n";
+                    if (stats.Key == "timeTakenPer")
+                        data += "Average time taken for each qns: " + stats.Value.ToString() + "\n";
+                    Debug.Log(stats.Value.ToString());
+
+                }
+            }
+        });
+        yield return new WaitUntil(() => done == true);
+
+        if(done)
+        {
+            loading.SetActive(false);
+            if (data != "")
+                update.GetComponent<Text>().text = data;
+            else
+                update.GetComponent<Text>().text = "No previous progress found!";
+
+        }
+    }
+
     IEnumerator ReadDBEdit()
     {
         done = false;
@@ -144,7 +214,6 @@ public class InitContent : MonoBehaviour
 
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
             DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-            
 
             FirebaseDatabase.DefaultInstance.GetReference("UserCustom/"+dataHandler.GetFirebaseUserId()).GetValueAsync().ContinueWith(task =>
             {

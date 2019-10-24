@@ -28,7 +28,6 @@ public class MailSender : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(FetchStats());
     }
 
     // Update is called once per frame
@@ -36,11 +35,26 @@ public class MailSender : MonoBehaviour
     {
 
     }
+    public void GetStats()
+    {
+        StartCoroutine(FetchStats());
+
+    }
+    public static DateTime? ConvertUnixTimeStamp(string unixTimeStamp)
+    {
+        DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        epoch = epoch.AddMilliseconds(Convert.ToDouble(unixTimeStamp));// your case results to 4/5/2013 8:48:34 AM
+        TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
+        DateTime dt = System.TimeZoneInfo.ConvertTimeFromUtc(epoch,tzi);
+        return dt;
+    }
     IEnumerator FetchStats()
     {
         done = false;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
         data += "Custom Stages Statistics\n";
+        data += "===============================================\n";
+
         FirebaseDatabase.DefaultInstance.GetReference("Data/" + "Custom/").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -63,14 +77,20 @@ public class MailSender : MonoBehaviour
                     foreach (var firebaseToken in stageNumber.Children)
                     {
                         countDB = 0;
+                        data += "-------------------------------------------------\n";
+
                         Debug.LogFormat("Firebase token={0}", firebaseToken.Key); //values inside question 1,2
                         foreach (var stats in firebaseToken.Children)
                         {
-                            if (stats.Key == "fbUserName")
+                            if (stats.Key == "fbUsername")
                                 data += "Facebook Username: " + stats.Value.ToString() + "\n";
+                            if(stats.Key=="qnsCount")
+                                data += "Number of attempted qns: " + stats.Value.ToString() + "\n";
                             //Debug.LogFormat("FB={0}", stats.Value.ToString()); //values inside question 1,2
                             if (stats.Key == "noRight")
                                 data += "Number of correct qns: " + stats.Value.ToString() + "\n";
+                            if(stats.Key=="attemptedTimestamp")
+                                data += "Timestamp attempted: " + ConvertUnixTimeStamp(stats.Value.ToString())+"\n";                      
                             if (stats.Key == "qnsRight")
                                 data += "Correct qns: " + stats.Value.ToString() + "\n";
                             //Debug.LogFormat("Right={0}", stats.Value.ToString()); //values inside question 1,2
@@ -79,11 +99,15 @@ public class MailSender : MonoBehaviour
                             //Debug.LogFormat("Wrong={0}", stats.Value.ToString()); //values inside question 1,2
                             if (stats.Key == "qnsWrong")
                                 data += "Wrong qns: " + stats.Value.ToString() + "\n";
+                            if (stats.Key == "timeTakenPer")
+                                data += "Average time taken for each qns: " + stats.Value.ToString() + "\n";
+                            if (stats.Key == "totalTimeTaken")
+                                data += "Total time taken for stage: " + stats.Value.ToString() + "\n";
                             countDB++;
                         }
 
                     }
-                    data += "================================\n";
+                    data += "===============================================\n";
 
                 }
                 done = true;
