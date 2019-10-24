@@ -482,7 +482,12 @@ PrefabInstance:
     - target: {fileID: 4163639687396753690, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Custom_Manage
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4163639687396753690, guid: f1754dc04061c9b47978cc7c721adf66,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1754dc04061c9b47978cc7c721adf66, type: 3}
@@ -3014,24 +3019,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 239340539}
+      objectReference: {fileID: 2797179505656461460}
     - target: {fileID: 7853666864414774279, guid: 8ba643df7a588464aba4917aa7e7a2fa,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: DeleteCheck
       objectReference: {fileID: 0}
     - target: {fileID: 7853666864414774279, guid: 8ba643df7a588464aba4917aa7e7a2fa,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7853666864414774279, guid: 8ba643df7a588464aba4917aa7e7a2fa,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4526603537128498006, guid: 8ba643df7a588464aba4917aa7e7a2fa,
+        type: 3}
+      propertyPath: popUpDelete
+      value: 
+      objectReference: {fileID: 239340539}
+    - target: {fileID: 4526603537128498006, guid: 8ba643df7a588464aba4917aa7e7a2fa,
+        type: 3}
+      propertyPath: contentPanel2
+      value: 
+      objectReference: {fileID: 1631680553}
+    - target: {fileID: 4526603537128498006, guid: 8ba643df7a588464aba4917aa7e7a2fa,
+        type: 3}
+      propertyPath: popUpComplete
+      value: 
+      objectReference: {fileID: 50601112}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ba643df7a588464aba4917aa7e7a2fa, type: 3}
+--- !u!114 &2797179505656461460 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4526603537128498006, guid: 8ba643df7a588464aba4917aa7e7a2fa,
+    type: 3}
+  m_PrefabInstance: {fileID: 2797179505656461459}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b42d957553d134db6021e0c5052436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5344725574366866582 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7853666864414774277, guid: 8ba643df7a588464aba4917aa7e7a2fa,
