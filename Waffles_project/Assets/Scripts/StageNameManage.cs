@@ -3,6 +3,7 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -28,32 +29,42 @@ public class StageNameManage : MonoBehaviour
     public static string stgName;
     
 
-    public  void onDeleteClick()
+    public void onDeleteClick()
     {
+        
+       
 
         
-        dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
-            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
-            DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-       
-            // dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
 
-
-
-            reference.Child("CustomStage").Child(stgName).RemoveValueAsync();
-            reference.Child("UserCustom").Child(dataHandler.GetFirebaseUserId()).Child(stgName).RemoveValueAsync();
-            reference.Child("Data").Child("Custom").Child(stgName).RemoveValueAsync();
-
+        if(DeleteProcess()==true)
+        {
 
             Destroy(prefabRef);
-           popUpComplete.SetActive(true);
+            popUpComplete.SetActive(true);
+        }
         
 
        
 
 
     }
+    bool DeleteProcess()
+    {
+        dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 
+        // dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
+
+
+
+        reference.Child("CustomStage").Child(stgName).RemoveValueAsync();
+        reference.Child("UserCustom").Child(dataHandler.GetFirebaseUserId()).Child(stgName).RemoveValueAsync();
+        reference.Child("Data").Child("Custom").Child(stgName).RemoveValueAsync();
+        Thread.Sleep(1000);
+
+        return true;
+    }
 
 
     public void onEditClick()
