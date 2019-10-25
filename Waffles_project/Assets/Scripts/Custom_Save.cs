@@ -397,12 +397,12 @@ public class Custom_Save : MonoBehaviour
             {
                 if (correctTick != noOfQuestion)
                 {
-                    error.text = ("Please Check at least one correct option");
+                    error.text = ("Please Tick One Of The Options");
                     popUpError.SetActive(true);
                 }
                 else
                 {
-                    error.text = ("One or more InputField(s) is empty");
+                    error.text = ("One Or More Of The InputField(s) Is Empty");
                     popUpError.SetActive(true);
                 }
 
