@@ -1685,7 +1685,7 @@ MonoBehaviour:
   popUpError: {fileID: 3635682949940773848}
   popUpComplete: {fileID: 0}
   popupConfirm: {fileID: 0}
-  error: {fileID: 0}
+  error: {fileID: 4533758727216552036}
   contentPanel2: {fileID: 0}
   option1: {fileID: 0}
   option2: {fileID: 0}
@@ -1693,7 +1693,7 @@ MonoBehaviour:
   option4: {fileID: 0}
   correctChecked: {fileID: 0}
   normalChecked: {fileID: 0}
-  stageName: {fileID: 0}
+  stageName: {fileID: 22128111}
   stageQuestion: {fileID: 0}
   stageAnswer1: {fileID: 0}
   stageAnswer2: {fileID: 0}
@@ -2285,15 +2285,15 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Custom_Manage
       objectReference: {fileID: 0}
-    - target: {fileID: 2060158837813176843, guid: f1754dc04061c9b47978cc7c721adf66,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
-      objectReference: {fileID: 0}
     - target: {fileID: 4199835637997249790, guid: f1754dc04061c9b47978cc7c721adf66,
         type: 3}
       propertyPath: m_Name
       value: Txt_SaveDialogue
+      objectReference: {fileID: 0}
+    - target: {fileID: 2060158837813176843, guid: f1754dc04061c9b47978cc7c721adf66,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1754dc04061c9b47978cc7c721adf66, type: 3}
@@ -4327,7 +4327,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Please Enter A Valid Stage Name
+  m_Text: Please Enter Stage Name
 --- !u!224 &4545603991774562226
 RectTransform:
   m_ObjectHideFlags: 0

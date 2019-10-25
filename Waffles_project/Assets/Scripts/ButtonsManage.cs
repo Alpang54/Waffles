@@ -45,21 +45,23 @@ public class ButtonsManage : MonoBehaviour
     public ArrayList questionName = new ArrayList();
     public ArrayList correctAnswers = new ArrayList();
     public ArrayList optionChoice = new ArrayList();
+    public ArrayList dbStgName = new ArrayList();
     private DataHandler dataHandler;
+    private bool done = false;
+    private int dbStg;
     public void pressNext()
     {
         if(string.IsNullOrEmpty(inputStage.GetComponent<InputField>().text.ToString()))
         {
+            error.text = ("Please Enter Stage Name");
             popUpError.SetActive(true);
         }
         else
         {
-            backButton.SetActive(!backButton.active);
-            nextButton.SetActive(!nextButton.active);
-            doneButton.SetActive(!doneButton.active);
-            inputStage.SetActive(!inputStage.active);
-            scrollView.SetActive(!scrollView.active);
-            addMoreQuestion.SetActive(!addMoreQuestion.active);
+
+            StartCoroutine(ReadDup());
+            
+            
         }
         
     }
@@ -447,5 +449,76 @@ public class ButtonsManage : MonoBehaviour
     }
 
 
-    
+
+    IEnumerator ReadDup()
+    {
+        done = false;
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+        
+
+
+        FirebaseDatabase.DefaultInstance.GetReference("CustomStage").GetValueAsync().ContinueWith(task =>
+        {
+            //reference.GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+
+
+                DataSnapshot snapshot = task.Result;
+                dbStg = (int)snapshot.ChildrenCount; 
+
+                foreach (var stages in snapshot.Children)
+                {
+                    Debug.LogFormat("Key={0}", stages.Key); //Node Custom Stage Name
+                    dbStgName.Add(stages.Key.ToString());
+
+
+                }
+                done = true;
+                //strJson =snapshot.GetRawJsonValue();
+
+            }
+        });
+
+        yield return new WaitUntil(() => done == true);
+
+
+
+        if (done == true) //reading db should be done by now
+        {
+            bool found = false;
+            for (int i=0;i<dbStg;i++)
+            {
+                if(String.Equals(dbStgName[i],stageName.text))
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if(found==true)
+            {
+                error.text = ("Stage Name Exists! Please Choose Another Stage Name");
+                popUpError.SetActive(true);
+            }
+            else
+            {
+                backButton.SetActive(!backButton.active);
+                nextButton.SetActive(!nextButton.active);
+                doneButton.SetActive(!doneButton.active);
+                inputStage.SetActive(!inputStage.active);
+                scrollView.SetActive(!scrollView.active);
+                addMoreQuestion.SetActive(!addMoreQuestion.active);
+                //yield return new WaitForSeconds(1f);
+            }
+
+        }
+
+
+    }
+
 }
