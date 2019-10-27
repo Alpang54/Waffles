@@ -14,14 +14,18 @@ public class WorldMapManagerScript : MonoBehaviour
     public Sprite activeSprite;
     public Sprite lockedSprite;
 
+    const double noOfWorldPerPage = 9.0;
 
     private int worldCount;
     private int worldProgress;
+    private int pageNumber;
 
     private List<string> worldNames;
 
     private List<Tuple<int,string,string>> worldStageNames;
     private List<Tuple<int, string, string>> worldStageProgress;
+
+    private List<Tuple<int, int>> worldCompletionPercentage;
 
 
     public Text loadText;
@@ -41,11 +45,13 @@ public class WorldMapManagerScript : MonoBehaviour
     {
 
         datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
-        loadText.text = "Loading..";
+        
+        this.pageNumber = 1;
         worldMapImplementor = new WorldMapImplementation();
 
         await GetWorldAndUserProgressFromDatabase();
-        loadText.text = "";
+        GameObject loadingCircle = GameObject.Find("LoadingCircle");
+        loadingCircle.SetActive(false);
 
 
 
@@ -69,8 +75,9 @@ public class WorldMapManagerScript : MonoBehaviour
         ExtractUserWorldProgress(snapshotOfUserProgress);
         ProcessUserProgessLogic(this.worldStageProgress);
 
+        this.worldCompletionPercentage=worldMapImplementor.ComputeWorldCompletionPercentage(this.worldStageProgress, this.worldStageNames, this.worldCount);
 
-        DeclareWorldMapButtons(worldProgress, worldCount);
+        DeclareWorldMapButtons(worldProgress, worldCount,this.pageNumber);
 
 
     }
@@ -78,7 +85,9 @@ public class WorldMapManagerScript : MonoBehaviour
     private void ExtractWorldInformation(DataSnapshot snapShotOfWorld)
     {
         this.worldStageNames = worldMapImplementor.ExtractWorldInformationLogic(snapShotOfWorld);
-        Debug.Log("this.worldstagenames is" + this.worldStageNames);
+       
+        this.worldNames = worldMapImplementor.GetWorldNames();
+     
 
     }
 
@@ -86,7 +95,7 @@ public class WorldMapManagerScript : MonoBehaviour
     {
         worldMapImplementor.ProcessWorldInformation(worldStageNames);
         this.worldCount = worldMapImplementor.GetWorldCount();
-        Debug.Log("this.worldcount is" + this.worldCount);
+       
     }
 
     //method to handle data from database
@@ -94,9 +103,8 @@ public class WorldMapManagerScript : MonoBehaviour
     {
         string userID = datahandler.GetFirebaseUserId();
         this.worldStageProgress = worldMapImplementor.ExtractUserProgressLogic(snapShotOfUserProgress, userID);
-        Debug.Log("this.worldstageprogress is" + this.worldStageProgress);
-        this.worldNames = worldMapImplementor.GetWorldNames();
-        Debug.Log("this.worldnames is" + this.worldNames);
+        
+        
         
 
       
@@ -106,32 +114,37 @@ public class WorldMapManagerScript : MonoBehaviour
     {
         worldMapImplementor.ProcessUserProgressLogic(worldStageProgress);
         this.worldProgress = worldMapImplementor.GetWorldProgress();
-        Debug.Log("this.worldprogress is" + this.worldProgress);
+       
     }
 
 
 
 
     //determine which buttons are to be active or which to be inactive
-    public void DeclareWorldMapButtons(int worldProgress, int worldCount)
+    public void DeclareWorldMapButtons(int worldProgress, int worldCount,int pageNumber)
     {
         for (int i = 0; i < worldMapButtons.Length; i++)
         {
 
             WorldMapButtonScript aWorldButtonScript = worldMapButtons[i].GetComponent<WorldMapButtonScript>();
 
-           
+            int result = worldMapImplementor.DeclareWorldButtonsLogic(worldProgress, worldCount, pageNumber, i);
 
-            if (worldMapImplementor.DeclareWorldButtonsLogic(worldProgress,worldCount,i))
+            if (result==1)
             {
-                aWorldButtonScript.SetWorldButtonImage(activeSprite);
+                // To calculate the worldNumber Text for different pages
+                int worldLevelForAButton = worldMapImplementor.ComputeWorldNumber(pageNumber, noOfWorldPerPage, i);
+                Debug.Log("worldLevelForAButton" + worldLevelForAButton);
                 worldMapButtons[i].GetComponent<Button>().interactable = true;
+                aWorldButtonScript.SetWorldButtonImage(activeSprite);
+                aWorldButtonScript.SetWorldLevel(worldLevelForAButton);
 
                 aWorldButtonScript.SetWorldButton(true);
          
             }
-            else
+            else if(result == 2)
             {
+
                 aWorldButtonScript.SetWorldButtonImage(lockedSprite);
                 aWorldButtonScript.SetWorldButton(false);
             }
@@ -146,7 +159,16 @@ public class WorldMapManagerScript : MonoBehaviour
     {
 
         WorldConfirmPanel confirmPanel = worldConfirmPanel.GetComponent<WorldConfirmPanel>();
-        confirmPanel.confirmPanelAppear(this.worldNames[worldLevel-1], worldLevel);
+        int selectedWorldCompletionPercent = 0;
+        foreach(var aRecordOfWorldCompletionPercentage in this.worldCompletionPercentage)
+        {
+            if (worldLevel == aRecordOfWorldCompletionPercentage.Item1)
+            {
+                selectedWorldCompletionPercent = aRecordOfWorldCompletionPercentage.Item2;
+            }
+        }
+
+        confirmPanel.confirmPanelAppear(this.worldNames[worldLevel-1], worldLevel,selectedWorldCompletionPercent);
     }
 
     // when a world is selected and confirmed, pass to stage manager to load stage map and turn world map off
@@ -182,12 +204,38 @@ public class WorldMapManagerScript : MonoBehaviour
     }
 
 
+    public void onSelectNextButton()
+
+    {
+        double noOfAcceptablePages = this.worldCount / noOfWorldPerPage;
+        
+
+        if (noOfAcceptablePages>this.pageNumber)
+        {
+            this.pageNumber++;
+            DeclareWorldMapButtons(this.worldProgress, this.worldCount, this.pageNumber);
+        }
+        
+    }
+
+    public void onSelectPreviousButton()
+    {   if (this.pageNumber <= 1)
+        { }
+        else
+        {
+            this.pageNumber--;
+            DeclareWorldMapButtons(this.worldProgress, this.worldCount, this.pageNumber);
+        }
+    }
 
 
 
 
-   
+
+
 }
+
+
 
 
 public class WorldMapImplementation
@@ -196,20 +244,30 @@ public class WorldMapImplementation
     private List<string> worldNames;
     private int worldProgress;
 
-    public bool DeclareWorldButtonsLogic(int worldProgress, int worldCount, int i)
+    public int DeclareWorldButtonsLogic(int worldProgress, int worldCount, int pageNumber, int i)
     {
-        if (i < worldProgress && i<worldCount)
-        {
-            return true;
-        }
-    
-        return false;
-    }
+        i = i + 9 * (pageNumber-1)+1;
 
+
+        if (i <= worldProgress && i < worldCount)
+        {
+            return 1;
+        }
+
+        else if (i <= worldCount && i > worldProgress)
+        {
+          
+            return 2;
+        }
+        else
+        {
+            return 0;
+        }
+    }
     public List<Tuple<int, string, string>>  ExtractWorldInformationLogic(DataSnapshot snapShotOfWorld)
     {
 
-
+        this.worldNames = new List<string>();
         int worldNumber=0;
         if (snapShotOfWorld == null)
         {
@@ -219,6 +277,7 @@ public class WorldMapImplementation
         foreach (var world in snapShotOfWorld.Children)
         {   
             worldNumber++;
+            this.worldNames.Add(world.Key.ToString());
             foreach (var stage in world.Children)
             {
                 Tuple<int, string, string> aRecordOfworldStageNames = new Tuple<int, string, string>(worldNumber, stage.Key.ToString(), stage.Value.ToString());
@@ -245,7 +304,7 @@ public class WorldMapImplementation
     {
 
         int worldProgress;
-        this.worldNames = new List<string>();
+        
         List<Tuple<int, string, string>> worldStageProgress = new List<Tuple<int, string, string>>();
 
         if (snapShotOfUserProgress == null || userID == null)
@@ -260,7 +319,7 @@ public class WorldMapImplementation
             {
                 foreach (var world in userid.Children)
                 {
-                    this.worldNames.Add(world.Key.ToString());
+                    
                     worldProgress = Int32.Parse(world.Key.ToString().Substring(5));
 
                     foreach (var stage in world.Children)
@@ -279,12 +338,57 @@ public class WorldMapImplementation
 
     public void ProcessUserProgressLogic(List<Tuple<int, string, string>> worldStageProgress)
     {
-        int worldProgress = 0;
+        int worldProgress = 1;
         foreach (var aRecordOfWorldStageProgress in worldStageProgress)
         {
             worldProgress = aRecordOfWorldStageProgress.Item1;
         }
         this.worldProgress = worldProgress;
+    }
+
+
+    public int ComputeWorldNumber(int pageNumber, double noOfWorldPerPage, int i)
+    {
+        int worldNumberText = (int) ((pageNumber-1) * noOfWorldPerPage + i + 1);
+        return worldNumberText;
+    }
+
+    public List<Tuple<int,int>> ComputeWorldCompletionPercentage(List<Tuple<int, string, string>> worldStageProgress, List<Tuple<int, string, string>> worldStageNames,int worldCount)
+    {
+        List<Tuple<int, int>> worldCompletionPercentage = new List<Tuple<int, int>>();
+        
+        for (int i = 1; i <= worldCount; i++)
+        {
+            int totalNoOfStages = 0;
+      
+            int totalScore = 0;
+
+            foreach (var aRecordOfWorldStageNames in worldStageNames)
+            {
+                if (i == aRecordOfWorldStageNames.Item1)
+                {
+                    totalNoOfStages++;
+                }
+            }
+
+            foreach (var aRecordOfWorldStageProgress in worldStageProgress) {
+                if (i == aRecordOfWorldStageProgress.Item1)
+                {
+                    Debug.Log(Int32.Parse(aRecordOfWorldStageProgress.Item3));
+                    
+                    totalScore += Int32.Parse(aRecordOfWorldStageProgress.Item3);
+
+
+                }
+            }
+            int completionPercentage = totalScore / totalNoOfStages;
+
+            Tuple<int, int> aRecordOfWorldCompletion = new Tuple<int, int>(i,completionPercentage);
+            worldCompletionPercentage.Add(aRecordOfWorldCompletion);
+
+        }
+
+        return worldCompletionPercentage;
     }
 
 

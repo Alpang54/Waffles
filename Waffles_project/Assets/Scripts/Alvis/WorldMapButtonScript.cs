@@ -14,9 +14,8 @@ using System.Threading.Tasks;
 public class WorldMapButtonScript : MonoBehaviour
 {
 
-    public int worldLevel;
-   
-    public Text worldButtonText;
+    private int worldLevel;
+   [SerializeField] private Text worldButtonText;
     private Image worldButtonImage;
     private Button worldButton;
     public GameObject worldMapManager;
@@ -27,10 +26,16 @@ public class WorldMapButtonScript : MonoBehaviour
        
         worldButtonImage = GetComponent<Image>();
         worldButton = GetComponent<Button>();
-        worldButtonText.text = "" + worldLevel;
+        
 
     }
 
+
+    public void SetWorldLevel(int worldLevel)
+    {
+        this.worldLevel = worldLevel;
+        this.worldButtonText.text = worldLevel.ToString();
+    }
   
     public void SetWorldButtonImage(Sprite activeOrInactiveSprite)
     {
@@ -53,29 +58,3 @@ public class WorldMapButtonScript : MonoBehaviour
     }
 }
 
-/*
- 
-     private async void getStageNamesFromDatabase(string worldname)
-    {
-        using (HttpClient client = new HttpClient())
-        {
-            using (HttpResponseMessage response = await client.GetAsync("https://cz3003-waffles.firebaseio.com/StageNames/.json"))
-            {
-                using (HttpContent content = response.Content)
-                {
-                    string mycontent = await content.ReadAsStringAsync();
-                    print(mycontent);
-
-
-                }
-
-            }
-        }
-    }
-
-    public void getStageNames()
-    {
-        Debug.Log("Working another");
-        getStageNamesFromDatabase("äli");
-    }
-*/
