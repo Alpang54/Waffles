@@ -1,18 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Firebase;
 using Firebase.Database;
-using System;
+using Firebase.Unity.Editor;
 using UnityEngine;
 
 public class LeaderboardManager : MonoBehaviour
 {
+    private class PlayerInfo
+    {
+        [SerializeField] public String playerName;
+        [SerializeField] public int points;
+
+        public PlayerInfo(String playerName, int points)
+        {
+            this.playerName = playerName;
+            this.points = points;
+        }
+    }
+
     [SerializeField] private GameObject playerRankTemplate = null;
 
-    // private List<Player> playersRanked;
+    private List<PlayerInfo> playersRanked;
 
     void Start()
     {
-        GenerateWithSampleData();
+        GenerateWithDatabaseRecords();
 	}
 
     private void GenerateWithSampleData()
@@ -23,17 +38,15 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    /* 
     private async void GenerateWithDatabaseRecords()
     {
         await FetchPlayersRanked();
 
         for (int i = 0; i < playersRanked.Count; i++)
         {
-            SpawnPlayerRankObj(playersRanked[i].name, playersRanked[i].points, i + 1);
+            SpawnPlayerRankObj(playersRanked[i].playerName, playersRanked[i].points, i + 1);
         }
     }
-    */
 
     private void SpawnPlayerRankObj(string playerName, int points, int rank)
     {
@@ -48,23 +61,22 @@ public class LeaderboardManager : MonoBehaviour
         playerRank.SetActive(true);
     }
 
-    /* 
     private async Task FetchPlayersRanked()
     {
-        GameObject DBHandler = GameObject.Find("DBHandler");
-        DBHandler DBHandlerScript = DBHandler.GetComponent<DBHandler>();
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 
-        await DBHandlerScript.ReadfromFirebase("User");
-        DataSnapshot snapshotOfUser = DBHandlerScript.GetSnapshot();
+        DataSnapshot leaderboardSnapshot = await FirebaseDatabase.DefaultInstance.GetReference("Leaderboard").GetValueAsync();
 
-        List<Player> players = new List<Player>();
+        List<PlayerInfo> players = new List<PlayerInfo>();
 
-        foreach (var user in snapshotOfUser.Children)
+        foreach (var user in leaderboardSnapshot.Children)
         {
-            players.Add(user.GetValue(Player));
+            String playerName = user.Child("Name").GetValue(true).ToString();
+            int points = Convert.ToInt32(user.Child("Score").GetValue(true));
+            players.Add(new PlayerInfo(playerName, points));
         }
 
         playersRanked = players.OrderByDescending(player => player.points).ToList();
     }
-    */
 }
