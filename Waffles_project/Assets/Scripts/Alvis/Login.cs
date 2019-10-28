@@ -46,6 +46,7 @@ public class Login : MonoBehaviour
         if (FB.IsLoggedIn)
         {
             loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
+            SetInit();
         }
         else
             loginOutbtn.GetComponentInChildren<Text>().text = "Login";

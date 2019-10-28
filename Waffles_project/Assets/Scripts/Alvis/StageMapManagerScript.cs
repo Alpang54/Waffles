@@ -74,7 +74,14 @@ public class StageMapManagerScript : MonoBehaviour
     public void OnSelectStageButton(int stageLevel, string stageName)
     {
         StageConfirmPanel confirmPanel = stageConfirmPanel.GetComponent<StageConfirmPanel>();
-        confirmPanel.confirmPanelAppear(stageName, worldLevel, stageLevel,stageCompletionPercentage[stageLevel-1]);
+        if (stageLevel == 1 && this.worldLevel == 1)
+        {
+            confirmPanel.confirmPanelAppear(stageName, worldLevel, stageLevel, "0");
+        }
+        else
+        {
+            confirmPanel.confirmPanelAppear(stageName, worldLevel, stageLevel, stageCompletionPercentage[stageLevel - 1]);
+        }
 
     }
 
