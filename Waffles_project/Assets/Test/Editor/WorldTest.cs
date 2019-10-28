@@ -41,7 +41,7 @@ namespace Tests
 
         
         // A Test behaves as an ordinary method
-        [Test]
+        /*[Test]
        public void TestForWorldMapButtonResultWhenBetweenNoOfWorldAndProgress()
         {
             WorldMapImplementation worldMapImplementor = new WorldMapImplementation();
@@ -64,7 +64,7 @@ namespace Tests
             bool result = worldMapImplementor.DeclareWorldButtonsLogic(3, 5, 8);
             Assert.False(result);
         }
-
+        */
         [Test]
         public void TestForExtractWorldInfoNoWorldWhenNoWorlds()
         {
