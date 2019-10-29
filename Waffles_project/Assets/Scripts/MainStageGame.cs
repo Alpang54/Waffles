@@ -83,14 +83,13 @@ public class MainStageGame : MonoBehaviour
     
         currentDiff = dataHandler.GetCharacterLevel()+1;
 
-        stageName = dataHandler.GetStageName();
-        if (stageName == "")
-            stageName = "World" + currentWorld + " Stage" + currentStage;
+      
         currentStage = worldAndStageLevel.Item2;
         currentWorld = worldAndStageLevel.Item1;
         Debug.Log("currentStage=" + currentStage);
         Debug.Log("currentWorld=" + currentWorld);
-
+        stageName = dataHandler.GetStageName();
+        stageName = "World" + currentWorld + " Stage" + currentStage;
         StartCoroutine(ReadDB());
         StartCoroutine(ReadPoint());
 

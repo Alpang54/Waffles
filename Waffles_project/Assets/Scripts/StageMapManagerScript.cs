@@ -99,7 +99,7 @@ public class StageMapManagerScript : MonoBehaviour
 
         datahandler.SetWorldAndStageLevel(worldAndStageLevel);
         Debug.Log("The result is:" +datahandler.GetWorldAndStageLevel());
-        SceneManager.LoadScene("Game Map");
+        SceneManager.LoadScene("Main Stage");
     }
 
 

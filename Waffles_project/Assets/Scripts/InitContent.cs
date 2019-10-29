@@ -30,7 +30,8 @@ public class InitContent : MonoBehaviour
     string currentScene;
     [SerializeField]
     GameObject loading;
-    
+    [SerializeField]
+    GameObject text;
     private void Awake()
     {
         
@@ -135,8 +136,9 @@ public class InitContent : MonoBehaviour
         }
         if (count <= 0)
         {
-            loading.SetActive(true);
-            loading.GetComponent<Text>().text = "No matching stage found";
+            //loading.SetActive(true);
+            text.SetActive(true);
+            text.GetComponent<Text>().text = "No matching stage found";
         }
     }
     public bool Search(string a, string b)
