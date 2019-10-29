@@ -78,13 +78,14 @@ public class StageMapManagerScript : MonoBehaviour
     public void OnSelectStageButton(int stageLevel, string stageName)
     {
         StageConfirmPanel confirmPanel = stageConfirmPanel.GetComponent<StageConfirmPanel>();
-        if (stageLevel == 1 && this.worldLevel == 1)
+        if (stageLevel == 1 && this.worldLevel == 1 && this.stageProgress==1)
         {
             confirmPanel.confirmPanelAppear(stageName, worldLevel, stageLevel, "0");
         }
         else
         {
             confirmPanel.confirmPanelAppear(stageName, worldLevel, stageLevel, stageCompletionPercentage[stageLevel - 1]);
+            Debug.Log("stageCompletionPercentage = "+stageCompletionPercentage[stageLevel - 1]);
         }
 
     }
@@ -97,7 +98,7 @@ public class StageMapManagerScript : MonoBehaviour
         Tuple<int, int> worldAndStageLevel = new Tuple<int, int>(this.worldLevel, stageLevel);
 
         datahandler.SetWorldAndStageLevel(worldAndStageLevel);
-        Debug.Log(datahandler.GetWorldAndStageLevel());
+        Debug.Log("The result is:" +datahandler.GetWorldAndStageLevel());
         SceneManager.LoadScene("Game Map");
     }
 
