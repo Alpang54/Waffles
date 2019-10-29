@@ -23,7 +23,6 @@ public class MailSender : MonoBehaviour
     [SerializeField]
     Text popUpText;
     bool validateEmail = false;
-    string data = "";
     bool done = false;
     [SerializeField]
     GameObject confirmButton;
@@ -31,6 +30,7 @@ public class MailSender : MonoBehaviour
     GameObject fetching;
     string toEmail;
     bool sent = false;
+    bool done2 = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,8 +55,92 @@ public class MailSender : MonoBehaviour
         DateTime dt = System.TimeZoneInfo.ConvertTimeBySystemTimeZoneId(epoch, tzi.Id);
         return dt;
     }
+    IEnumerator FetchMainStats()
+    {
+        string data = "";
+
+        done2 = false;
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
+        data += "Main Stages Statistics\n";
+        data += "===============================================\n";
+
+        FirebaseDatabase.DefaultInstance.GetReference("Data/" + "Main/").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                int countDB = 0;
+                int noOfCustom;
+                DataSnapshot snapshot = task.Result;
+                foreach (var stageNumber in snapshot.Children)
+                {
+                    Debug.LogFormat("Key={0}", stageNumber.Key); //Node at question number
+                    data += "World/Stage: " + stageNumber.Key + "\n";
+
+                    noOfCustom = (int)stageNumber.ChildrenCount;  //noOfQuestions
+                    data += "Number of players: " + noOfCustom + "\n";
+                    Debug.LogFormat("Count={0}", stageNumber.ChildrenCount); //Node at question number
+
+                    foreach (var firebaseToken in stageNumber.Children)
+                    {
+                        countDB = 0;
+                        data += "----------------------------------------\n";
+
+                        Debug.LogFormat("Firebase token={0}", firebaseToken.Key); //values inside question 1,2
+                        foreach (var stats in firebaseToken.Children)
+                        {
+                            if (stats.Key == "fbUsername")
+                                data += "Facebook Username: " + stats.Value.ToString() + "\n";
+                            Debug.LogFormat("FB={0}", stats.Value.ToString()); //values inside question 1,2
+
+                            if (stats.Key == "totalQns")
+                                data += "Number of attempted qns: " + stats.Value.ToString() + "\n";
+                            if (stats.Key == "noRight")
+                                data += "Number of correct qns: " + stats.Value.ToString() + "\n";
+                            if (stats.Key == "attemptedTimestamp")
+                            {
+                                long milliseconds;
+                                long.TryParse(stats.Value.ToString(), out milliseconds);
+                                Debug.Log(ConvertUnixTimeStamp(milliseconds));
+                                data += "Timestamp attempted: " + ConvertUnixTimeStamp(milliseconds) + "\n";
+                            }
+                           
+                            if (stats.Key == "noWrong")
+                                data += "Number of wrong qns: " + stats.Value.ToString() + "\n";
+                            if (stats.Key == "timeTakenPer")
+                                data += "Average time taken for each qns: " + stats.Value.ToString() + "\n";
+                            if (stats.Key == "totalTimeTaken")
+                                data += "Total time taken for stage: " + stats.Value.ToString() + "\n";
+                            countDB++;
+                        }
+
+                    }
+                    data += "=======================================\n";
+
+                }
+                done2 = true;
+            }
+        });
+
+        yield return new WaitUntil(() => done2 == true);
+        if (done2)
+        {
+            Debug.Log(data);
+
+            StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/mainStats.txt");
+            sw.WriteLine(data);
+            sw.Close();
+
+        }
+
+    }
     IEnumerator FetchStats()
     {
+        string data = "";
+
         done = false;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
         data += "Custom Stages Statistics\n";
@@ -136,7 +220,8 @@ public class MailSender : MonoBehaviour
             StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/customStats.txt");
             sw.WriteLine(data);
             sw.Close();
-         
+            StartCoroutine(FetchMainStats());
+
         }
 
     }
@@ -154,15 +239,19 @@ public class MailSender : MonoBehaviour
 
         if (ValidateEmail(toEmail))
         {
-            if(done)
+            if(done2)
             try
             {
                 string attachmentPath = Application.persistentDataPath + "/customStats.txt";
+                  
                 System.Net.Mail.Attachment attachment = new System.Net.Mail.Attachment(attachmentPath);
+                attachmentPath = Application.persistentDataPath + "/mainStats.txt";
+                System.Net.Mail.Attachment attachment2 = new System.Net.Mail.Attachment(attachmentPath);
                 var mail = new MailMessage();
                 mail.From = new MailAddress("cz3003wa@gmail.com");
                 mail.To.Add(toEmail);
                 mail.Attachments.Add(attachment);
+                mail.Attachments.Add(attachment2);
                 mail.Subject = "Waffles Statistic Report";
                 mail.Body = "This is the statistics for the Waffles app";
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");

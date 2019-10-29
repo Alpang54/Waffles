@@ -12,6 +12,7 @@ public class DataHandler : MonoBehaviour
     private Tuple<int, int> worldAndStageLevel;
     private int characterlevel;
     private string facebookUsername;
+    private string stageName;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,6 +66,14 @@ public class DataHandler : MonoBehaviour
     public void SetWorldAndStageLevel(Tuple<int, int> worldAndStageLevel)
     {
         this.worldAndStageLevel = worldAndStageLevel;
+    }
+    public void SetStageName(string s)
+    {
+
+    }
+    public string GetStageName()
+    {
+        return stageName;
     }
 
     public void SetCharacterLevel()
