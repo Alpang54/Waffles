@@ -26,6 +26,8 @@ public class WorldMapManagerScript : MonoBehaviour
     private List<Tuple<int, string, string>> worldStageProgress;
 
     private List<Tuple<int, int>> worldCompletionPercentage;
+    [SerializeField] private GameObject LeftButton;
+    [SerializeField] private GameObject RightButton;
 
 
     public Text loadText;
@@ -53,6 +55,9 @@ public class WorldMapManagerScript : MonoBehaviour
         GameObject loadingCircle = GameObject.Find("LoadingCircle");
         loadingCircle.SetActive(false);
 
+        UpdateLeftRightButtons();
+
+
 
 
     }
@@ -78,6 +83,10 @@ public class WorldMapManagerScript : MonoBehaviour
         this.worldCompletionPercentage=worldMapImplementor.ComputeWorldCompletionPercentage(this.worldStageProgress, this.worldStageNames, this.worldCount);
 
         DeclareWorldMapButtons(worldProgress, worldCount,this.pageNumber);
+
+        
+
+
 
 
     }
@@ -203,6 +212,27 @@ public class WorldMapManagerScript : MonoBehaviour
         this.worldStageNames=newWorldStageNames;
     }
 
+    private void UpdateLeftRightButtons()
+    {
+        double noOfAcceptablePages = this.worldCount / noOfWorldPerPage;
+        if (noOfAcceptablePages > this.pageNumber)
+        {
+            RightButton.SetActive(true);
+
+        }
+        else
+        {
+            RightButton.SetActive(false);
+        }
+
+        if (noOfAcceptablePages <= 1)
+        {
+            LeftButton.SetActive(false);
+        }
+        else {
+            LeftButton.SetActive(true); }
+    }
+
 
     public void onSelectNextButton()
 
@@ -215,7 +245,9 @@ public class WorldMapManagerScript : MonoBehaviour
             this.pageNumber++;
             DeclareWorldMapButtons(this.worldProgress, this.worldCount, this.pageNumber);
         }
-        
+
+        UpdateLeftRightButtons();
+
     }
 
     public void onSelectPreviousButton()
@@ -226,6 +258,7 @@ public class WorldMapManagerScript : MonoBehaviour
             this.pageNumber--;
             DeclareWorldMapButtons(this.worldProgress, this.worldCount, this.pageNumber);
         }
+        UpdateLeftRightButtons();
     }
 
 

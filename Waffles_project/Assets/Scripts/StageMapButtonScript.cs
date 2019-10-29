@@ -56,7 +56,7 @@ public class StageMapButtonScript : MonoBehaviour
     {
         StageMapManagerScript stageManager = stageMapManager.GetComponent<StageMapManagerScript>();
         stageManager.OnSelectStageButton(this.stageLevel,this.stageName);
-        Debug.Log("onselectstage is " + this.stageLevel + "    " + this.stageName);
+        
 
     }
 

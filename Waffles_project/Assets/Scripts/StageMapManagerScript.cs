@@ -36,10 +36,14 @@ public class StageMapManagerScript : MonoBehaviour
     private DataHandler datahandler;
     private StageMapManagerImplementation stageMapImplementor;
 
+    [SerializeField] private GameObject LeftButton;
+    [SerializeField] private GameObject RightButton;
+
 
 
     public void LoadStageMap(int worldLevel, List<Tuple<int, string, string>> worldStageNames, List<Tuple<int, string, string>> worldStageProgress)
     {
+        Debug.Log("world level is" + worldLevel);
         datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
         this.pageNumber = 1;
         this.worldStageNames = worldStageNames;
@@ -91,7 +95,9 @@ public class StageMapManagerScript : MonoBehaviour
         //change depengind on ameplay,ideally load scene
         
         Tuple<int, int> worldAndStageLevel = new Tuple<int, int>(this.worldLevel, stageLevel);
+
         datahandler.SetWorldAndStageLevel(worldAndStageLevel);
+        Debug.Log(datahandler.GetWorldAndStageLevel());
         SceneManager.LoadScene("Game Map");
     }
 
@@ -114,8 +120,9 @@ public class StageMapManagerScript : MonoBehaviour
 
             if (result==1)
             {
-                Debug.Log("result is ???? should only be when i =0");
+         
                 int stageLevelForAButton = stageMapImplementor.computeStageNumber(pageNumber, noOfStagePerPage, i);
+             
                 stageMapButtons[i].GetComponent<Button>().interactable = true;
                 aStageButton.SetStageButtonImage(activeSprite2);
                 aStageButton.SetStageName(stageNames[i]);
@@ -140,6 +147,7 @@ public class StageMapManagerScript : MonoBehaviour
             this.pageNumber++;
             DeclareStageMapButtons(this.stageProgress, this.stageCount, this.pageNumber);
         }
+        UpdateLeftRightButtons();
 
     }
 
@@ -151,6 +159,29 @@ public class StageMapManagerScript : MonoBehaviour
         {
             this.pageNumber--;
             DeclareStageMapButtons(this.stageProgress, this.stageCount, this.pageNumber);
+        }
+        UpdateLeftRightButtons();
+    }
+    private void UpdateLeftRightButtons()
+    {
+        double noOfAcceptablePages = this.stageCount / noOfStagePerPage;
+        if (noOfAcceptablePages > this.pageNumber)
+        {
+            RightButton.SetActive(true);
+
+        }
+        else
+        {
+            RightButton.SetActive(false);
+        }
+
+        if (noOfAcceptablePages <= 1)
+        {
+            LeftButton.SetActive(false);
+        }
+        else
+        {
+            LeftButton.SetActive(true);
         }
     }
 }
@@ -192,11 +223,10 @@ public class StageMapManagerImplementation
         {
             if (entry.Item1 == worldLevel)
             {
-                Debug.Log("the stage progress22222 is" + this.stageProgress);
-                Debug.Log(entry);
+
                 this.stageProgress++;
                 stageCompletionPercentage.Add(entry.Item3);
-                Debug.Log("the stage progress is"+ this.stageProgress);
+
             }
            
         }
@@ -222,12 +252,13 @@ public class StageMapManagerImplementation
     public int computeStageNumber(int pageNumber, double noOfStagePerPage, int i)
     {
         int stageNumberText = (int)((pageNumber - 1) * noOfStagePerPage + i + 1);
+        Debug.Log(stageNumberText);
         return stageNumberText;
     }
 
     public int DeclareStageMapButton(int stageProgress, int stageCount,int pageNumber, int i)
     {
-        Debug.Log("stage progress should be 1" + stageProgress);
+     
         i = i + 9 * (pageNumber - 1) + 1;
         if (i <= stageProgress)
         {

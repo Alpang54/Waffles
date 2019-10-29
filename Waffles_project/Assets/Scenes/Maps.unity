@@ -7928,6 +7928,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeSprite: {fileID: 21300068, guid: b4c1e02935e1f6246b47d53edff0855a, type: 3}
   lockedSprite: {fileID: 21300076, guid: b4c1e02935e1f6246b47d53edff0855a, type: 3}
+  LeftButton: {fileID: 1193297154}
+  RightButton: {fileID: 12954091}
   loadText: {fileID: 1064050613}
   worldMapButtons:
   - {fileID: 900091063}
@@ -8081,6 +8083,8 @@ MonoBehaviour:
   loadText: {fileID: 1064050613}
   toggleDifficulty: {fileID: 123087676}
   difficultyText: {fileID: 1773806087}
+  LeftButton: {fileID: 696598748}
+  RightButton: {fileID: 740083012}
 --- !u!4 &1896673996
 Transform:
   m_ObjectHideFlags: 0

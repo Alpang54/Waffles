@@ -30,6 +30,7 @@ public class StageConfirmPanel : MonoBehaviour
         confirmStageNameText.text = worldLevel + "-" +stageLevel+"-"+ stageName;
         stageCompletion.text=stageCompletionPercentage+"%";
         this.gameObject.SetActive(true);
+        this.stageLevel = stageLevel;
     }
 
 
