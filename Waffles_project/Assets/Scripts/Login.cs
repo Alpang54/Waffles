@@ -196,6 +196,7 @@ public class Login : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})",
             newUser.DisplayName, newUser.UserId);
             datahandler.SetFireBaseUserId(newUser.UserId);
+            datahandler.SetFBUserName(newUser.DisplayName);
         });
         Debug.Log(datahandler.GetFirebaseUserId());
         Debug.Log("Login done");
