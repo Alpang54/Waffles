@@ -22,6 +22,9 @@ public class ButtonsManage : MonoBehaviour
     public GameObject popUpComplete;
     public GameObject popupConfirm;
     public Text error;
+    public Text completeText;
+    public GameObject stgWordCount;
+    public GameObject stgMaxCount;
     public Transform contentPanel2;
     public Button option1;
     public Button option2;
@@ -72,6 +75,8 @@ public class ButtonsManage : MonoBehaviour
         doneButton.SetActive(!doneButton.active);
         inputStage.SetActive(!inputStage.active);
         scrollView.SetActive(!scrollView.active);
+        stgMaxCount.SetActive(!stgMaxCount.active);
+        stgWordCount.SetActive(!stgWordCount.active);
         addMoreQuestion.SetActive(!addMoreQuestion.active);
     }
 
@@ -210,8 +215,9 @@ public class ButtonsManage : MonoBehaviour
 
             }
 
-
-            popUpComplete.SetActive(true);
+        //  completeText.text = stageName.text;
+        completeText.text = "Custom Stage "+stageName.text.ToString()+" Created!";
+        popUpComplete.SetActive(true);
         
        
 
@@ -511,6 +517,8 @@ public class ButtonsManage : MonoBehaviour
                 backButton.SetActive(!backButton.active);
                 nextButton.SetActive(!nextButton.active);
                 doneButton.SetActive(!doneButton.active);
+                stgMaxCount.SetActive(!stgMaxCount.active);
+                stgWordCount.SetActive(!stgWordCount.active);
                 inputStage.SetActive(!inputStage.active);
                 scrollView.SetActive(!scrollView.active);
                 addMoreQuestion.SetActive(!addMoreQuestion.active);
@@ -520,6 +528,14 @@ public class ButtonsManage : MonoBehaviour
         }
 
 
+    }
+
+    public void Text_Changed(string newText)
+    {
+        // backButton.SetActive(true);
+        int textCount = newText.Length;
+        stgWordCount.GetComponent<Text>().text=textCount.ToString();
+        
     }
 
 }
