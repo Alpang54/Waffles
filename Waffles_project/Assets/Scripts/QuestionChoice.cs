@@ -10,9 +10,27 @@ public class QuestionChoice : MonoBehaviour
     public int answerInt;
     public string answerStr;
     public bool answeredCorrectly = false;
+    public bool cleared = false;
+    public int difficulty;
     public QuestionChoice()
     {
 
+    }
+    public void setCleared(bool c)
+    {
+        cleared = c;
+    }
+    public bool getCleared()
+    {
+        return cleared;
+    }
+    public void setDifficulty(int d)
+    {
+        difficulty = d;
+    }
+    public int getDifficulty()
+    {
+        return difficulty;
     }
     public void setAnsweredCorrectWrong(bool stats)
     {
