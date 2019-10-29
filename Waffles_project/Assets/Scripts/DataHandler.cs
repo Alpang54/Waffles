@@ -47,7 +47,7 @@ public class DataHandler : MonoBehaviour
 
     public int GetCharacterLevel()
     {
-        return this.characterlevel;
+        return (PlayerPrefs.GetInt("CharacterSelected") - 1);
     }
 
 
@@ -79,6 +79,6 @@ public class DataHandler : MonoBehaviour
     public void SetCharacterLevel()
     {
         //set the character level
-        this.characterlevel = PlayerPrefs.GetInt("CharacterSelected");
+        characterlevel = PlayerPrefs.GetInt("CharacterSelected");
     }
 }
