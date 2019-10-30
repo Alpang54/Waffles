@@ -120,7 +120,7 @@ public class InitContent : MonoBehaviour
     public void OnSearch(InputField ifs)
     {
         int count = 0;
-        loading.SetActive(false);
+        text.SetActive(false);
 
         foreach (Transform child in contentPanel)
         {

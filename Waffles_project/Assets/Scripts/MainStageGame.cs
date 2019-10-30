@@ -89,7 +89,7 @@ public class MainStageGame : MonoBehaviour
         Debug.Log("currentStage=" + currentStage);
         Debug.Log("currentWorld=" + currentWorld);
         stageName = dataHandler.GetStageName();
-        stageName = "World" + currentWorld + " Stage" + currentStage;
+        stageName = "World " + currentWorld + " Stage " + currentStage;
         StartCoroutine(ReadDB());
         StartCoroutine(ReadPoint());
 
@@ -221,6 +221,7 @@ public class MainStageGame : MonoBehaviour
 
         if (done == true) //reading db should be done by now
         {
+            loading.SetActive(false);
             startTime = Time.time;
 
             for (int i = 0; i < qnDiff1List.Count; i++)
