@@ -275,7 +275,7 @@ public class MainStageGame : MonoBehaviour
     }
     public void StoreStats()
     {
-        string world = "World" + currentWorld + " Stage1";
+        string world = "World" + currentWorld + " Stage" + currentStage;
         reference.Child("Leaderboard").Child(firebaseUserID).Child("Name").SetValueAsync(fBUsername);
         reference.Child("Leaderboard").Child(firebaseUserID).Child("Score").SetValueAsync(points);
         double timeTakenPer = Math.Round((timeTaken / totalQnsAnswered), 2);
