@@ -131,40 +131,45 @@ public class Edit : MonoBehaviour
                 buttonImageCount = 0;
                 test = inputs.gameObject.name;
 
-                if (count == 0)
-                {
-                    //test = inputs.gameObject.GetComponent<InputField>().text;
-                    inputs.gameObject.GetComponent<InputField>().text = questionName[counting].ToString();// input question
 
-                }
-                else
+
+                foreach (Transform options in inputs.gameObject.transform)
                 {
-                    
-                    foreach (Transform options in inputs.gameObject.transform)
+                    if (buttonImageCount == 0)
                     {
-                        if (buttonImageCount == 0)
+                        if (count == 0)
                         {
-                            options.gameObject.GetComponent<InputField>().text = optionChoice[counting*4+count2].ToString();  //text for option
-                            
+                            options.gameObject.GetComponent<InputField>().text = questionName[counting].ToString();// input question
+                            //count2++;
+                            buttonImageCount++;
+                        }
+
+                        else
+                        {
+                            options.gameObject.GetComponent<InputField>().text = optionChoice[counting * 4 + count2].ToString();  //text for option
+
                             buttonImageCount++;
                             count2++;
                         }
-                        else
-                        {
-                            if(count2==Int32.Parse(correctAnswers[counting].ToString()))
-                            {
-                                options.gameObject.GetComponent<Button>().image.sprite = correctChecked;
-                            }
-                            
-                            
 
-                        }
 
                     }
-                    
+                    else
+                    {
+                        if (count2 == Int32.Parse(correctAnswers[counting].ToString()))
+                        {
+                            options.gameObject.GetComponent<Button>().image.sprite = correctChecked;
+                        }
+
+
+                    }
 
                 }
-                
+
+
+
+
+             
                 count++;
                 correctAnswer++;
 

@@ -113,41 +113,50 @@ public class Custom_Save : MonoBehaviour
             correctAnswer = 0;
             int count = 0;
 
+
             foreach (Transform inputs in stageQuestion.transform) //elements inside questions
             {
                 buttonImageCount = 0;
                 test = inputs.gameObject.name;
 
-                if (count == 0)
-                {
-                    test = inputs.gameObject.GetComponent<InputField>().text;
-                    questionName.Add(inputs.gameObject.GetComponent<InputField>().text);// input question
 
-                }
-                else
-                {
 
-                    foreach (Transform options in inputs.gameObject.transform)
+                foreach (Transform options in inputs.gameObject.transform)
+                {
+                    if (buttonImageCount == 0)
                     {
-                        if (buttonImageCount == 0)
+                        if (count == 0)
                         {
-                            test = options.gameObject.GetComponent<InputField>().text;  //text for option
+                            questionName.Add(options.gameObject.GetComponent<InputField>().text);
+                            buttonImageCount++;
+                        }
+
+                        else
+                        {
                             optionChoice.Add(options.gameObject.GetComponent<InputField>().text);
                             buttonImageCount++;
                         }
-                        else
+
+
+                    }
+                    else
+                    {
+                        if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
                         {
-                            if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
-                            {
-                                correctAnswers.Add(correctAnswer); //option of correct answer
-                            }
+                            correctAnswers.Add(correctAnswer); //option of correct answer
 
                         }
 
+
                     }
 
-
                 }
+
+
+
+
+
+
                 count++;
                 correctAnswer++;
 
@@ -177,7 +186,7 @@ public class Custom_Save : MonoBehaviour
 
         if(noOfQuestion<dbQuestion)
         {
-            for(int i=dbQuestion;i>(dbQuestion-noOfQuestion);i--)
+            for(int i=dbQuestion;i>noOfQuestion;i--)
             {
                 databaseRef.Child("CustomStage").Child(custStageName).Child("QuestionNumber").Child(i.ToString()).RemoveValueAsync();
             }
@@ -222,45 +231,33 @@ public class Custom_Save : MonoBehaviour
                     buttonImageCount = 0;
                     test = inputs.gameObject.name;
 
-                    if (count == 0)
-                    {
 
-                        test = inputs.gameObject.GetComponent<InputField>().text;// get input question
-                        if (string.IsNullOrEmpty(test) == true)
+
+                    foreach (Transform options in inputs.gameObject.transform)
+                    {
+                        if (buttonImageCount == 0)
                         {
-                            filled = false;
+                            test = options.gameObject.GetComponent<InputField>().text;  //text for option
+                            if (string.IsNullOrEmpty(test) == true)
+                            {
+                                filled = false;
+                            }
+                            buttonImageCount++;
+                        }
+                        else
+                        {
+                            if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
+                            {
+
+                                correctTick++;
+                            }
+
+
                         }
 
                     }
-                    else
-                    {
-
-                        foreach (Transform options in inputs.gameObject.transform)
-                        {
-                            if (buttonImageCount == 0)
-                            {
-                                test = options.gameObject.GetComponent<InputField>().text;  //text for option
-                                if (string.IsNullOrEmpty(test) == true)
-                                {
-                                    filled = false;
-                                }
-                                buttonImageCount++;
-                            }
-                            else
-                            {
-                                if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
-                                {
-
-                                    correctTick++;
-                                }
 
 
-                            }
-
-                        }
-
-
-                    }
                     count++;
                     correctAnswer++;
 
@@ -284,6 +281,7 @@ public class Custom_Save : MonoBehaviour
                 go.SetActive(true);
                 go.transform.SetParent(contentPanel2);
                 go.gameObject.transform.localScale = new Vector3(1, 1, 1);
+
             }
             else
             {
@@ -335,49 +333,39 @@ public class Custom_Save : MonoBehaviour
                     buttonImageCount = 0;
                     test = inputs.gameObject.name;
 
-                    if (count == 0)
-                    {
 
-                        test = inputs.gameObject.GetComponent<InputField>().text;// get input question
-                        if (string.IsNullOrEmpty(test) == true)
+
+                    foreach (Transform options in inputs.gameObject.transform)
+                    {
+                        if (buttonImageCount == 0)
                         {
-                            filled = false;
+                            test = options.gameObject.GetComponent<InputField>().text;  //text for option
+                            if (string.IsNullOrEmpty(test) == true)
+                            {
+                                filled = false;
+                            }
+                            buttonImageCount++;
                         }
-
-                    }
-                    else
-                    {
-
-                        foreach (Transform options in inputs.gameObject.transform)
+                        else
                         {
-                            if (buttonImageCount == 0)
+                            if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
                             {
-                                test = options.gameObject.GetComponent<InputField>().text;  //text for option
-                                if (string.IsNullOrEmpty(test) == true)
-                                {
-                                    filled = false;
-                                }
-                                buttonImageCount++;
+
+                                correctTick++;
                             }
-                            else
-                            {
-                                if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
-                                {
 
-                                    correctTick++;
-                                }
-
-
-                            }
 
                         }
 
 
                     }
-                    count++;
-                    correctAnswer++;
+
 
                 }
+                count++;
+                correctAnswer++;
+
+
 
 
 
@@ -411,6 +399,4 @@ public class Custom_Save : MonoBehaviour
 
         }
     }
-
-
 }

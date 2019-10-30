@@ -154,40 +154,45 @@ public class ButtonsManage : MonoBehaviour
             {
                 buttonImageCount = 0;
                 test = inputs.gameObject.name;
-                
-                    if (count == 0)
-                    {
-                        test = inputs.gameObject.GetComponent<InputField>().text;
-                        questionName.Add(inputs.gameObject.GetComponent<InputField>().text);// input question
-                         
 
+
+
+                foreach (Transform options in inputs.gameObject.transform)
+                {
+                    if (buttonImageCount == 0)
+                    {
+                        if(count==0)
+                        {
+                            questionName.Add(options.gameObject.GetComponent<InputField>().text);
+                            buttonImageCount++;
+                        }
+                            
+                        else
+                        {
+                            optionChoice.Add(options.gameObject.GetComponent<InputField>().text);
+                            buttonImageCount++;
+                        }
+
+                      
                     }
                     else
                     {
-
-                        foreach(Transform options in inputs.gameObject.transform)
-                         {
-                            if(buttonImageCount==0)
-                               {
-                                 test = options.gameObject.GetComponent<InputField>().text;  //text for option
-                                optionChoice.Add(options.gameObject.GetComponent<InputField>().text);
-                                 buttonImageCount++;
-                                
+                        if (options.gameObject.GetComponent<Button>().image.sprite == correctChecked)
+                        {
+                            correctAnswers.Add(correctAnswer); //option of correct answer
+                            
                         }
-                            else
-                              {
-                                 if(options.gameObject.GetComponent<Button>().image.sprite==correctChecked)
-                                    {
-                                        correctAnswers.Add(correctAnswer); //option of correct answer
-                                        
-                                     }
-
-                        }
-                           
-                         }
 
 
                     }
+
+                }
+
+
+
+               
+
+                    
                     count++;
                 correctAnswer++;
                
@@ -257,18 +262,7 @@ public class ButtonsManage : MonoBehaviour
                     buttonImageCount = 0;
                     test = inputs.gameObject.name;
 
-                    if (count == 0)
-                    {
-
-                        test = inputs.gameObject.GetComponent<InputField>().text;// get input question
-                        if (string.IsNullOrEmpty(test) == true)
-                        {
-                            filled = false;
-                        }
-
-                    }
-                    else
-                    {
+                 
 
                         foreach (Transform options in inputs.gameObject.transform)
                         {
@@ -294,8 +288,7 @@ public class ButtonsManage : MonoBehaviour
 
                         }
 
-
-                    }
+                    
                     count++;
                     correctAnswer++;
 
@@ -378,18 +371,7 @@ public class ButtonsManage : MonoBehaviour
                         buttonImageCount = 0;
                         test = inputs.gameObject.name;
 
-                        if (count == 0)
-                        {
-
-                            test = inputs.gameObject.GetComponent<InputField>().text;// get input question
-                            if (string.IsNullOrEmpty(test) == true)
-                            {
-                                filled = false;
-                            }
-
-                        }
-                        else
-                        {
+                      
 
                             foreach (Transform options in inputs.gameObject.transform)
                             {
@@ -413,6 +395,7 @@ public class ButtonsManage : MonoBehaviour
 
                                 }
 
+
                             }
 
 
@@ -420,7 +403,7 @@ public class ButtonsManage : MonoBehaviour
                         count++;
                         correctAnswer++;
 
-                    }
+                    
 
 
 
