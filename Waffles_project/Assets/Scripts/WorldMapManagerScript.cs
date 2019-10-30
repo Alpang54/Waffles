@@ -79,9 +79,12 @@ public class WorldMapManagerScript : MonoBehaviour
         DataSnapshot snapshotOfUserProgress = DBHandlerScript.GetSnapshot();
         ExtractUserWorldProgress(snapshotOfUserProgress);
         ProcessUserProgessLogic(this.worldStageProgress);
-
+        
         this.worldCompletionPercentage=worldMapImplementor.ComputeWorldCompletionPercentage(this.worldStageProgress, this.worldStageNames, this.worldCount);
+        DetermineIfUserWorldProgressShouldBeUpdated();
 
+
+        //Debug.Log("par 1 par 2 par 3 " + worldProgress + " " + worldCount + " "+ this.pageNumber);
         DeclareWorldMapButtons(worldProgress, worldCount,this.pageNumber);
 
         
@@ -90,6 +93,24 @@ public class WorldMapManagerScript : MonoBehaviour
 
 
     }
+
+    private void DetermineIfUserWorldProgressShouldBeUpdated()
+    { int temporaryworldCompletionPercentage = this.worldCompletionPercentage[worldProgress-1].Item2;
+        Debug.Log("worldcompletionpercentage" + worldCompletionPercentage);
+        if (temporaryworldCompletionPercentage >= 70&& this.worldProgress<this.worldCount)
+        {
+            this.worldProgress++;
+
+            Tuple<int, int> aRecordOfWorldCompletion = new Tuple<int, int>(worldProgress, 0);
+            worldCompletionPercentage.Add(aRecordOfWorldCompletion);
+
+            Debug.Log("par 1 par 2 par 3 " + worldProgress + " " + worldCount + " " + this.pageNumber);
+            DeclareWorldMapButtons(worldProgress, worldCount, this.pageNumber);
+        }
+       
+
+    }
+
 
     private void ExtractWorldInformation(DataSnapshot snapShotOfWorld)
     {
@@ -282,7 +303,7 @@ public class WorldMapImplementation
         i = i + 9 * (pageNumber-1)+1;
 
 
-        if (i <= worldProgress && i < worldCount)
+        if (i <= worldProgress && i <= worldCount)
         {
             return 1;
         }

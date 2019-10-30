@@ -56,11 +56,33 @@ public class StageMapManagerScript : MonoBehaviour
         this.stageProgress = stageMapImplementor.GetStageProgress();
         this.stageCompletionPercentage = stageMapImplementor.GetStageCompletionPercentage();
         DeclareStageMapButtons(this.stageProgress,this.stageCount,this.pageNumber);
+        DetermineIfUserStageProgressShouldBeUpdated();
         stageSelect.SetActive(true);
+
     }
 
- 
 
+    private void DetermineIfUserStageProgressShouldBeUpdated()
+    {   if (this.stageCompletionPercentage.Count >= stageProgress) // if current stage has completion percentage
+        {
+
+            //check if should declare new stages
+            String stageCompletionPercentage = this.stageCompletionPercentage[stageProgress - 1];
+
+            if (Int32.Parse(stageCompletionPercentage) >= 70 && this.stageProgress < this.stageCount)
+            {
+                this.stageProgress++;
+                this.stageCompletionPercentage.Add("0");
+                DeclareStageMapButtons(this.stageProgress, stageCount, this.pageNumber);
+            }
+
+        }
+        else
+        {
+            this.stageCompletionPercentage.Add("0");
+        }
+        
+    }
 
 
     //turn stage map on

@@ -2195,7 +2195,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'World-Stage:'
+  m_Text: Stage Information
 --- !u!222 &477228027
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8571,7 +8571,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: World Name
+  m_Text: Information
 --- !u!222 &2040337430
 CanvasRenderer:
   m_ObjectHideFlags: 0
