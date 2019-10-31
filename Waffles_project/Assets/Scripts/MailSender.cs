@@ -12,7 +12,7 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using System.IO;
 /** To send email from waffle account to user's email input
- * 
+ * @author Mok Wei Min
  */
 public class MailSender : MonoBehaviour
 {

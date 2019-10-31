@@ -7,19 +7,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+/**
+*Custom Gameplay Manager, fetches the questions from the correct custom stage, all the logic with displaying questions, checking questions and statistics collection
+* @author Mok Wei Min
+**/
 public class CustomGame : MonoBehaviour
 {
-    /* 
-     public Transform contentPanel;
-     public GameObject extraContent;
-     public Text stageName;
-     public Sprite correctChecked;
-      public GameObject plus;
-     public GameObject save;
-     public ArrayList questionName = new ArrayList();
-     public ArrayList correctAnswers = new ArrayList();
-     public ArrayList optionChoice = new ArrayList();*/
     public List<QuestionChoice> qnList = new List<QuestionChoice>();
     public static string CuststageName;
     public bool done = false;
@@ -105,6 +98,9 @@ public class CustomGame : MonoBehaviour
         answerPopUp.SetActive(false);
     }
 
+    /**
+    *Reads from database the questions and choices to deserialize with QuestionChoice class for the custom stage user chose to play
+    **/
     IEnumerator ReadDB()
     {
         done = false;
@@ -212,6 +208,10 @@ public class CustomGame : MonoBehaviour
             startTime = Time.time;
         }
     }
+    /**
+    *Calls checking for answer when user clicks on a choice and updates the button color according to correct or wrong,
+    * @param i the choice chosen by user as answer
+    **/
     public void UpdateButtonCondition(int i)
     {
         if(CheckAns(i))
@@ -245,6 +245,11 @@ public class CustomGame : MonoBehaviour
         if (qnsCounter != null)
             qnsCounter.GetComponent<Text>().text = ("Question Cleared: " + (qnsCounterT) + "/" + qnList.Count).ToString();
     }
+    /**
+   *Checks the user's choice if it is the right answer for the question
+   *@return true if answer is correct
+   * @return false if answer is wrong
+   **/
     public bool CheckAns(int i)
     {
         if (i == qnList[currentQnsNumber].getAnswer())
@@ -257,6 +262,9 @@ public class CustomGame : MonoBehaviour
         }
        
     }
+    /**
+    *Stops elasped time to store, check for user's playthrough if user finished the last question and calls to store statistics to firebase
+    **/
     public void CheckEnd()
     {
         if (qnsCounterT == qnList.Count)
@@ -321,6 +329,9 @@ public class CustomGame : MonoBehaviour
             StoreLatestStat();
         }
     }
+    /**
+    *Stores the latest attempt of user's custom game play statistics in firebase
+    **/
     void StoreLatestStat()
     {
         double timeTakenPer = Math.Round((timeTaken / qnList.Count),2);
@@ -342,6 +353,9 @@ public class CustomGame : MonoBehaviour
             reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsWrong").SetValueAsync("None");
         reference.Child("Data").Child("Custom").Child(CuststageName).Child(firebaseUserID).Child("qnsCount").SetValueAsync(qnList.Count);
     }
+    /**
+    *Stores the question in to the QuestionChoice tagged in the button that was clicked
+    **/
     public void loadQns()
     {
         //Question pop up

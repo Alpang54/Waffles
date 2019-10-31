@@ -10,6 +10,7 @@ using UnityEngine.UI;
 /**
 *Manager for the stages in normal play,
 *Fetches the questions from each world stage and generates them randomly, also collecting statstics on how the player played
+* @author Mok Wei Min
 **/
 public class MainStageGame : MonoBehaviour
 {
@@ -285,7 +286,7 @@ public class MainStageGame : MonoBehaviour
 
     }
     /**
-    *Stores the latest attempt of user's game play statistics in firebase
+    *Stores the latest attempt of user's main stages game play statistics in firebase
     **/
     public void StoreStats()
     {
