@@ -4,6 +4,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+/// <summary>
+/// This class is used for the character select page 
+/// and sent the user set difficulty 
+/// Component CharacterManager
+/// 
+/// </summary>
 public class CharacterSel : MonoBehaviour
 {
     /// <summary>
