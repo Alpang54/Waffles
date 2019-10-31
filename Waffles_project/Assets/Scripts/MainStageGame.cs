@@ -7,7 +7,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+/**
+*Manager for the stages in normal play,
+*Fetches the questions from each world stage and generates them randomly, also collecting statstics on how the player played
+**/
 public class MainStageGame : MonoBehaviour
 {
     private DataHandler dataHandler;
@@ -49,18 +52,16 @@ public class MainStageGame : MonoBehaviour
     int consecutiveRights = 0;
 
     //Fetching
-    public List<QuestionChoice> qnDiff1List = new List<QuestionChoice>();
-    public List<QuestionChoice> qnDiff2List = new List<QuestionChoice>();
-    public List<QuestionChoice> qnDiff3List = new List<QuestionChoice>();
-    public List<QuestionChoice> qnDiff4List = new List<QuestionChoice>();
-    public List<QuestionChoice> qnDiff5List = new List<QuestionChoice>();
+    List<QuestionChoice> qnDiff1List = new List<QuestionChoice>();
+    List<QuestionChoice> qnDiff2List = new List<QuestionChoice>();
+    List<QuestionChoice> qnDiff3List = new List<QuestionChoice>();
+    List<QuestionChoice> qnDiff4List = new List<QuestionChoice>();
+    List<QuestionChoice> qnDiff5List = new List<QuestionChoice>();
 
-    public List<QuestionChoice> answeredList = new List<QuestionChoice>();
-    public List<string> rightList = new List<string>();
-    public List<string> wrongList = new List<string>();
-
-    public GameObject currentSelected;
-    public GameObject[] patterns;
+    List<QuestionChoice> answeredList = new List<QuestionChoice>();
+    
+    GameObject currentSelected;
+    public GameObject[] patterns; /**<different stage patterns, one pattern will be chosen each time on random for the stage*/
     GameObject selectedPattern;
     List<GameObject> allButtons = new List<GameObject>();
     int correctQns = 0;
@@ -110,7 +111,9 @@ public class MainStageGame : MonoBehaviour
         difficultyText.text = "Current Difficulty: " + currentDiff.ToString();
 
     }
-
+    /**
+    *Fetches from firebase user's previous point records to add on
+    **/
     IEnumerator ReadPoint()
     {
         done = false;
@@ -145,6 +148,9 @@ public class MainStageGame : MonoBehaviour
 
         Debug.Log(points);
     }
+    /**
+    *Fetches from firebase world stage question banks and stores to the different difficulty lists
+    **/
     IEnumerator ReadDB()
     {
         done = false;
@@ -237,6 +243,9 @@ public class MainStageGame : MonoBehaviour
 
         }
     }
+    /**
+    *Stops elasped time to store, check for user's playthrough and calls to store statistics to firebase
+    **/
     public void CheckEnd()
     {
         timeTaken = Time.time - startTime;
@@ -264,7 +273,9 @@ public class MainStageGame : MonoBehaviour
         UpdateProgress();
         StoreStats();
     }
-    
+    /**
+    *Update user's current world stage progress in firebase
+    **/
     public void UpdateProgress()
     {
         string world = "World" + currentWorld;
@@ -273,6 +284,9 @@ public class MainStageGame : MonoBehaviour
         Debug.Log(world + " " + stage);
 
     }
+    /**
+    *Stores the latest attempt of user's game play statistics in firebase
+    **/
     public void StoreStats()
     {
         string world = "World" + currentWorld + " Stage" + currentStage;
@@ -289,6 +303,10 @@ public class MainStageGame : MonoBehaviour
         reference.Child("Data").Child("Main").Child(world).Child(firebaseUserID).Child("totalQns").SetValueAsync(totalQnsAnswered);
 
     }
+    /**
+    *Randomises a question out of the current question difficulty
+    * @param btn get the QuestionChoice tagged to the button
+    **/
     public void generateRdmQuestion(GameObject btn)
     {
         int random;
@@ -372,8 +390,13 @@ public class MainStageGame : MonoBehaviour
             btn.GetComponent<QuestionChoice>().setQnsNumber(random);
             Debug.Log(qnDiff5List[random].getQns());
         }
-        loadQns(btn);
+        LoadQns(btn);
     }
+    /**
+    *Calls checking for answer when user clicks on a choice and updates the button color according to correct or wrong,
+    * Increases difficulty for user if they have 2 right in a row, stores statistics for number of right/wrong
+    * @param i the choice chosen by user as answer
+    **/
     public void UpdateButtonCondition(int i)
     {
         int difficulty = currentSelected.GetComponent<QuestionChoice>().getDifficulty();
@@ -509,6 +532,11 @@ public class MainStageGame : MonoBehaviour
          if (qnsCounter != null)
              qnsCounter.GetComponent<Text>().text = ("Question Cleared: " + (qnsCounterT) + "/" + qnList.Count).ToString();*/
     }
+    /**
+    *Checks the user's choice if it is the right answer for the question
+    *@return true if answer is correct
+    * @return false if answer is wrong
+    **/
     public bool CheckAns(int i)
     {
         int difficulty = currentSelected.GetComponent<QuestionChoice>().getDifficulty();
@@ -569,8 +597,11 @@ public class MainStageGame : MonoBehaviour
             }
         }
     }
-
-    public void loadQns(GameObject btn)
+    /**
+    *Stores the question in to the QuestionChoice tagged in the button that was clicked
+    * @param btn button that was clicked
+    **/
+    public void LoadQns(GameObject btn)
     {
         //Question pop up
         currentSelected = btn;
