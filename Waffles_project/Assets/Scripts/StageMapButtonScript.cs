@@ -18,8 +18,9 @@ public class StageMapButtonScript : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    { 
- 
+    {
+       
+
     }
 
     // Update is called once per frame
@@ -32,12 +33,12 @@ public class StageMapButtonScript : MonoBehaviour
     public void SetStageLevel(int stageLevel)
     {
         this.stageLevel = stageLevel;
-        stageButtonText.text = "" + stageLevel;
+       
     }
  
-    public void SetStageName(string stageName)
+    public void SetStageText(string stageText)
     {   
-        this.stageName = stageName;
+        this.stageButtonText.text=stageText;
     }
     public void SetStageButtonImage(Sprite activeOrInactiveSprite)
     {
@@ -55,11 +56,12 @@ public class StageMapButtonScript : MonoBehaviour
     public void OnSelectStage()
     {
         StageMapManagerScript stageManager = stageMapManager.GetComponent<StageMapManagerScript>();
-        stageManager.OnSelectStageButton(this.stageLevel,this.stageName);
+        stageManager.OnSelectStageButton(this.stageLevel);
         
 
     }
 
 
-    
+
+
 }

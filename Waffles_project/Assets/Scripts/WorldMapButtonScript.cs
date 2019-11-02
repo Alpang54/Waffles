@@ -24,8 +24,6 @@ public class WorldMapButtonScript : MonoBehaviour
  void Start()
     {
        
-        worldButtonImage = GetComponent<Image>();
-        worldButton = GetComponent<Button>();
         
 
     }
@@ -34,19 +32,25 @@ public class WorldMapButtonScript : MonoBehaviour
     public void SetWorldLevel(int worldLevel)
     {
         this.worldLevel = worldLevel;
-        this.worldButtonText.text = worldLevel.ToString();
+        
     }
   
     public void SetWorldButtonImage(Sprite activeOrInactiveSprite)
     {
+        worldButtonImage = GetComponent<Image>();
         worldButtonImage.sprite = activeOrInactiveSprite;
 
     }
     public void SetWorldButton(Boolean enabledOrNot)
     {
+        worldButton = GetComponent<Button>();
         worldButton.enabled = enabledOrNot;
     }
 
+    public void SetText(string text)
+    {
+        this.worldButtonText.text = text;
+    }
 
     public void OnSelectWorld()
     {
