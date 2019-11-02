@@ -8,6 +8,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/**
+ * This class will handle all buttons clicks for Create Custom Scene and do their functions inside as well as logic testing
+ * @author Ng Kai Qian
+ */
+
 public class ButtonsManage : MonoBehaviour
 {
     public GameObject backButton;
@@ -52,23 +57,25 @@ public class ButtonsManage : MonoBehaviour
     private DataHandler dataHandler;
     private bool done = false;
     private int dbStg;
-    public void pressNext()
+
+    
+    public void pressNext() //User press next button
     {
-        if(string.IsNullOrEmpty(inputStage.GetComponent<InputField>().text.ToString()))
+        if(string.IsNullOrEmpty(inputStage.GetComponent<InputField>().text.ToString()))  //Check if any stage name is entered
         {
             error.text = ("Please Enter Stage Name");
             popUpError.SetActive(true);
         }
-        else
+        else  //If it's not empty or null
         {
 
-            StartCoroutine(ReadDup());
+            StartCoroutine(ReadDup()); //Start Coroutine to read all stage names inside db
             
             
         }
         
     }
-    public void pressBack()
+    public void pressBack() //Allows the user decides to choose another custom stage name again
     {
         backButton.SetActive(!backButton.active);
         nextButton.SetActive(!nextButton.active);
@@ -81,7 +88,7 @@ public class ButtonsManage : MonoBehaviour
     }
 
 
-    public void correctOptionCheck(Button btn)
+    public void correctOptionCheck(Button btn) //Checks which options is being checked by user
     {
         correct = Int32.Parse(btn.name);
         // btn.image.sprite = correctChecked;
@@ -126,14 +133,12 @@ public class ButtonsManage : MonoBehaviour
 
             option4.image.sprite = correctChecked;
         }
-        //string test = goQuestion[0].name;
-        // string test=goQuestion[0].GetComponent<GameObject>().GetComponent<InputField>().text;
-        //string test= GameObject.Find("1").GetComponent<InputField>().text;
+        
 
         
     }
 
-    public void pressDone()
+    public void pressDone()  //Upload the custom stage data to DB
     {
         dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
         string uID = dataHandler.GetFirebaseUserId();
@@ -232,7 +237,7 @@ public class ButtonsManage : MonoBehaviour
 
     }
 
-    public void pressPlus()
+    public void pressPlus()  //Instantiate new questions if user decide to add more questions 
     {
         int buttonImageCount = 0;
         int correctAnswer = 0;
@@ -333,14 +338,14 @@ public class ButtonsManage : MonoBehaviour
         
     }
 
-    public void pressDelete()
+    public void pressDelete() //Delete questions
     {
         noOfQuestion--;
         Destroy(prefRef);
     }
 
 
-    public void prompAndCheck()
+    public void prompAndCheck()  //Error checking for input values 
     {
         noOfQuestion = contentPanel2.childCount;
         if (noOfQuestion == 0)
@@ -440,7 +445,7 @@ public class ButtonsManage : MonoBehaviour
 
 
 
-    IEnumerator ReadDup()
+    IEnumerator ReadDup()  //Read all custom stage name inside DB
     {
         done = false;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
@@ -484,18 +489,18 @@ public class ButtonsManage : MonoBehaviour
             bool found = false;
             for (int i=0;i<dbStg;i++)
             {
-                if(String.Equals(dbStgName[i],stageName.text))
+                if(String.Equals(dbStgName[i],stageName.text)) //Check if there's existing stage name in db
                 {
                     found = true;
                     break;
                 }
             }
-            if(found==true)
+            if(found==true)//If there's existing sane stage name pop up error
             {
-                error.text = ("Stage Name Exists! Please Choose Another Stage Name");
-                popUpError.SetActive(true);
+                error.text = ("Stage Name Exists! Please Choose Another Stage Name"); 
+                popUpError.SetActive(true); 
             }
-            else
+            else  //Proceed
             {
                 backButton.SetActive(!backButton.active);
                 nextButton.SetActive(!nextButton.active);
@@ -513,7 +518,7 @@ public class ButtonsManage : MonoBehaviour
 
     }
 
-    public void Text_Changed(string newText)
+    public void Text_Changed(string newText) //count the number of characters inside the stage name 
     {
         // backButton.SetActive(true);
         int textCount = newText.Length;

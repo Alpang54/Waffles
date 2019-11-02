@@ -11,6 +11,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/**
+ * This class will instiantiate and load the number of custom stage and display to user depending on the db values
+ * @author Ng Kai Qian
+ */
+
 public class InitContent : MonoBehaviour
 {
     public GameObject extraContent;
@@ -43,11 +48,11 @@ public class InitContent : MonoBehaviour
         dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
 
         if (currentScene == "Lobby")
-            StartCoroutine(ReadDBLobby());
+            StartCoroutine(ReadDBLobby()); //start coroutine to read DB for Custom Lobby Scene
         else
         {
 
-            StartCoroutine(ReadDBEdit());
+            StartCoroutine(ReadDBEdit()); //Start coroutine to read DB for Manage Custom Scene
             //Invoke("loadDB", 1);
            
         }
@@ -55,7 +60,7 @@ public class InitContent : MonoBehaviour
 
 
     }
-    IEnumerator ReadDBLobby()
+    IEnumerator ReadDBLobby() //Read DB for Custom Lobby
     {
         done = false;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
@@ -103,7 +108,7 @@ public class InitContent : MonoBehaviour
 
 
     }
-    void loadDBLobby()
+    void loadDBLobby()  //Instantiate number of custom stage based on DB and load the stage name
     {
         for (int i = 0; i < noOfCustom; i++)
         {
@@ -225,7 +230,7 @@ public class InitContent : MonoBehaviour
         }
     }
 
-    IEnumerator ReadDBEdit()
+    IEnumerator ReadDBEdit() //Read DB for manage custom based on user id
     {
         done = false;
         loading.SetActive(true);
@@ -274,7 +279,7 @@ public class InitContent : MonoBehaviour
 
 
     }
-    void loadDBEdit()
+    void loadDBEdit() //Instantiate number of custom stage based on DB and load the stage name
     {
         for (int i = 0; i < noOfCustom; i++)
         {

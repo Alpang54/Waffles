@@ -8,6 +8,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/**
+ * This class handles editing of custom stage and upload changes to database
+ * @author Ng Kai Qian
+ */
+
 public class Custom_Save : MonoBehaviour
 {
     public GameObject backButton;

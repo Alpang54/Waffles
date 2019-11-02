@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * This class populates the data retrieve from the DB when the user selects a stage
+ * @author Ng Kai Qian
+ */
 public class Edit : MonoBehaviour
 {
     public bool done = false;
@@ -29,14 +33,14 @@ public class Edit : MonoBehaviour
         CuststageName = StageNameManage.customName;
         Debug.Log(stageName);
 
-        StartCoroutine(ReadDB());
+        StartCoroutine(ReadDB()); //Starts corountine to read db
     }
 
     // Update is called once per frame
     
 
 
-    IEnumerator ReadDB()
+    IEnumerator ReadDB() //Read db for selected custom stage name for editing
     {
         done = false;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
@@ -101,7 +105,7 @@ public class Edit : MonoBehaviour
 
     }
 
-    void loadDB()
+    void loadDB()  //Instantiate the number of questions based on DB and load the values to display to user
     {
         int buttonImageCount = 0;
         int correctAnswer = 0;
