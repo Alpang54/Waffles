@@ -74,23 +74,30 @@ public class MainStageGame : MonoBehaviour
     void Start()
     {
         dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();     
-        firebaseUserID = dataHandler.GetFirebaseUserId();
-        Debug.Log(firebaseUserID);
-        fBUsername = dataHandler.GetFBUserName();
-        Debug.Log(fBUsername);
-       
-        Debug.Log("currentDiff=" + dataHandler.GetCharacterLevel());
-
-        Tuple<int, int> worldAndStageLevel = dataHandler.GetWorldAndStageLevel();
-    
-        currentDiff = dataHandler.GetCharacterLevel()+1;
-
       
-        currentStage = worldAndStageLevel.Item2;
-        currentWorld = worldAndStageLevel.Item1;
-        Debug.Log("currentStage=" + currentStage);
-        Debug.Log("currentWorld=" + currentWorld);
-        stageName = dataHandler.GetStageName();
+        if(dataHandler!=null)
+        {
+            firebaseUserID = dataHandler.GetFirebaseUserId();
+            Debug.Log(firebaseUserID);
+            fBUsername = dataHandler.GetFBUserName();
+            Debug.Log(fBUsername);
+
+            Debug.Log("currentDiff=" + dataHandler.GetCharacterLevel());
+            Tuple<int, int> worldAndStageLevel = dataHandler.GetWorldAndStageLevel();
+            if(worldAndStageLevel!=null)
+            {
+                currentStage = worldAndStageLevel.Item2;
+                currentWorld = worldAndStageLevel.Item1;
+            }
+            currentDiff = dataHandler.GetCharacterLevel() + 1;
+            Debug.Log("currentStage=" + currentStage);
+            Debug.Log("currentWorld=" + currentWorld);
+            stageName = dataHandler.GetStageName();
+        }
+        else
+        {
+            currentStage = currentWorld= 1;
+        }
         stageName = "World " + currentWorld + " Stage " + currentStage;
         StartCoroutine(ReadDB());
         StartCoroutine(ReadPoint());

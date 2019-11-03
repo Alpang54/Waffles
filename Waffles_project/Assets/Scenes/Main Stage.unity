@@ -366,13 +366,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &81348962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,13 +526,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &85303699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -980,13 +966,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &188205298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1647,13 +1626,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &354507479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2251,13 +2223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &618590062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2401,13 +2366,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &620718077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2703,13 +2661,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &636178814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3048,13 +2999,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &800467768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4339,13 +4283,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1060791442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4662,13 +4599,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1095140059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4980,13 +4910,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1104156520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5338,13 +5261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1121973015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5758,8 +5674,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 265.35, y: -296.66666}
-  m_SizeDelta: {x: 525.5, y: 593.3333}
+  m_AnchoredPosition: {x: 265.35, y: -296.75}
+  m_SizeDelta: {x: 525.5, y: 593.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1272036301
 MonoBehaviour:
@@ -5982,7 +5898,7 @@ PrefabInstance:
     - target: {fileID: 5063177802228242707, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
         type: 3}
       propertyPath: m_Text
-      value: Edit
+      value: Qns
       objectReference: {fileID: 0}
     - target: {fileID: 5063177802228242707, guid: 4d74c4ab086865f4e9057af2ddd70cd3,
         type: 3}
@@ -6050,7 +5966,7 @@ RectTransform:
   m_Father: {fileID: 202544074}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.3629213}
+  m_AnchorMin: {x: 0, y: 0.3631001}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -6449,13 +6365,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1362291809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6851,13 +6760,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1443558907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7248,13 +7150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1530183496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7490,7 +7385,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2142003955}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7570,7 +7465,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.000063684725}
-  m_SizeDelta: {x: 0, y: 593.3333}
+  m_SizeDelta: {x: 0, y: 593.5}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1622351000
 MonoBehaviour:
@@ -7687,8 +7582,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1335103147}
   m_HandleRect: {fileID: 1335103146}
   m_Direction: 2
-  m_Value: 0.9999997
-  m_Size: 0.6370786
+  m_Value: 1
+  m_Size: 0.63689977
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8101,13 +7996,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1690620642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8670,13 +8558,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &1896807800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8826,15 +8707,6 @@ MonoBehaviour:
   answerWrongQns: {fileID: 21300072, guid: b4c1e02935e1f6246b47d53edff0855a, type: 3}
   clearedText: {fileID: 283894432}
   difficultyText: {fileID: 1346340050}
-  qnDiff1List: []
-  qnDiff2List: []
-  qnDiff3List: []
-  qnDiff4List: []
-  qnDiff5List: []
-  answeredList: []
-  rightList: []
-  wrongList: []
-  currentSelected: {fileID: 0}
   patterns:
   - {fileID: 996636457}
   - {fileID: 381493000}
@@ -8918,7 +8790,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1954034893}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9612,13 +9484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!114 &2044640428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10232,13 +10097,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3222b56b958fa3541b23af88fb633711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qns: 
-  qnsNumber: 0
-  answerInt: 0
-  answerStr: 
-  answeredCorrectly: 0
-  cleared: 0
-  difficulty: 0
 --- !u!1 &2142003954
 GameObject:
   m_ObjectHideFlags: 0
@@ -10324,6 +10182,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Return to stage
+      objectReference: {fileID: 0}
+    - target: {fileID: 8072572382457933815, guid: 5a6ee4fd21d002e499e493ebf8f9758b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8072572382457931784, guid: 5a6ee4fd21d002e499e493ebf8f9758b,
         type: 3}

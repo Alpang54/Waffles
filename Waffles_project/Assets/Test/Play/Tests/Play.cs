@@ -16,7 +16,7 @@ namespace Tests
        
         public static IEnumerable<string> LevelTestCases
         {
-            get { return new List<string> { "StartScene","Main Menu","CharacterSel" }; }
+            get { return new List<string> { "StartScene","Main Menu","Main Stage","CharacterSel", "Maps", "Custom_Main", "Create_Custom", "Custom_Manage", "Custom Stage","Edit_Custom","Leaderboard","Custom Lobby"}; }
         }
 
         [UnityTest]
@@ -27,11 +27,7 @@ namespace Tests
             Assert.IsTrue(true);
         }
 
-        [TearDown]
-        public void UnloadLevel()
-        {
-            SceneManager.UnloadSceneAsync(sceneToUnload);
-        }
+
 
         private string sceneToUnload;
 
@@ -51,6 +47,58 @@ namespace Tests
             using (Measure.Scope(new SampleGroupDefinition("Setup.LoadScene")))
             {
                 SceneManager.LoadScene("Main Menu");
+            }
+            Debug.Log(LogType.Log.ToString());
+            LogAssert.Expect(LogType.Log, "Log");
+            yield return null;
+
+            yield return Measure.Frames().Run();
+        }
+        [PerformanceUnityTest]
+        public IEnumerator Rendering_CustomStage()
+        {
+            using (Measure.Scope(new SampleGroupDefinition("Setup.LoadScene")))
+            {
+                SceneManager.LoadScene("Custom Stage");
+            }
+            Debug.Log(LogType.Log.ToString());
+            LogAssert.Expect(LogType.Log, "Log");
+            yield return null;
+
+            yield return Measure.Frames().Run();
+        }
+        [PerformanceUnityTest]
+        public IEnumerator Rendering_CustomEdit()
+        {
+            using (Measure.Scope(new SampleGroupDefinition("Setup.LoadScene")))
+            {
+                SceneManager.LoadScene("Edit_Custom");
+            }
+            Debug.Log(LogType.Log.ToString());
+            LogAssert.Expect(LogType.Log, "Log");
+            yield return null;
+
+            yield return Measure.Frames().Run();
+        }
+        [PerformanceUnityTest]
+        public IEnumerator Rendering_CustomManage()
+        {
+            using (Measure.Scope(new SampleGroupDefinition("Setup.LoadScene")))
+            {
+                SceneManager.LoadScene("Custom_Manage");
+            }
+            Debug.Log(LogType.Log.ToString());
+            LogAssert.Expect(LogType.Log, "Log");
+            yield return null;
+
+            yield return Measure.Frames().Run();
+        }
+        [PerformanceUnityTest]
+        public IEnumerator Rendering_MainStage()
+        {
+            using (Measure.Scope(new SampleGroupDefinition("Setup.LoadScene")))
+            {
+                SceneManager.LoadScene("Main Stage");
             }
             Debug.Log(LogType.Log.ToString());
             LogAssert.Expect(LogType.Log, "Log");
