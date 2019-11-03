@@ -557,6 +557,11 @@ public class WorldMapImplementation
     {
         return this.worldCount;
     }
+
+    public void SetWorldCount(int worldCount)
+    {
+        this.worldCount = worldCount ;
+    }
     public int GetWorldProgress()
     {
         return this.worldProgress;

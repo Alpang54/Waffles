@@ -37,18 +37,23 @@ public class StageMapManagerScript : MonoBehaviour
     {
         datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
 
+        //default page number is 1
         this.pageNumber = 1;
         this.worldLevel = worldLevel;
 
         stageMapImplementor = new StageMapManagerImplementation();
 
-
+        //Get stage names and progress from the parameters
         this.stageNames = stageMapImplementor.InitializeStageNames(worldStageNames, worldLevel);
         this.stageProgress = stageMapImplementor.InitializeStageProgress(worldStageProgress, worldLevel);
 
-        
+        //If User progress on last attempted stage is more than 70%, we allow him to proceed to next stage
         DetermineIfUserStageProgressShouldBeUpdated();
         UpdateLeftRightButtons();
+
+
+
+        //If The number of stages in this world is 0, declare 0 stages.
         if (stageNames[0].Item1 == 0)
         {
             DeclareStageMapButtons(stageProgress.Count, 0, this.pageNumber);
@@ -60,24 +65,16 @@ public class StageMapManagerScript : MonoBehaviour
         
         stageSelect.SetActive(true);
 
-        for (int i =0;i<stageNames.Count;i++)
-        {
-            Debug.Log(stageNames[i]);
-        }
-
-        for (int i = 0; i < stageProgress.Count; i++)
-        {
-            Debug.Log(stageProgress[i]);
-        }
     }
 
 
+    //To determine if the last attempted stage of has more than 70% completion, if so, we allow user to proceed to next stage
     private void DetermineIfUserStageProgressShouldBeUpdated()
     {
         int userStageProgress = this.stageProgress.Count;
         int temporaryStageCompletionPercentage = Int32.Parse(this.stageProgress[userStageProgress - 1].Item2);
 
-        if (temporaryStageCompletionPercentage >= 70 && userStageProgress < this.stageNames.Count) // if current stage has completion percentage
+        if (temporaryStageCompletionPercentage >= 70 && userStageProgress < this.stageNames.Count) 
         {
             Tuple<int, string> aRecordofStageProgress = new Tuple<int, string>(userStageProgress + 1, "0");
             this.stageProgress.Add(aRecordofStageProgress);
@@ -121,7 +118,7 @@ public class StageMapManagerScript : MonoBehaviour
     }
 
 
-
+    
     public void Share()
     {
         ShareScript sharescript = GameObject.Find("ShareHandler").GetComponent<ShareScript>();
@@ -167,17 +164,22 @@ public class StageMapManagerScript : MonoBehaviour
             }
         }
     }
+
+    //When user clicks the next page button
     public void onNextStageMapButton()
     {
         this.pageNumber++;
         UpdateLeftRightButtons();
     }
 
+    //When user clicks the next previous button
     public void onPreviousStageMapButton()
     {
         this.pageNumber--;
         UpdateLeftRightButtons();
     }
+
+    //Check if which pages user can flips to and re-declare stage buttons
     private void UpdateLeftRightButtons()
     {
         double noOfAcceptablePages = this.stageNames.Count / noOfStagePerPage;
@@ -238,6 +240,7 @@ public class StageMapManagerScript : MonoBehaviour
             return this.stageCompletionPercentage;
         }
 
+        //Get the stage Progress
         public List<Tuple<int, string>> InitializeStageProgress(List<Tuple<int, int, string>> worldStageProgress, int worldLevel)
         {
 
@@ -270,6 +273,7 @@ public class StageMapManagerScript : MonoBehaviour
                 else { loop++; }
             }
 
+            //if there is no progress at all for this stage, set progress to 1 and give the percentage as 0;
             if (stageProgress.Count == 0)
             {
             Tuple<int, string> aRecordofStageProgress = new Tuple<int, string>(1, "0");
@@ -280,7 +284,7 @@ public class StageMapManagerScript : MonoBehaviour
             return stageProgress;
         }
 
-
+    // Get stage Names
         public List<Tuple<int, string>> InitializeStageNames(List<Tuple<int, int, string>> worldStageNames, int worldLevel)
         {
 
@@ -319,12 +323,26 @@ public class StageMapManagerScript : MonoBehaviour
 
         }
 
+    // To compute the stage number of the the declared buttons as a result of multiple pages
         public int ComputeStageNumber(int pageNumber, double noOfStagePerPage, int i)
         {
-            int stageNumberText = (int)((pageNumber - 1) * noOfStagePerPage + i + 1);
+        if (pageNumber < 1)
+        {
+            pageNumber = 1;
+        }
+        if (noOfStagePerPage < 1)
+        {
+           noOfStagePerPage = 9.0;
+        }
+        if (i < 0)
+        {
+            i = 0;
+        }
+        int stageNumberText = (int)((pageNumber - 1) * noOfStagePerPage + i + 1);
             return stageNumberText;
         }
 
+    // To decide if we should declare the button or not.
         public int DeclareStageMapButton(int stageProgress, int stageCount, int pageNumber, int i)
         {
 
