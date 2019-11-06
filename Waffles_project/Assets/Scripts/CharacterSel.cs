@@ -5,34 +5,36 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-/// <summary>
-/// This class is used for the character select page 
-/// and sent the user set difficulty 
-/// Component CharacterManager
-/// 
-/// </summary>
+/**
+ * This class is used for the character select page 
+ * and sent the user set difficulty 
+ * Component CharacterManager
+ * @author Fang ShuHui
+ * */
 public class CharacterSel : MonoBehaviour
 {
-    /// <summary>
-    /// This variable is to get the character(question diffcultiy) from the user input
-    /// </summary>
+     
+    /*
+      This variable is to get the character(question diffcultiy) from the user input
+    */
     private int selectedCharacterIndes;
 
     [Header("list of characters")]
     [SerializeField] private List<CharacterSelectObject> characterList = new List<CharacterSelectObject>();
 
-    /// <summary>
-    /// this is to reference in the unity 
-    /// </summary>
-     
+    /**
+     *  this is to reference in the unity 
+     */
+
     [Header("UI References")]
     [SerializeField] private Text description;
     [SerializeField] private Image characterimage;
     [SerializeField] private Text level;
-    
-    /// <summary>
-    /// When the scene/page is loaded it will run this function
-    /// </summary>
+
+    /**
+     * When the scene/page is loaded it will run this function
+     */
+
 
     private void Start()
     {
@@ -42,10 +44,10 @@ public class CharacterSel : MonoBehaviour
         UpdateCharacterSelectionUI();
     }
 
-    /// <summary>
-    /// When the user click on the left button this function will be activated
-    /// It will transverse the list by going left
-    /// </summary>
+    /**
+     * When the user click on the left button this function will be activated
+     * It will transverse the list by going left
+     */
     public void LeftArrow()
     {
         selectedCharacterIndes--;
@@ -56,10 +58,11 @@ public class CharacterSel : MonoBehaviour
 
         UpdateCharacterSelectionUI();
     }
-    /// <summary>
-    /// When the user click on the right button this function will be activated
-    /// It will transverse the list by going right
-    /// </summary>
+
+    /**
+     * When the user click on the right button this function will be activated
+     * It will transverse the list by going right
+     */
     public void RightArrow()
     {
         selectedCharacterIndes++;
@@ -73,10 +76,11 @@ public class CharacterSel : MonoBehaviour
         UpdateCharacterSelectionUI();
     }
 
-    /// <summary>
-    /// This function is for sending the question difficulty when the user click on the 
-    /// confirm (green button) 
-    /// </summary>
+    /**
+     * This function is for sending the question difficulty when the user click on the 
+     * confirm (green button) 
+     */
+
     public void ConfirmCharSel()
     {
         
@@ -87,10 +91,9 @@ public class CharacterSel : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// This function is used to change the output(e.g image, description)
-    /// 
-    /// </summary>
+    /**
+     *  This function is used to change the output(e.g image, description)
+     */
     private void UpdateCharacterSelectionUI()
     {
 
@@ -102,11 +105,10 @@ public class CharacterSel : MonoBehaviour
         //change level 
         level.text = characterList[selectedCharacterIndes].level;
     }
-
-    /// <summary>
-    /// This function is to set what the list contain 
-    /// </summary>
-
+    /**
+     * This function is to set what the list contain 
+     */
+  
     [System.Serializable]
     public class CharacterSelectObject
     {
