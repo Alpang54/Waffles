@@ -128,12 +128,11 @@ public class Login : MonoBehaviour
     {
         if (!FB.IsLoggedIn)
         {
-            Debug.Log("FacebookLogin");
+            
             FacebookLogin();
         }
         else
         {
-            Debug.Log("FacebookLogout");
             FacebookLogout();
         }
     }
@@ -143,7 +142,7 @@ public class Login : MonoBehaviour
     **/
     public void FacebookLogin()
     {
-        Debug.Log("FacebookLogin");
+        
         if (!FB.IsLoggedIn)
         {
             var perms = new List<string>() { "public_profile", "email" };
@@ -164,7 +163,7 @@ public class Login : MonoBehaviour
     **/
     private void FBAuthCallback(ILoginResult result)
     {
-        Debug.Log("FBAuthCallback");
+       
         if (FB.IsLoggedIn)
         {
             this.loggedIn = true;
@@ -172,12 +171,8 @@ public class Login : MonoBehaviour
             credentials = FacebookAuthProvider.GetCredential(this.accessToken.TokenString);
             print(credentials);
             datahandler.SetIsLoggedIn(true);
-            Debug.Log("In FBAUTHCALLBACK"); Debug.Log("In FBAUTHCALLBACK");
-            Debug.Log("In FBAUTHCALLBACK");
             loginOutbtn.GetComponentInChildren<Text>().text = "Logout";
             FirebaseLogin();
-            Debug.Log("In FBAUTHCALLBACK");
-            Debug.Log("this.accesstoken.userid is:" + this.accessToken.UserId);
             FB.API("me?fields=name", Facebook.Unity.HttpMethod.GET, GetFacebookData);
         }
         else
