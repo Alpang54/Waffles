@@ -5,6 +5,11 @@ using Firebase.Unity.Editor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+
+/** DBHandler manages the Stage map on the application side regarding GameObjects
+* @author Ang Jie Kai Alvis
+**/
 public class DBHandler : MonoBehaviour
 {
     private DataSnapshot snapshot;
@@ -21,6 +26,10 @@ public class DBHandler : MonoBehaviour
         return this.snapshot;
     }
 
+
+    /** Reads a jsonParse Tree from the database
+    * @params RootName is the root name of the json parse tree
+    **/
     public async Task ReadfromFirebase(string RootName)
     {
         await GetSnapshotFromDatabase(RootName);
@@ -28,6 +37,10 @@ public class DBHandler : MonoBehaviour
 
     }
 
+
+    /** Error checking to determine if there is such a parse tree specified
+    * @params RootName is the root name of the json parse tree
+    **/
     private async Task GetSnapshotFromDatabase(string RootName)
     {
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");

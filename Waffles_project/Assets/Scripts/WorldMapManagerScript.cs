@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using Firebase.Database;
 using UnityEngine;
 using UnityEngine.UI;
+
+
+/** WorldMapManagerScript manages the world map logic on the application side regarding GameObjects
+* @author Ang Jie Kai Alvis
+**/
 public class WorldMapManagerScript : MonoBehaviour
 {
     [SerializeField] public static int worldSelected;
@@ -63,7 +68,9 @@ public class WorldMapManagerScript : MonoBehaviour
     }
 
 
-    //method to handle data from database
+    /**
+     *Gets all the relevant information needed from the database, then calls processing methods to process the information
+     **/
     private async Task GetWorldAndUserProgressFromDatabase()
     {
         GameObject DBHandler = GameObject.Find("DBHandler");
@@ -101,7 +108,10 @@ public class WorldMapManagerScript : MonoBehaviour
 
     }
 
-    //If user progress of the world is 70% or more, allow him to proceed to next world
+
+    /**
+     *Updates the world buttons if previous world has over 70% completion
+     **/
     private void DetermineIfUserWorldProgressShouldBeUpdated()
     {
         int temporaryworldCompletionPercentage = this.worldCompletionPercentage[worldProgress-1].Item2;
@@ -116,28 +126,39 @@ public class WorldMapManagerScript : MonoBehaviour
     }
 
 
-    //Sets world Information without considering user
+
+    /**
+     *Sets the world values without considering user progress
+     * @param snapShotOfWorld is a json parse tree obtained from the database
+     **/
     private void ExtractWorldInformation(DataSnapshot snapShotOfWorld)
     {
         this.worldStageNames = worldMapImplementor.ExtractWorldInformationLogic(snapShotOfWorld);
         this.worldNames = worldMapImplementor.GetWorldNames();
     }
 
-    //Sets world Count without considering user
+    /**Sets world Count without considering user
+     * @params worldNames is a list of tuples that contains the names of the worlds
+     * */
     private void ProcessWorldInformation(List<Tuple<int, string>> worldNames)
     {
         worldMapImplementor.ProcessWorldInformation(worldNames);
         this.worldCount = worldMapImplementor.GetWorldCount();      
     }
 
-    //Obtains user progress
+
+    /**Obtains user progress
+     * @params snapShotOfUserProgress is a json parse tree obtained from the database
+     * */
     private void ExtractUserWorldProgress(DataSnapshot snapShotOfUserProgress)
     {
         string userID = datahandler.GetFirebaseUserId();
         this.worldStageProgress = worldMapImplementor.ExtractUserProgressLogic(snapShotOfUserProgress, userID);
     }
-    
-    //Processes user progress information in order to determine which world can be played
+
+    /**Processes user progress information in order to determine which world can be played
+     *@params worldStageProgress is a list of tuples that contains the world,the stages of the world, and the user progress in that stage
+     * */
     private void ProcessUserProgessLogic(List<Tuple<int, int, string>> worldStageProgress)
     {
         worldMapImplementor.ProcessUserProgressLogic(worldStageProgress);
@@ -145,7 +166,9 @@ public class WorldMapManagerScript : MonoBehaviour
        
     }
 
-    //determine which buttons are to be active or which to be inactive
+    /**determine which buttons are to be active or which to be inactive
+     * @params worldProgress is the world the user has unlocked until, worldCount is the total number of worlds, pageNumber is the page of the world
+     * */
     public void DeclareWorldMapButtons(int worldProgress, int worldCount,int pageNumber)
     {
         for (int i = 0; i < worldMapButtons.Length; i++)
@@ -193,7 +216,10 @@ public class WorldMapManagerScript : MonoBehaviour
     }
 
 
-    //when a world is selected, show confirm panel
+   
+    /**when a world is selected, show confirm panel
+    * @params worldLevel is the world level of the button selected
+    * */
     public void OnSelectWorldButton(int worldLevel)
     {
 
@@ -210,7 +236,9 @@ public class WorldMapManagerScript : MonoBehaviour
         confirmPanel.confirmPanelAppear(this.worldNames[worldLevel-1].Item2, worldLevel,selectedWorldCompletionPercent);
     }
 
-    // when a world is selected and confirmed, pass to stage manager to load stage map and turn world map off
+    /** when a world is selected and confirmed, pass to stage manager to load stage map and turn world map off
+     *   * @params worldLevel is the world level of the button selected
+    * */
     public void OnSelectWorldProceedButton(int worldLevel)
     {
        
@@ -220,28 +248,37 @@ public class WorldMapManagerScript : MonoBehaviour
 
     }
 
-    //turn world map off
+    /** turns the world map off
+    * */
     public void WorldSelectDisappear()
     {
         worldSelect.SetActive(false);
     }
 
-    //turn world map on
+    /** turns the world map on
+    * */
     public void WorldSelectAppear()
     {
         worldSelect.SetActive(true);
     }
 
+    /** returns the worldStageNames value which holds world, stage , and the name of the stage in a tuple, for an entire list
+    * */
     public List<Tuple<int, int, string>> GetWorldStageNames()
     {
         return this.worldStageNames;
     }
 
+    /** Sets the new world stage names value
+     * @params newWorldStageNames 
+    * */
     public void SetWorldStageNames(List<Tuple<int, int, string>> newWorldStageNames)
     {
         this.worldStageNames=newWorldStageNames;
     }
 
+    /** Decides if left or/and right buttons appear to navigate between pages of the world map
+    * */
     private void UpdateLeftRightButtons()
     {
         double noOfAcceptablePages = this.worldCount / noOfWorldPerPage;
@@ -265,7 +302,8 @@ public class WorldMapManagerScript : MonoBehaviour
         DeclareWorldMapButtons(this.worldProgress, this.worldCount, this.pageNumber);
     }
 
-
+    /** Increments the page number when the button is clicked and calls update the button method
+  * */
     public void onSelectNextButton()
 
     {
@@ -274,6 +312,8 @@ public class WorldMapManagerScript : MonoBehaviour
 
     }
 
+    /** Decrements the page number when the button is clicked and calls update the button method
+  * */
     public void onSelectPreviousButton()
     {
         this.pageNumber--;
@@ -284,14 +324,18 @@ public class WorldMapManagerScript : MonoBehaviour
 
 
 
-
+/** WorldMapImplementation manages the world map logic on the logic side which is used in worldMapManagerScript
+* @author Ang Jie Kai Alvis
+**/
 public class WorldMapImplementation
 {
     private int worldCount;
     private List<Tuple<int,string>> worldNames;
     private int worldProgress;
 
-    //Logic to determine the worldnumber of buttons
+    /**Logic to determine the if a button should be declared or not.
+     * @ params worldProgress is the user progress in the world, worldCount is the number of worlds available, pageNumber is the page of the world map, i is i'th world button in the current world map
+     * */
     public int DeclareWorldButtonsLogic(int worldProgress, int worldCount, int pageNumber, int i)
     {
 
@@ -315,7 +359,9 @@ public class WorldMapImplementation
         }
     }
 
-    // Returns worldStageNames in ascending order in terms of worldNumber
+    /** Returns worldStageNames in ascending order in terms of worldNumber
+     * @params snapShotOfWorld is a json parse tree from the firebase containing the snapshot of all available world
+     * */
     public List<Tuple<int, int, string>>  ExtractWorldInformationLogic(DataSnapshot snapShotOfWorld)
     {
         List<Tuple<int,string>>worldNames = new List<Tuple<int,string>>();
@@ -401,7 +447,9 @@ public class WorldMapImplementation
       
     }
 
-    //Set Number of Worlds
+    /**Set Number of Worlds
+     * @params worldNames is a list of tuple containing the list of the world names
+     * */
     public void ProcessWorldInformation(List<Tuple<int, string>> worldNames)
     {
         int worldCount = 0;
@@ -414,7 +462,9 @@ public class WorldMapImplementation
 
 
 
-    //returns UserProgress in ascending order in terms of worldNumber
+    /**returns UserProgress in ascending order in terms of worldNumber
+     * @params snapShotOfUserProgress is a json parse tree from the database which contains the user progress in the world map, userID is the ID of the user
+     * */
     public List<Tuple<int, int, string>> ExtractUserProgressLogic(DataSnapshot snapShotOfUserProgress, string userID)
     {
         int worldProgress;
@@ -479,7 +529,9 @@ public class WorldMapImplementation
     }
 
 
-    //Process WorldProgress for user
+    /** Process WorldProgress for user
+     * @params worldStageProgress is a tuple containing a world, a stage and the user stage progress, wrapped in a list
+     * */
     public void ProcessUserProgressLogic(List<Tuple<int, int, string>> worldStageProgress)
     {
         int worldProgress=1;
@@ -502,6 +554,9 @@ public class WorldMapImplementation
     }
 
 
+    /** Compute the world number for buttons in different pages
+     * @params pageNumber is the current page the user is on, noOfWorldperPage is a constant which specifies how many buttons there are on a page, i is the i'th button on the page
+     * */
     public int ComputeWorldNumber(int pageNumber, double noOfWorldPerPage, int i)
     {
         int worldNumberText = (int) ((pageNumber-1) * noOfWorldPerPage + i + 1);
@@ -509,7 +564,11 @@ public class WorldMapImplementation
     }
 
 
-    //Returns an array of world Completion percentage for the user.
+
+
+    /** Returns an array of world Completion percentage for the user.
+ * @params worldStageProgress is a list of tuples containing a world, a stage , and the user stage progress, worldStageNames is a list of tuples containing a world, a stage , and the names of the stage, worldCount is the total number of worlds
+ * */
     public List<Tuple<int,int>> ComputeWorldCompletionPercentage(List<Tuple<int, int, string>> worldStageProgress, List<Tuple<int, int, string>> worldStageNames,int worldCount)
     {
         List<Tuple<int, int>> worldCompletionPercentage = new List<Tuple<int, int>>();
@@ -553,20 +612,28 @@ public class WorldMapImplementation
     }
 
 
+    /** Returns the total number of worlds
+     * */
     public int GetWorldCount()
     {
         return this.worldCount;
     }
-
+    /** Sets the total number of worlds
+     * @params worldCount is the total number of worlds to be set
+  * */
     public void SetWorldCount(int worldCount)
     {
         this.worldCount = worldCount ;
     }
+
+    /** Gets the total number of worlds
+ * */
     public int GetWorldProgress()
     {
         return this.worldProgress;
     }
-
+    /** Gets all the world and its names in a tuple within a list
+* */
     public List<Tuple<int,string>> GetWorldNames()
     {
         return this.worldNames;

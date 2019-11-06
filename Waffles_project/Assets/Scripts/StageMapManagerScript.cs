@@ -8,6 +8,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
+
+/** StageMapManagerScript manages the Stage map on the application side regarding GameObjects
+* @author Ang Jie Kai Alvis
+**/
 public class StageMapManagerScript : MonoBehaviour
 {
     public GameObject stageSelect;
@@ -32,7 +37,9 @@ public class StageMapManagerScript : MonoBehaviour
     [SerializeField] private GameObject RightButton;
 
 
-
+    /** Initializes the stage using values obtained from the world map.
+* @params worldlevel is the world selected, worldStageNames is a list of tuples containing a world, a stage, and the stage name, worldStageProgress is a list of tuples containing a world, a stage, and the user progress for that stage
+**/
     public void LoadStageMap(int worldLevel, List<Tuple<int, int, string>> worldStageNames, List<Tuple<int, int, string>> worldStageProgress)
     {
         datahandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
@@ -68,7 +75,8 @@ public class StageMapManagerScript : MonoBehaviour
     }
 
 
-    //To determine if the last attempted stage of has more than 70% completion, if so, we allow user to proceed to next stage
+    /**To determine if the last attempted stage of has more than 70% completion, if so, we allow user to proceed to next stage
+     **/
     private void DetermineIfUserStageProgressShouldBeUpdated()
     {
         int userStageProgress = this.stageProgress.Count;
@@ -84,18 +92,22 @@ public class StageMapManagerScript : MonoBehaviour
     }
 
 
-    //turn stage map on
+    /**turn stage map on
+     * */
     public void SetActive()
     {
         stageSelect.SetActive(true);
     }
-    // turn stage map off
+    /** turn stage map off
+     **/
     public void SetInactive()
     {
         stageSelect.SetActive(false);
     }
 
-    //when a stage is selected, show confirm panel
+    /**when a stage is selected, show confirm panel
+     * @params stageLevel is the stage level of the stage selected
+     * */
     public void OnSelectStageButton(int stageLevel)
     {
         string stageName = this.stageNames[stageLevel - 1].Item2;
@@ -106,7 +118,9 @@ public class StageMapManagerScript : MonoBehaviour
 
     }
 
-    //when a stage is selected and confirmed, load next scene
+    /**when a stage is selected and confirmed, load next scene
+     * @params stagelevel is the stage level of the stage selected
+     * */
     public void OnSelectStagePlayButton(int stageLevel)
     {
         //change depengind on ameplay,ideally load scene
@@ -118,14 +132,17 @@ public class StageMapManagerScript : MonoBehaviour
     }
 
 
-    
+    /**Shares a screenshot of the current screen to whichever platform the user chooses
+     **/
     public void Share()
     {
         ShareScript sharescript = GameObject.Find("ShareHandler").GetComponent<ShareScript>();
         sharescript.Share();
     }
 
-    //Determine which stages are available to the user.
+    /**Determine which stages are available to the user.
+     * @params stageProgress is the progress of the user of a stage, stageCount is the total number of stages available, pageNumber is the current page number of the stage map
+     * */
     public void DeclareStageMapButtons(int stageProgress, int stageCount, int pageNumber)
     {
 
@@ -165,21 +182,24 @@ public class StageMapManagerScript : MonoBehaviour
         }
     }
 
-    //When user clicks the next page button
+    /**When user clicks the next page button, increment this page number and update the page selection buttons
+     * */
     public void onNextStageMapButton()
     {
         this.pageNumber++;
         UpdateLeftRightButtons();
     }
 
-    //When user clicks the next previous button
+    /**When user clicks the previous page button, decrement this page number and update the page selection buttons
+     * */
     public void onPreviousStageMapButton()
     {
         this.pageNumber--;
         UpdateLeftRightButtons();
     }
 
-    //Check if which pages user can flips to and re-declare stage buttons
+    /**Check if which pages user can flips to and re-declare stage buttons
+     **/
     private void UpdateLeftRightButtons()
     {
         double noOfAcceptablePages = this.stageNames.Count / noOfStagePerPage;
@@ -205,6 +225,8 @@ public class StageMapManagerScript : MonoBehaviour
         DeclareStageMapButtons(this.stageProgress.Count, this.stageNames.Count, this.pageNumber);
     }
 
+    /** Reloads the current scene to go back to the world map
+     * */
     public void BackButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -213,34 +235,44 @@ public class StageMapManagerScript : MonoBehaviour
 
 }
 
-    public class StageMapManagerImplementation
+/** StageMapManagerImplementaion implements the Stage map logic
+* @author Ang Jie Kai Alvis
+**/
+public class StageMapManagerImplementation
     {
         List<string> stageCompletionPercentage = new List<string>();
         List<string> stageNames = new List<string>();
         int stageCount;
         int stageProgress;
 
-        public int GetStageCount()
+    /** Returns the no of stages available
+   * */
+    public int GetStageCount()
         {
             return this.stageCount;
         }
-
-        public int GetStageProgress()
+    /** Returns the user progress
+   * */
+    public int GetStageProgress()
         {
             return this.stageProgress;
         }
-
-        public List<string> GetStageNames()
+    /** Returns the nane of a stage
+   * */
+    public List<string> GetStageNames()
         {
             return this.stageNames;
         }
-
-        public List<string> GetStageCompletionPercentage()
+    /** Returns a list of the completion percentage of the stages
+   * */
+    public List<string> GetStageCompletionPercentage()
         {
             return this.stageCompletionPercentage;
         }
 
-        //Get the stage Progress
+        /**Returns the stage Progress
+         * @worldStageProgress is a list of tuple containing the world, the stage, and the progress the user has on that stage. worldLevel is the world number selected previously
+         * */
         public List<Tuple<int, string>> InitializeStageProgress(List<Tuple<int, int, string>> worldStageProgress, int worldLevel)
         {
 
@@ -284,7 +316,9 @@ public class StageMapManagerScript : MonoBehaviour
             return stageProgress;
         }
 
-    // Get stage Names
+    /** Returns a list of stage  and its Names from the worldStageNames
+     * @params worldStageNames is a list of tuple of a world, a stage, and its names, worldlevel is the world number selected
+     * */
         public List<Tuple<int, string>> InitializeStageNames(List<Tuple<int, int, string>> worldStageNames, int worldLevel)
         {
 
@@ -323,8 +357,10 @@ public class StageMapManagerScript : MonoBehaviour
 
         }
 
-    // To compute the stage number of the the declared buttons as a result of multiple pages
-        public int ComputeStageNumber(int pageNumber, double noOfStagePerPage, int i)
+    /** Computes the stage number of a button
+  * @params pageNumber is the page number of the stages available in a world, no OfStagePerPage is the number of stages in a page, i is the i'th button of the stage map
+  * */
+    public int ComputeStageNumber(int pageNumber, double noOfStagePerPage, int i)
         {
         if (pageNumber < 1)
         {
@@ -342,8 +378,10 @@ public class StageMapManagerScript : MonoBehaviour
             return stageNumberText;
         }
 
-    // To decide if we should declare the button or not.
-        public int DeclareStageMapButton(int stageProgress, int stageCount, int pageNumber, int i)
+    /** To decide if we should declare the button or not.
+  * @params stageProgress is the stage where the user has progressed until, stageCount is the total number of available stages, pagenumber is the page number of the stage map, i is the i'th button of the stage map
+  * */
+    public int DeclareStageMapButton(int stageProgress, int stageCount, int pageNumber, int i)
         {
 
             i = i + 9 * (pageNumber - 1) + 1;

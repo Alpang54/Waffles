@@ -11,6 +11,10 @@ using Facebook.Unity;
 using Firebase.Auth;
 using UnityEngine.SceneManagement;
 
+
+/** Login class handles login to Firebase and the database
+* @author Ang Jie Kai Alvis
+**/
 public class Login : MonoBehaviour
 {
     private Facebook.Unity.AccessToken accessToken;
@@ -53,6 +57,9 @@ public class Login : MonoBehaviour
 
     }
 
+    /**
+   *Initializes Facebook App
+   **/
     private void SetInit()
     {
         if (FB.IsInitialized)
@@ -84,6 +91,10 @@ public class Login : MonoBehaviour
             Debug.Log("Failed to Initialize the Facebook SDK");
         }
     }
+
+    /**
+  *Sets the username of the user
+  **/
     void GetFacebookData(Facebook.Unity.IGraphResult result)
     {
         string fbName = result.ResultDictionary["name"].ToString();
@@ -91,6 +102,9 @@ public class Login : MonoBehaviour
         datahandler.SetFBUserName(fbName);
     }
 
+    /**
+  *Pauses unity if a facebook popup appears
+  **/
     private void OnHideUnity(bool isGameShown)
     {
         if (!isGameShown)
@@ -107,6 +121,9 @@ public class Login : MonoBehaviour
 
     //End Of Default Code
 
+    /**
+    *Operates from button press, it checks if user is logged in or not, if not, login the user
+    **/
     public void OnLoginLogoutButtonClick()
     {
         if (!FB.IsLoggedIn)
@@ -121,6 +138,9 @@ public class Login : MonoBehaviour
         }
     }
 
+    /**
+    *Calls facebook api to login
+    **/
     public void FacebookLogin()
     {
         Debug.Log("FacebookLogin");
@@ -139,6 +159,9 @@ public class Login : MonoBehaviour
     }
 
 
+    /**
+    *Callback function when the api has been processed
+    **/
     private void FBAuthCallback(ILoginResult result)
     {
         Debug.Log("FBAuthCallback");
@@ -166,6 +189,9 @@ public class Login : MonoBehaviour
         }
     }
 
+    /**
+    *Logs Out the user
+    **/
     public void FacebookLogout()
     {
         this.loggedIn = false;
@@ -176,7 +202,9 @@ public class Login : MonoBehaviour
     }
 
 
-
+    /**
+    *Logs the user into firebase
+    **/
     private void FirebaseLogin()
     {
         auth.SignInWithCredentialAsync(credentials).ContinueWith(task => {
@@ -204,12 +232,16 @@ public class Login : MonoBehaviour
     }
 
 
-
+    /**
+    *Get method for login status
+    **/
     public bool GetLoggedIn()
     {
         return this.loggedIn;
     }
-
+    /**
+   *Get method for username
+   **/
     public string GetUserID()
     {
         return this.userID;
