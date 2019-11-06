@@ -7,8 +7,15 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using UnityEngine;
 
+/**
+ * Leaderboard Manager class to generate the leaderbaord based on scores currently stored in the database.
+ * @author Lasnier Roman
+ */
 public class LeaderboardManager : MonoBehaviour
 {
+    /**
+     * Player model class with all information necessary per user for the leaderboard.
+     */
     private class PlayerInfo
     {
         [SerializeField] public String playerName;
@@ -28,8 +35,12 @@ public class LeaderboardManager : MonoBehaviour
     void Start()
     {
         GenerateWithDatabaseRecords();
-	}
+    }
 
+    /**
+     * Method to generate the leaderboard with a sample set of data automatically generated.
+     * Intended to be used for testing purposes only.
+     */
     private void GenerateWithSampleData()
     {
         for (int i = 1; i <= 50; i++)
@@ -38,6 +49,9 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
+    /**
+     * Method to generate the leaderboard with user data fetched from Firebase.
+     */
     private async void GenerateWithDatabaseRecords()
     {
         await FetchPlayersRanked();
@@ -48,6 +62,9 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
+    /**
+     * Method to spawn a PlayerRankInfo object in the Scroll View with the given player data.
+     */
     private void SpawnPlayerRankObj(string playerName, int points, int rank)
     {
         GameObject playerRank = Instantiate(playerRankTemplate) as GameObject;
@@ -61,15 +78,20 @@ public class LeaderboardManager : MonoBehaviour
         playerRank.SetActive(true);
     }
 
+    /**
+     * Method to fetch a list of all players ranked (ordered by score).
+     * Stores the fetched data as a list of PlayerInfo instances in the playersRanked attribute.
+     */
     private async Task FetchPlayersRanked()
     {
+        // Instantiate the Firebase request for Leaderboard data
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 
         DataSnapshot leaderboardSnapshot = await FirebaseDatabase.DefaultInstance.GetReference("Leaderboard").GetValueAsync();
 
+        // Build the player list based on all snapshot data
         List<PlayerInfo> players = new List<PlayerInfo>();
-
         foreach (var user in leaderboardSnapshot.Children)
         {
             String playerName = user.Child("Name").GetValue(true).ToString();
@@ -77,6 +99,7 @@ public class LeaderboardManager : MonoBehaviour
             players.Add(new PlayerInfo(playerName, points));
         }
 
+        // Order and store the final list
         playersRanked = players.OrderByDescending(player => player.points).ToList();
     }
 }

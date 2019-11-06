@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * Class used as the Game Object displayed for each player in the Leaderboard scene.
+ * @author Lasnier Roman
+ */
 public class PlayerRankInfo : MonoBehaviour
 {
     [SerializeField] private Text playerName;
