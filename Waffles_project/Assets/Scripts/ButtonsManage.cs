@@ -58,8 +58,9 @@ public class ButtonsManage : MonoBehaviour
     private bool done = false;
     private int dbStg;
 
-    
-    public void pressNext() //User press next button
+
+    /**If User press next button*/
+    public void pressNext()
     {
         if(string.IsNullOrEmpty(inputStage.GetComponent<InputField>().text.ToString()))  //Check if any stage name is entered
         {
@@ -75,7 +76,9 @@ public class ButtonsManage : MonoBehaviour
         }
         
     }
-    public void pressBack() //Allows the user decides to choose another custom stage name again
+
+    /**Allows the user decides to choose another custom stage name again*/
+    public void pressBack() 
     {
         backButton.SetActive(!backButton.active);
         nextButton.SetActive(!nextButton.active);
@@ -87,8 +90,8 @@ public class ButtonsManage : MonoBehaviour
         addMoreQuestion.SetActive(!addMoreQuestion.active);
     }
 
-
-    public void correctOptionCheck(Button btn) //Checks which options is being checked by user
+    /**Checks which options is being checked by user*/
+    public void correctOptionCheck(Button btn) 
     {
         correct = Int32.Parse(btn.name);
         // btn.image.sprite = correctChecked;
@@ -133,12 +136,13 @@ public class ButtonsManage : MonoBehaviour
 
             option4.image.sprite = correctChecked;
         }
-        
 
-        
+
+
     }
 
-    public void pressDone()  //Upload the custom stage data to DB
+    /** Upload the custom stage data to DB */
+    public void pressDone()  
     {
         dataHandler = GameObject.Find("DataManager").GetComponent<DataHandler>();
         string uID = dataHandler.GetFirebaseUserId();
@@ -237,7 +241,8 @@ public class ButtonsManage : MonoBehaviour
 
     }
 
-    public void pressPlus()  //Instantiate new questions if user decide to add more questions 
+    /** Instantiate new questions if user decide to add more questions */
+    public void pressPlus()  
     {
         int buttonImageCount = 0;
         int correctAnswer = 0;
@@ -338,14 +343,17 @@ public class ButtonsManage : MonoBehaviour
         
     }
 
-    public void pressDelete() //Delete questions
+
+    /** Delete questions */
+    public void pressDelete() 
     {
         noOfQuestion--;
         Destroy(prefRef);
     }
 
 
-    public void prompAndCheck()  //Error checking for input values 
+    /**Error checking for input values */
+    public void prompAndCheck()  
     {
         noOfQuestion = contentPanel2.childCount;
         if (noOfQuestion == 0)
@@ -444,8 +452,8 @@ public class ButtonsManage : MonoBehaviour
     }
 
 
-
-    IEnumerator ReadDup()  //Read all custom stage name inside DB
+    /**Read all custom stage name inside DB*/
+    IEnumerator ReadDup() 
     {
         done = false;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
@@ -518,7 +526,9 @@ public class ButtonsManage : MonoBehaviour
 
     }
 
-    public void Text_Changed(string newText) //count the number of characters inside the stage name 
+
+    /**count the number of characters inside the stage name*/
+    public void Text_Changed(string newText)
     {
         // backButton.SetActive(true);
         int textCount = newText.Length;

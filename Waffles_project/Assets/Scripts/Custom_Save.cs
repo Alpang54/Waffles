@@ -12,7 +12,6 @@ using UnityEngine.UI;
  * This class handles editing of custom stage and upload changes to database
  * @author Ng Kai Qian
  */
-
 public class Custom_Save : MonoBehaviour
 {
     public GameObject backButton;
@@ -51,7 +50,9 @@ public class Custom_Save : MonoBehaviour
     public ArrayList correctAnswers = new ArrayList();
     public ArrayList optionChoice = new ArrayList();
 
-   
+
+
+    /**Checks which options is being checked by user*/
     public void correctOptionCheck(Button btn)
     {
         correct = Int32.Parse(btn.name);
@@ -104,6 +105,7 @@ public class Custom_Save : MonoBehaviour
 
     }
 
+    /** Save changes of custom stage data to DB */
     public void pressDone()
     {
         custStageName = StageNameManage.customName;
@@ -204,7 +206,7 @@ public class Custom_Save : MonoBehaviour
         correctAnswers.Clear();
         questionName.Clear();
     }
-
+    /** Instantiate new questions if user decide to add more questions */
     public void pressPlus()
     {
 
@@ -306,7 +308,7 @@ public class Custom_Save : MonoBehaviour
 
     }
 
-
+    /**Error checking for input values */
     public void prompAndCheck()
     {
         noOfQuestion = contentPanel2.childCount;

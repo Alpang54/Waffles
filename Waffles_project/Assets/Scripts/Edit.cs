@@ -40,7 +40,7 @@ public class Edit : MonoBehaviour
     
 
 
-    IEnumerator ReadDB() //Read db for selected custom stage name for editing
+    IEnumerator ReadDB() /**Read db for selected custom stage name for editing*/
     {
         done = false;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
@@ -105,7 +105,7 @@ public class Edit : MonoBehaviour
 
     }
 
-    void loadDB()  //Instantiate the number of questions based on DB and load the values to display to user
+    void loadDB()  /*Instantiate the number of questions based on DB and load the values to display to user*/
     {
         int buttonImageCount = 0;
         int correctAnswer = 0;

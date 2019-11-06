@@ -60,7 +60,7 @@ public class InitContent : MonoBehaviour
 
 
     }
-    IEnumerator ReadDBLobby() //Read DB for Custom Lobby
+    IEnumerator ReadDBLobby() /**Read DB for Custom Lobby*/
     {
         done = false;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://cz3003-waffles.firebaseio.com/");
@@ -108,7 +108,7 @@ public class InitContent : MonoBehaviour
 
 
     }
-    void loadDBLobby()  //Instantiate number of custom stage based on DB and load the stage name
+    void loadDBLobby()  /**Instantiate number of custom stage based on DB and load the stage name*/
     {
         for (int i = 0; i < noOfCustom; i++)
         {
@@ -230,7 +230,7 @@ public class InitContent : MonoBehaviour
         }
     }
 
-    IEnumerator ReadDBEdit() //Read DB for manage custom based on user id
+    IEnumerator ReadDBEdit() /**Read DB for manage custom based on user id*/
     {
         done = false;
         loading.SetActive(true);
@@ -279,7 +279,7 @@ public class InitContent : MonoBehaviour
 
 
     }
-    void loadDBEdit() //Instantiate number of custom stage based on DB and load the stage name
+    void loadDBEdit() /**Instantiate number of custom stage based on DB and load the stage name*/
     {
         for (int i = 0; i < noOfCustom; i++)
         {

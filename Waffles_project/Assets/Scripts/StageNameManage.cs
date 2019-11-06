@@ -10,6 +10,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/**
+ * This class is to handle button clicks for manage custom
+ * @author Ng Kai Qian
+ */
 public class StageNameManage : MonoBehaviour
 {
     public Button clickedDelete;
@@ -29,7 +33,8 @@ public class StageNameManage : MonoBehaviour
     public static string stgName;
     
 
-    public void onDeleteClick()
+    /** Delete custom stage */
+    public void onDeleteClick() 
     {
         
        
@@ -66,12 +71,14 @@ public class StageNameManage : MonoBehaviour
         return true;
     }
 
-
+    /**Edit custom stage*/
     public void onEditClick()
     {
         customName = stageName.text.ToString();
         SceneManager.LoadScene("Edit_Custom");
     }
+
+
     public void onPlayClick()
     {
         customName = stageName.text.ToString();
